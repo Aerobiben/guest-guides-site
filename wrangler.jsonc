@@ -1,0 +1,14 @@
+{
+  "name": "guest-guides-site",
+  "compatibility_date": "2026-09-21",
+  "observability": {
+    "enabled": true,
+    "traces": {
+      "enabled": true
+    }
+  },
+  "assets": {
+    "directory": "./",
+    "html_handling": "drop-trailing-slash"
+  }
+}

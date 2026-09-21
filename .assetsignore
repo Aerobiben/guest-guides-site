@@ -1,0 +1,16 @@
+.git
+.agents
+.cursor
+.wrangler
+node_modules
+package.json
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+skills-lock.json
+wrangler.jsonc
+wrangler.toml
+vercel.json
+.gitignore
+README.md
+.assetsignore
