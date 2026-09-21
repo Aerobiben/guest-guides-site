@@ -58,8 +58,17 @@ function bindValue(selector, path, kind = "input") {
     saveState();
     renderPreview();
     if (path.startsWith("address.")) refreshMap();
-    if (path === "propertyName" || path === "title") qs("#guide-title").textContent = "Create Guidebook";
+    renderHeading();
   };
+}
+
+function renderHeading() {
+  const guide = activeGuide();
+  const place = [guide.address.city, guide.address.country].filter(Boolean).join(", ");
+  qs("#guide-title").textContent = guide.propertyName || guide.title || "Untitled guidebook";
+  qs("#guide-subtitle").textContent = place
+    ? `${place} · edits appear in the phone preview as you type.`
+    : "Edit any section. The phone preview updates as you type.";
 }
 
 function renderNav() {
@@ -86,8 +95,11 @@ function renderGuides() {
   const list = qs("#guides-list");
   list.innerHTML = state.guides.map((guide) => `
     <div class="guide-chip">
-      <button class="ghost-btn" data-open="${guide.id}">${escapeHtml(guide.propertyName || guide.title)}</button>
-      <button class="text-btn" data-delete="${guide.id}">Delete</button>
+      <div>
+        <button class="chip-open" data-open="${guide.id}">${escapeHtml(guide.propertyName || guide.title)}</button>
+        <p class="hint">${escapeHtml(guide.address.city || "No location yet")} · ${guide.photos.filter((photo) => photo.url).length} photos</p>
+      </div>
+      <button class="text-btn" data-delete="${guide.id}" ${state.guides.length === 1 ? "disabled" : ""}>Delete</button>
     </div>
   `).join("");
   list.querySelectorAll("[data-open]").forEach((btn) => {
@@ -110,9 +122,9 @@ function renderTemplates() {
     <div class="guide-chip">
       <div>
         <strong>${escapeHtml(tpl.title)}</strong>
-        <div class="hint">${escapeHtml(tpl.address.city || "")}</div>
+        <p class="hint">${escapeHtml([tpl.address.city, tpl.address.country].filter(Boolean).join(", "))}</p>
       </div>
-      <button class="add-btn" data-use="${tpl.id}">Use</button>
+      <button class="add-btn" data-use="${tpl.id}">Use template</button>
     </div>
   `).join("");
   list.querySelectorAll("[data-use]").forEach((btn) => {
@@ -136,7 +148,7 @@ function renderPhotos() {
     <div class="photo-row">
       <img src="${escapeHtml(photo.url)}" alt="" />
       <div class="stack">
-        <input class="input" data-photo-url="${photo.id}" placeholder="Photo URL" value="${escapeHtml(photo.url)}" />
+        <input class="input" data-photo-url="${photo.id}" placeholder="${index === 0 ? "Hero photo URL" : "Photo URL"}" value="${escapeHtml(photo.url)}" />
         <input class="input" data-photo-caption="${photo.id}" placeholder="Caption" value="${escapeHtml(photo.caption || "")}" />
         <input type="file" accept="image/*" data-photo-file="${photo.id}" />
       </div>
@@ -187,10 +199,10 @@ function renderRepeat(kind) {
   if (kind === "manual") {
     const list = qs("#manual-list");
     list.innerHTML = guide.houseManual.map((item) => `
-      <div class="repeat-row">
-        <div class="stack" style="grid-column: 1 / 3">
-          <input class="input" data-hm-title="${item.id}" placeholder="Title" value="${escapeHtml(item.title)}" />
-          <textarea data-hm-body="${item.id}">${escapeHtml(item.body)}</textarea>
+      <div class="repeat-row repeat-row-plain">
+        <div class="stack">
+          <input class="input" data-hm-title="${item.id}" placeholder="Title, e.g. Heat &amp; lights" value="${escapeHtml(item.title)}" />
+          <textarea data-hm-body="${item.id}" placeholder="How it works">${escapeHtml(item.body)}</textarea>
         </div>
         <button class="text-btn" data-hm-remove="${item.id}">Remove</button>
       </div>
@@ -224,8 +236,8 @@ function renderRepeat(kind) {
         <img src="${escapeHtml(item.image || "")}" alt="" />
         <div class="stack">
           <input class="input" data-rec-name="${item.id}" placeholder="Name" value="${escapeHtml(item.name)}" />
-          <input class="input" data-rec-cat="${item.id}" placeholder="Category" value="${escapeHtml(item.category || "")}" />
-          <textarea data-rec-notes="${item.id}">${escapeHtml(item.notes)}</textarea>
+          <input class="input" data-rec-cat="${item.id}" placeholder="Category, e.g. Coffee" value="${escapeHtml(item.category || "")}" />
+          <textarea data-rec-notes="${item.id}" placeholder="Why you send guests there">${escapeHtml(item.notes)}</textarea>
           <input class="input" data-rec-url="${item.id}" placeholder="Link" value="${escapeHtml(item.url || "")}" />
           <input class="input" data-rec-image="${item.id}" placeholder="Image URL" value="${escapeHtml(item.image || "")}" />
         </div>
@@ -307,6 +319,7 @@ function fillForm() {
   renderRepeat("manual");
   renderRepeat("recs");
   renderRepeat("rules");
+  renderHeading();
   refreshMap();
 }
 
@@ -367,6 +380,14 @@ async function exportHtml() {
   downloadTextFile(`${slugify(activeGuide().propertyName || activeGuide().title)}.html`, html);
 }
 
+async function openPreview() {
+  if (!guestCssCache) await loadGuestCss();
+  const html = buildGuestDocument(activeGuide(), guestCssCache);
+  const url = URL.createObjectURL(new Blob([html], { type: "text/html;charset=utf-8" }));
+  window.open(url, "_blank", "noopener");
+  setTimeout(() => URL.revokeObjectURL(url), 30000);
+}
+
 function wire() {
   qsa("[data-view]").forEach((btn) => {
     btn.onclick = () => {
@@ -414,13 +435,7 @@ function wire() {
     render();
   };
   qs("#download-btn").onclick = exportHtml;
-  qs("#preview-btn").onclick = () => {
-    const phone = qs(".preview-col");
-    phone.scrollIntoView({ behavior: "smooth" });
-    if (window.matchMedia("(max-width: 1180px)").matches) {
-      exportHtml();
-    }
-  };
+  qs("#preview-btn").onclick = openPreview;
   let searchTimer;
   qs("#address-search").addEventListener("input", (event) => {
     clearTimeout(searchTimer);
