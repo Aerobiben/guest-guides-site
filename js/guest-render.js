@@ -50,6 +50,14 @@ function renderGuestInner(guidebook) {
   return `
     <div class="guest-shell">
       <section class="guest-hero" style="${hero ? `background-image:url('${escapeHtml(hero.url)}')` : ""}" data-hero>
+        <button class="guest-theme-toggle" type="button" data-theme-toggle aria-label="Toggle dark mode">
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+            <circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M2.5 12h2M19.5 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"/>
+          </svg>
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+            <path d="M20 14.2A8.2 8.2 0 0 1 9.8 4a8.4 8.4 0 1 0 10.2 10.2Z"/>
+          </svg>
+        </button>
         <div class="guest-hero-copy">
           <p>${escapeHtml(guidebook.hostName || "Your host")}</p>
           <h1>${escapeHtml(guidebook.propertyName || guidebook.title || "Guest guide")}</h1>
@@ -145,6 +153,25 @@ function guestPageScript() {
   return `
     (function () {
       var photos = PHOTOS_PLACEHOLDER;
+      var root = document.body;
+      var THEME_KEY = "guest-guide-theme";
+      try {
+        var saved = localStorage.getItem(THEME_KEY);
+        if (saved === "light" || saved === "dark") root.dataset.guestTheme = saved;
+      } catch (e) {}
+      function resolved() {
+        var mode = root.dataset.guestTheme;
+        if (mode === "dark" || mode === "light") return mode;
+        return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      }
+      var themeBtn = document.querySelector("[data-theme-toggle]");
+      if (themeBtn) {
+        themeBtn.addEventListener("click", function () {
+          var next = resolved() === "dark" ? "light" : "dark";
+          root.dataset.guestTheme = next;
+          try { localStorage.setItem(THEME_KEY, next); } catch (e) {}
+        });
+      }
       var hero = document.querySelector("[data-hero]");
       document.querySelectorAll("[data-photo]").forEach(function (btn) {
         btn.addEventListener("click", function () {
@@ -176,8 +203,16 @@ globalThis.renderGuestInner = renderGuestInner;
 globalThis.guestPageScript = guestPageScript;
 globalThis.hydrateGuest = hydrateGuest;
 
-function hydrateGuest(root, guidebook) {
+function hydrateGuest(root, guidebook, previewTheme) {
   root.innerHTML = renderGuestInner(guidebook);
+  const theme = guidebook.theme || "auto";
+  root.dataset.guestTheme = theme === "auto" ? previewTheme || "light" : theme;
+  const toggle = root.querySelector("[data-theme-toggle]");
+  if (toggle) {
+    toggle.addEventListener("click", () => {
+      root.dataset.guestTheme = root.dataset.guestTheme === "dark" ? "light" : "dark";
+    });
+  }
   const photos = (guidebook.photos || []).filter((photo) => photo.url).map((photo) => photo.url);
   const hero = root.querySelector("[data-hero]");
   root.querySelectorAll("[data-photo]").forEach((btn) => {

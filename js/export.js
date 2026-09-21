@@ -13,12 +13,14 @@ function buildGuestDocument(guidebook, guestCss) {
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700&display=swap" rel="stylesheet" />
+  <meta name="color-scheme" content="${guidebook.theme === "dark" ? "dark" : guidebook.theme === "light" ? "light" : "light dark"}" />
   <style>${guestCss}
     html, body { margin: 0; }
-    body { background: #f4efe8; }
+    html { background: #f3efe9; }
+    @media (prefers-color-scheme: dark) { html { background: #100e15; } }
   </style>
 </head>
-<body class="guest-app">
+<body class="guest-app" data-guest-theme="${escapeHtml(guidebook.theme || "auto")}">
 ${renderGuestInner(guidebook)}
 <script>${script}</script>
 </body>

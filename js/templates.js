@@ -18,6 +18,7 @@ function blankGuidebook() {
   return {
     id: makeId(),
     title: "New guidebook",
+    theme: "auto",
     propertyName: "",
     hostName: "",
     hostPhone: "",
@@ -80,6 +81,7 @@ function richmondGuidebook() {
   return {
     id: "gb-richmond",
     title: "Clement Street Hideaway",
+    theme: "auto",
     propertyName: "Clement Street Hideaway",
     hostName: "Ben Schumacher",
     hostPhone: "+1 (415) 555-0148",

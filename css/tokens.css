@@ -1,0 +1,203 @@
+:root {
+  --canvas: #f4f2ef;
+  --surface: #ffffff;
+  --surface-sunken: #faf8f6;
+  --ink: #191521;
+  --ink-soft: #4d4757;
+  --muted: #837c90;
+  --line: #ece7f0;
+  --line-strong: #ded7e6;
+  --accent: #6d43d0;
+  --accent-deep: #4c2aa0;
+  --accent-soft: #f1ecfd;
+  --warm: #f2643c;
+  --warm-soft: #fdeee9;
+  --warm-ink: #b8451f;
+  --danger: #b4453a;
+  --danger-soft: #fdeceb;
+  --glow-1: #ece5fb;
+  --glow-2: #fdeadf;
+  --preview-wash: linear-gradient(170deg, #efe9fb 0%, #f7f1ec 100%);
+  --radius-xl: 28px;
+  --radius-lg: 20px;
+  --radius-md: 14px;
+  --radius-pill: 999px;
+  --shadow-soft: 0 1px 2px rgba(25, 21, 33, 0.04), 0 18px 40px -28px rgba(50, 35, 90, 0.35);
+  --shadow-lift: 0 2px 6px rgba(25, 21, 33, 0.05), 0 32px 60px -32px rgba(50, 35, 90, 0.4);
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  --canvas: #0e0c13;
+  --surface: #171420;
+  --surface-sunken: #1e1a29;
+  --ink: #f5f2fa;
+  --ink-soft: #cdc6db;
+  --muted: #948ca6;
+  --line: #2a2436;
+  --line-strong: #3a3348;
+  --accent: #bda3ff;
+  --accent-deep: #d8c8ff;
+  --accent-soft: #2a2239;
+  --warm: #ff9166;
+  --warm-soft: #33241e;
+  --warm-ink: #ffab86;
+  --danger: #ff8d80;
+  --danger-soft: #3a2320;
+  --glow-1: #221a3a;
+  --glow-2: #2d1d23;
+  --preview-wash: linear-gradient(170deg, #1d1830 0%, #221a26 100%);
+  --shadow-soft: 0 1px 2px rgba(0, 0, 0, 0.4), 0 18px 40px -28px rgba(0, 0, 0, 0.9);
+  --shadow-lift: 0 2px 6px rgba(0, 0, 0, 0.45), 0 32px 60px -32px rgba(0, 0, 0, 1);
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  background:
+    radial-gradient(900px 520px at 12% -10%, var(--glow-1) 0%, transparent 62%),
+    radial-gradient(760px 460px at 96% 4%, var(--glow-2) 0%, transparent 58%),
+    var(--canvas);
+  color: var(--ink);
+  font-family: "Plus Jakarta Sans", "Segoe UI", system-ui, sans-serif;
+  font-size: 15px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  transition: background 0.25s ease, color 0.25s ease;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-pill);
+  padding: 11px 18px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+.btn-ghost {
+  background: var(--surface);
+  border-color: var(--line-strong);
+  color: var(--ink-soft);
+}
+
+.btn-ghost:hover {
+  background: var(--surface-sunken);
+}
+
+.btn-primary {
+  color: #fff;
+  background: linear-gradient(135deg, #7b43e0, #5a2bb4);
+  box-shadow: 0 14px 28px -16px rgba(92, 45, 180, 0.95);
+}
+
+.btn-primary:hover {
+  box-shadow: 0 18px 34px -16px rgba(92, 45, 180, 1);
+}
+
+.btn-lg {
+  padding: 14px 24px;
+  font-size: 15px;
+}
+
+.btn-icon {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+
+.btn-icon:hover {
+  background: var(--surface-sunken);
+}
+
+.btn-icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.btn-icon .icon-moon,
+:root[data-theme="dark"] .btn-icon .icon-sun {
+  display: none;
+}
+
+:root[data-theme="dark"] .btn-icon .icon-moon {
+  display: block;
+}
+
+.brand-mark {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: inherit;
+  text-decoration: none;
+}
+
+.brand-glyph {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 14px;
+  color: #fff;
+  background: linear-gradient(140deg, #7b43e0 0%, #5a2bb4 55%, #f2643c 160%);
+  box-shadow: 0 10px 22px -12px rgba(92, 45, 180, 0.9);
+}
+
+.brand-glyph svg {
+  width: 22px;
+  height: 22px;
+}
+
+.brand-text strong {
+  display: block;
+  font-size: 16px;
+  letter-spacing: -0.02em;
+}
+
+.brand-text span {
+  font-size: 12.5px;
+  color: var(--muted);
+}
+
+.hidden {
+  display: none !important;
+}

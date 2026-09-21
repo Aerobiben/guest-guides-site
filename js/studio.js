@@ -5,12 +5,16 @@ let state = loadState();
 function loadState() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    if (raw) return JSON.parse(raw);
+    if (raw) {
+      const saved = JSON.parse(raw);
+      saved.guides = saved.guides.map((guide) => ({ ...blankGuidebook(), ...guide, id: guide.id }));
+      return saved;
+    }
   } catch {
     /* ignore */
   }
   const first = structuredClone(STARTER_TEMPLATES[0]);
-  return { guides: [first], activeId: first.id, tab: "basic", view: "editor" };
+  return { guides: [first], activeId: first.id, tab: "intro", view: "editor" };
 }
 
 function saveState() {
@@ -275,6 +279,7 @@ function renderRepeat(kind) {
 function fillForm() {
   const g = activeGuide();
   bindValue("#property-name", "propertyName");
+  bindValue("#guest-theme", "theme");
   bindValue("#host-name", "hostName");
   bindValue("#host-phone", "hostPhone");
   bindValue("#host-email", "hostEmail");
@@ -358,7 +363,7 @@ async function searchAddress(query) {
 }
 
 function renderPreview() {
-  hydrateGuest(qs("#guest-preview"), activeGuide());
+  hydrateGuest(qs("#guest-preview"), activeGuide(), document.documentElement.dataset.theme);
 }
 
 function render() {
@@ -444,6 +449,8 @@ function wire() {
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
+  initTheme("#theme-toggle");
+  document.addEventListener("themechange", renderPreview);
   await loadGuestCss();
   wire();
   render();
