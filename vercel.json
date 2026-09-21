@@ -2,6 +2,18 @@
   "version": 2,
   "cleanUrls": true,
   "trailingSlash": false,
+  "redirects": [
+    {
+      "source": "/samples/les-lilas-assets/photo-01.jpg",
+      "destination": "https://a0.muscache.com/im/pictures/miso/Hosting-29406522/original/6b4ce990-175f-46da-8158-77dc0cd8cc81.jpeg",
+      "permanent": false
+    },
+    {
+      "source": "/samples/mundus-bologna-assets/photo-02.jpg",
+      "destination": "https://cdn.krossbooking.com/mundussrl/images/2/10/15562063398867.jpg",
+      "permanent": false
+    }
+  ],
   "headers": [
     {
       "source": "/(.*)",
