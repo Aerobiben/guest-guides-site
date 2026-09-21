@@ -3,17 +3,251 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Free phone guest guides for Airbnb hosts — Ben Schumacher</title>
-  <meta name="description" content="Phone-friendly guest guides: Wi‑Fi, check-in, house notes, and local picks in one link. Free samples for hosts. No guest app." />
-  <meta name="robots" content="index,follow" />
-  <link rel="canonical" href="./" />
+  <title>Digital Guidebook — guest-ready Airbnb HTML</title>
+  <meta name="description" content="Build a modular Airbnb guest guide: swap photos and stay details, then download a phone-ready HTML file for your guests." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./css/studio.css" />
+  <link rel="stylesheet" href="./css/guest.css" />
 </head>
 <body>
-  <h1>Phone guest guides hosts actually use</h1>
-  <ul>
-    <li><a href="samples/les-lilas.html">Les Lilas</a></li>
-    <li><a href="samples/mundus-bologna.html">Mundus Bologna</a></li>
-    <li><a href="samples/bnbhost-glasgow.html">BnBHost Glasgow</a></li>
-  </ul>
+  <div class="app-frame">
+    <div class="app-shell">
+      <header class="brand-bar">
+        <div class="brand-mark">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M4 11.5 12 4l8 7.5V20a1 1 0 0 1-1 1h-5v-6H10v6H5a1 1 0 0 1-1-1v-8.5Z" fill="currentColor"/>
+          </svg>
+          Digital Guidebook
+        </div>
+        <div class="brand-actions">
+          <button class="btn-preview" id="preview-btn" type="button">Guest preview</button>
+          <button class="btn-download" id="download-btn" type="button">Download HTML</button>
+        </div>
+      </header>
+      <div class="app-body">
+        <aside class="sidebar">
+          <button class="nav-btn is-active" data-view="guides" type="button">
+            <span>▤</span> Guidebooks
+          </button>
+          <button class="nav-btn" data-view="templates" type="button">
+            <span>▦</span> Templates
+          </button>
+          <div class="nav-label">Sections</div>
+          <button class="section-btn" data-section="intro" type="button">☆ Intros</button>
+          <button class="section-btn" data-section="arrival" type="button">→ Check-ins</button>
+          <button class="section-btn" data-section="basic" type="button">☰ Directions</button>
+          <button class="section-btn" data-section="parking" type="button">▣ Parking</button>
+          <button class="section-btn" data-section="wifi" type="button">◉ Wifi</button>
+          <button class="section-btn" id="checkout-nav" type="button">⎋ Checkouts</button>
+          <button class="section-btn" data-section="house" type="button">▢ House manual</button>
+          <button class="section-btn" data-section="recs" type="button">✦ Recommendations</button>
+        </aside>
+        <main class="workspace">
+          <div id="guides-panel" class="hidden">
+            <h1>Guidebooks</h1>
+            <p class="hint">Each guidebook is a modular pack of photos and stay details. Open one, edit it, then download HTML for the guest.</p>
+            <button class="add-btn" id="new-guide" type="button">New guidebook</button>
+            <div id="guides-list" class="guides-list" style="margin-top:16px"></div>
+          </div>
+          <div id="templates-panel" class="hidden">
+            <h1>Templates</h1>
+            <p class="hint">Start from a sample stay, then swap pictures and the important info.</p>
+            <div id="templates-list" class="guides-list"></div>
+          </div>
+          <div id="editor-panel">
+            <h1 id="guide-title">Create Guidebook</h1>
+            <div class="tabs">
+              <button data-tab="basic" type="button">Basic info</button>
+              <button data-tab="arrival" type="button">Arrival &amp; Departure</button>
+              <button data-tab="house" type="button">House manuals</button>
+              <button data-tab="recs" type="button">Recommendations</button>
+              <button data-tab="book" type="button">Book again</button>
+              <button data-tab="intro" type="button">Intro &amp; photos</button>
+              <button data-tab="wifi" type="button">Wifi</button>
+              <button data-tab="parking" type="button">Parking</button>
+            </div>
+
+            <section class="panel" data-panel="basic">
+              <div class="field-label">Business name / Address</div>
+              <p class="hint">Add a business name or address to populate the fields below</p>
+              <div class="search-row">
+                <div>
+                  <input class="input" id="address-search" placeholder="Search by business name or address" />
+                  <div id="search-results" class="search-results hidden"></div>
+                </div>
+                <input class="input" id="address-line" placeholder="Address" />
+              </div>
+              <div class="basic-grid">
+                <iframe id="map-frame" class="map-frame" title="Property map"></iframe>
+                <div class="stack">
+                  <div class="grid-2">
+                    <div>
+                      <div class="field-label">Street number</div>
+                      <input class="input" id="street-number" />
+                    </div>
+                    <div>
+                      <div class="field-label">Street name</div>
+                      <input class="input" id="street-name" />
+                    </div>
+                  </div>
+                  <div class="grid-2">
+                    <div>
+                      <div class="field-label">City*</div>
+                      <input class="input" id="city" />
+                    </div>
+                    <div>
+                      <div class="field-label">State</div>
+                      <input class="input" id="state" />
+                    </div>
+                  </div>
+                  <div>
+                    <div class="field-label">Postal code</div>
+                    <input class="input" id="postal" />
+                  </div>
+                  <div>
+                    <div class="field-label">Country</div>
+                    <input class="input" id="country" />
+                  </div>
+                  <div class="grid-2">
+                    <div>
+                      <div class="field-label">Latitude</div>
+                      <input class="input" id="lat" />
+                    </div>
+                    <div>
+                      <div class="field-label">Longitude</div>
+                      <input class="input" id="lng" />
+                    </div>
+                  </div>
+                  <div>
+                    <div class="field-label">Link behavior*</div>
+                    <p class="hint">Select how you want guests to view the map.</p>
+                    <select id="link-behavior">
+                      <option value="automatic">Automatic: defaults to Google Maps</option>
+                      <option value="address">Use address: redirect to the specific address</option>
+                      <option value="latlng">Latitude &amp; Longitude: redirect to the geo point</option>
+                    </select>
+                  </div>
+                  <div>
+                    <div class="field-label">Directions notes</div>
+                    <textarea id="directions-notes"></textarea>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <section class="panel" data-panel="intro">
+              <div class="field-label">Guidebook title</div>
+              <input class="input" id="title-field" />
+              <div class="field-label" style="margin-top:12px">Property name</div>
+              <input class="input" id="property-name" />
+              <div class="grid-2" style="margin-top:12px">
+                <div>
+                  <div class="field-label">Host name</div>
+                  <input class="input" id="host-name" />
+                </div>
+                <div>
+                  <div class="field-label">Host phone</div>
+                  <input class="input" id="host-phone" />
+                </div>
+              </div>
+              <div class="field-label" style="margin-top:12px">Welcome</div>
+              <textarea id="welcome"></textarea>
+              <div class="field-label">About the home</div>
+              <textarea id="about"></textarea>
+              <div class="field-label">Photos</div>
+              <p class="hint">Paste image URLs or upload files. The first photo is the hero guests see on their phone.</p>
+              <div id="photo-list" class="photo-list"></div>
+              <button class="add-btn" id="add-photo" type="button" style="margin-top:10px">Add photo</button>
+            </section>
+
+            <section class="panel" data-panel="arrival">
+              <div class="grid-2">
+                <div>
+                  <div class="field-label">Check-in time</div>
+                  <input class="input" id="checkin-time" />
+                </div>
+                <div>
+                  <div class="field-label">Door / lockbox code</div>
+                  <input class="input" id="access-code" />
+                </div>
+              </div>
+              <div class="field-label" style="margin-top:12px">Check-in instructions</div>
+              <textarea id="checkin-notes"></textarea>
+              <div class="field-label">Checkout time</div>
+              <input class="input" id="checkout-time" />
+              <div class="field-label">Checkout instructions</div>
+              <textarea id="checkout-notes"></textarea>
+            </section>
+
+            <section class="panel" data-panel="wifi">
+              <div class="grid-2">
+                <div>
+                  <div class="field-label">Network</div>
+                  <input class="input" id="wifi-network" />
+                </div>
+                <div>
+                  <div class="field-label">Password</div>
+                  <input class="input" id="wifi-password" />
+                </div>
+              </div>
+              <div class="field-label" style="margin-top:12px">Notes</div>
+              <textarea id="wifi-notes"></textarea>
+            </section>
+
+            <section class="panel" data-panel="parking">
+              <div class="field-label">Parking</div>
+              <textarea id="parking-notes"></textarea>
+            </section>
+
+            <section class="panel" data-panel="house">
+              <div class="field-label">House manual cards</div>
+              <div id="manual-list" class="repeat-list"></div>
+              <button class="add-btn" id="add-manual" type="button" style="margin:10px 0 18px">Add manual item</button>
+              <div class="field-label">House rules (one per line)</div>
+              <textarea id="rules-input"></textarea>
+            </section>
+
+            <section class="panel" data-panel="recs">
+              <div class="field-label">Local recommendations</div>
+              <div id="rec-list" class="repeat-list"></div>
+              <button class="add-btn" id="add-rec" type="button" style="margin-top:10px">Add recommendation</button>
+            </section>
+
+            <section class="panel" data-panel="book">
+              <div class="field-label">Host email</div>
+              <input class="input" id="host-email" />
+              <div class="field-label" style="margin-top:12px">Listing URL</div>
+              <input class="input" id="listing-url" />
+              <div class="field-label">Book-again note</div>
+              <textarea id="book-message"></textarea>
+              <div class="grid-2">
+                <div>
+                  <div class="field-label">Emergency number</div>
+                  <input class="input" id="emergency-number" />
+                </div>
+                <div>
+                  <div class="field-label">Emergency notes</div>
+                  <input class="input" id="emergency-notes" />
+                </div>
+              </div>
+            </section>
+          </div>
+        </main>
+        <aside class="preview-col">
+          <h2>Guest phone preview</h2>
+          <p class="hint">This is the HTML your guest receives. Download it when the photos and info look right.</p>
+          <div class="phone">
+            <div class="phone-screen guest-app" id="guest-preview"></div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </div>
+  <script src="./js/templates.js"></script>
+  <script src="./js/guest-render.js"></script>
+  <script src="./js/export.js"></script>
+  <script src="./js/studio.js"></script>
 </body>
 </html>

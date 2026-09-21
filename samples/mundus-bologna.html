@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mundus Bologna — guest guide</title>
+  <meta name="description" content="Wi‑Fi, check-in, house notes, and local picks for your stay." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700&display=swap" rel="stylesheet" />
+  <style>:root {
+  --guest-bg: #f4efe8;
+  --guest-paper: #fffdf9;
+  --guest-ink: #1c1917;
+  --guest-muted: #6b625b;
+  --guest-line: #eadfd4;
+  --guest-accent: #6d28d9;
+  --guest-accent-2: #ea580c;
+  --guest-chip: #f5f0ff;
+}
+
+.guest-app {
+  margin: 0;
+  color: var(--guest-ink);
+  background: var(--guest-bg);
+  font-family: "Plus Jakarta Sans", "Segoe UI", sans-serif;
+}
+
+.guest-shell {
+  max-width: 430px;
+  margin: 0 auto;
+  min-height: 100%;
+  background: var(--guest-paper);
+  box-shadow: 0 0 0 1px rgba(28, 25, 23, 0.04);
+}
+
+.guest-hero {
+  position: relative;
+  min-height: 280px;
+  background: #1c1917 center/cover no-repeat;
+}
+
+.guest-hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(28, 25, 23, 0.05), rgba(28, 25, 23, 0.72));
+}
+
+.guest-hero-copy {
+  position: absolute;
+  left: 20px;
+  right: 20px;
+  bottom: 20px;
+  z-index: 1;
+  color: #fff;
+}
+
+.guest-hero-copy p {
+  margin: 0 0 6px;
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0.85;
+}
+
+.guest-hero-copy h1 {
+  margin: 0;
+  font-size: 28px;
+  line-height: 1.15;
+  font-weight: 700;
+}
+
+.guest-dots {
+  display: flex;
+  gap: 6px;
+  margin-top: 12px;
+}
+
+.guest-dots button {
+  width: 7px;
+  height: 7px;
+  padding: 0;
+  border: 0;
+  border-radius: 99px;
+  background: rgba(255, 255, 255, 0.45);
+}
+
+.guest-dots button.is-on {
+  background: #fff;
+  width: 18px;
+}
+
+.guest-body {
+  padding: 20px 20px 96px;
+}
+
+.guest-welcome {
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--guest-ink);
+  margin: 0 0 8px;
+}
+
+.guest-about {
+  margin: 0 0 18px;
+  color: var(--guest-muted);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.guest-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 22px;
+}
+
+.guest-actions a,
+.guest-actions button {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px;
+  border: 1px solid var(--guest-line);
+  border-radius: 14px;
+  background: #fff;
+  color: inherit;
+  text-decoration: none;
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
+}
+
+.guest-actions strong {
+  font-size: 13px;
+}
+
+.guest-actions span {
+  font-size: 12px;
+  color: var(--guest-muted);
+}
+
+.guest-card {
+  border: 1px solid var(--guest-line);
+  border-radius: 18px;
+  padding: 16px;
+  margin-bottom: 14px;
+  background: #fff;
+}
+
+.guest-card h2 {
+  margin: 0 0 8px;
+  font-size: 15px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--guest-accent);
+}
+
+.guest-card p,
+.guest-card li {
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--guest-ink);
+}
+
+.guest-card p {
+  margin: 0 0 8px;
+}
+
+.guest-card ul {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.guest-wifi {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+  padding: 10px 0;
+  border-top: 1px solid var(--guest-line);
+}
+
+.guest-wifi:first-of-type {
+  border-top: 0;
+}
+
+.guest-wifi button {
+  border: 0;
+  background: var(--guest-chip);
+  color: var(--guest-accent);
+  border-radius: 999px;
+  padding: 8px 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.guest-map {
+  width: 100%;
+  height: 180px;
+  border: 0;
+  border-radius: 14px;
+  margin-top: 8px;
+}
+
+.guest-rec {
+  display: grid;
+  grid-template-columns: 84px 1fr;
+  gap: 12px;
+  padding: 10px 0;
+  border-top: 1px solid var(--guest-line);
+  text-decoration: none;
+  color: inherit;
+}
+
+.guest-rec:first-of-type {
+  border-top: 0;
+}
+
+.guest-rec img {
+  width: 84px;
+  height: 84px;
+  object-fit: cover;
+  border-radius: 12px;
+  background: #eee;
+}
+
+.guest-rec small {
+  color: var(--guest-accent-2);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.guest-gallery {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.guest-gallery img {
+  width: 100%;
+  height: 110px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.guest-nav {
+  position: sticky;
+  bottom: 0;
+  display: flex;
+  gap: 4px;
+  overflow: auto;
+  padding: 10px 12px 16px;
+  background: rgba(255, 253, 249, 0.94);
+  backdrop-filter: blur(10px);
+  border-top: 1px solid var(--guest-line);
+}
+
+.guest-nav a {
+  flex: none;
+  padding: 8px 10px;
+  border-radius: 999px;
+  text-decoration: none;
+  color: var(--guest-muted);
+  font-size: 12px;
+  font-weight: 600;
+  background: #f6f1ea;
+}
+
+.guest-hidden {
+  display: none !important;
+}
+
+.guest-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 76px;
+  transform: translateX(-50%);
+  background: #1c1917;
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.guest-toast.is-on {
+  opacity: 1;
+}
+
+    html, body { margin: 0; }
+    body { background: #f4efe8; }
+  </style>
+</head>
+<body class="guest-app">
+
+    <div class="guest-shell">
+      <section class="guest-hero" style="background-image:url('https://images.unsplash.com/photo-1596484552834-6a58f1101c92?auto=format&amp;fit=crop&amp;w=1600&amp;q=80')" data-hero>
+        <div class="guest-hero-copy">
+          <p>Mundus Hosts</p>
+          <h1>Mundus Bologna</h1>
+          <div class="guest-dots"><button type="button" data-photo="0" class="is-on"></button><button type="button" data-photo="1" class=""></button></div>
+        </div>
+      </section>
+      <div class="guest-body">
+        <p class="guest-welcome">Benvenuti a Bologna. The apartment is in the university quarter, a short walk from Piazza Maggiore.</p>
+        <p class="guest-about ">A bright two-room stay with a full kitchen, fast Wi‑Fi, and a coffee bar on the ground floor.</p>
+        <div class="guest-gallery ">
+          <img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&amp;fit=crop&amp;w=1200&amp;q=80" alt="Apartment" />
+        </div>
+        <div class="guest-actions">
+          <a href="#wifi"><strong>Wi‑Fi</strong><span>MundusGuest</span></a>
+          <a href="#checkin"><strong>Check-in</strong><span>15:00</span></a>
+          <a href="https://www.google.com/maps?q=Bologna%2C%20Italy%2C%20Bologna%2C%20Emilia-Romagna%2C%2040126%2C%20Italy" target="_blank" rel="noreferrer"><strong>Map</strong><span>Bologna</span></a>
+          <a href="tel:+390510000000"><strong>Host</strong><span>+39 051 000 0000</span></a>
+        </div>
+
+        <article class="guest-card " id="wifi">
+          <h2>Wi‑Fi</h2>
+          <div class="guest-wifi"><div>Network</div><div><strong>MundusGuest</strong> <button type="button" data-copy="MundusGuest">Copy</button></div></div>
+          <div class="guest-wifi"><div>Password</div><div><strong>portici2026</strong> <button type="button" data-copy="portici2026">Copy</button></div></div>
+          <p>Modem is in the cupboard near the entry.</p>
+        </article>
+
+        <article class="guest-card" id="checkin">
+          <h2>Check-in</h2>
+          <p>From <strong>15:00</strong> · Door code <strong>2288</strong></p>
+          <p>Ring Mundus at the street door, then take the elevator to the 3rd floor.</p>
+        </article>
+
+        <article class="guest-card" id="directions">
+          <h2>Directions</h2>
+          <p>Bologna, Italy, Bologna, Emilia-Romagna, 40126, Italy</p>
+          <p>From Bologna Centrale, bus 32 or a 15-minute walk under the portici.</p>
+          <iframe class="guest-map" title="Map" src="https://www.openstreetmap.org/export/embed.html?bbox=11.3326%2C44.4849%2C11.352599999999999%2C44.5049&layer=mapnik&marker=44.4949%2C11.3426"></iframe>
+        </article>
+
+        <article class="guest-card" id="parking">
+          <h2>Parking</h2>
+          <p>ZTL zone — do not drive in. Use the Stadium parking and walk or taxi.</p>
+        </article>
+
+        <article class="guest-card" id="house">
+          <h2>House manual</h2>
+          <p><strong>AC</strong><br />Remote is in the nightstand. Set to 24°C overnight.</p>
+          <ul><li>No smoking</li><li>Quiet after 23:00</li></ul>
+        </article>
+
+        <article class="guest-card " id="recs">
+          <h2>Recommendations</h2>
+          
+            <a class="guest-rec" href="https://maps.google.com/?q=Cremeria+Santo+Stefano+Bologna" target="_blank" rel="noreferrer">
+              <img src="https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&amp;fit=crop&amp;w=800&amp;q=80" alt="Cremeria Santo Stefano" />
+              <div>
+                <small>Gelato</small>
+                <p><strong>Cremeria Santo Stefano</strong></p>
+                <p>Pistachio is the move.</p>
+              </div>
+            </a>
+          
+        </article>
+
+        <article class="guest-card" id="checkout">
+          <h2>Checkout</h2>
+          <p>By <strong>10:00</strong></p>
+          <p>Leave keys on the kitchen table and close the shutters.</p>
+        </article>
+
+        <article class="guest-card" id="book">
+          <h2>Book again</h2>
+          <p>Ask us for a returning-guest rate before you book elsewhere.</p>
+          <p><a href="https://www.airbnb.com/" target="_blank" rel="noreferrer">Open the listing</a></p>
+          <p>Emergency: 112. Pronto soccorso at Ospedale Maggiore.</p>
+        </article>
+      </div>
+      <nav class="guest-nav">
+        <a href="#wifi">Wi‑Fi</a>
+        <a href="#checkin">Check-in</a>
+        <a href="#directions">Map</a>
+        <a href="#parking">Parking</a>
+        <a href="#house">House</a>
+        <a href="#recs">Eats</a>
+        <a href="#checkout">Out</a>
+      </nav>
+      <div class="guest-toast" data-toast>Copied</div>
+    </div>
+  
+<script>
+    (function () {
+      var photos = ["https://images.unsplash.com/photo-1596484552834-6a58f1101c92?auto=format&fit=crop&w=1600&q=80","https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=1200&q=80"];
+      var hero = document.querySelector("[data-hero]");
+      document.querySelectorAll("[data-photo]").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          var i = Number(btn.getAttribute("data-photo"));
+          if (!photos[i]) return;
+          hero.style.backgroundImage = "url('" + photos[i] + "')";
+          document.querySelectorAll("[data-photo]").forEach(function (el) { el.classList.toggle("is-on", el === btn); });
+        });
+      });
+      var toast = document.querySelector("[data-toast]");
+      document.querySelectorAll("[data-copy]").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          var text = btn.getAttribute("data-copy") || "";
+          if (navigator.clipboard) navigator.clipboard.writeText(text);
+          toast.textContent = "Copied";
+          toast.classList.add("is-on");
+          setTimeout(function () { toast.classList.remove("is-on"); }, 1200);
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
