@@ -85,7 +85,9 @@ function renderNav() {
     btn.classList.toggle("is-active", state.view === "editor" && btn.dataset.section === state.tab);
   });
   qsa("[data-tab]").forEach((btn) => {
-    btn.classList.toggle("is-active", btn.dataset.tab === state.tab);
+    const on = btn.dataset.tab === state.tab;
+    btn.classList.toggle("is-active", on);
+    if (on) btn.scrollIntoView({ block: "nearest", inline: "nearest" });
   });
   qsa(".panel").forEach((panel) => {
     panel.classList.toggle("is-active", panel.dataset.panel === state.tab);

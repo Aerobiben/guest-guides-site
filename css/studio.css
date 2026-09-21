@@ -23,7 +23,9 @@
 
 .topbar-actions {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
+  justify-content: flex-end;
   gap: 10px;
 }
 
@@ -164,6 +166,13 @@
   border: 1px solid var(--line);
   border-radius: var(--radius-pill);
   scrollbar-width: none;
+  scroll-behavior: smooth;
+  mask-image: linear-gradient(90deg, #000 0, #000 calc(100% - 36px), transparent 100%);
+}
+
+.tabs:hover,
+.tabs:focus-within {
+  mask-image: none;
 }
 
 .tabs::-webkit-scrollbar {
@@ -577,6 +586,14 @@ input[type="file"]::file-selector-button {
   .topbar {
     top: 10px;
     flex-wrap: wrap;
+  }
+
+  .save-chip {
+    display: none;
+  }
+
+  .brand-text span {
+    display: none;
   }
 
   .app-body {

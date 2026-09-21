@@ -134,8 +134,8 @@
 .hero-stage::before {
   content: "";
   position: absolute;
-  width: 420px;
-  height: 420px;
+  width: min(420px, 100%);
+  aspect-ratio: 1;
   border-radius: 50%;
   background: radial-gradient(circle, rgba(123, 67, 224, 0.26), transparent 62%);
   filter: blur(14px);
@@ -441,6 +441,16 @@
 
 .site-footer a:hover {
   color: var(--accent);
+}
+
+@media (max-width: 1240px) {
+  .float-wifi {
+    left: 0;
+  }
+
+  .float-download {
+    right: 0;
+  }
 }
 
 @media (max-width: 960px) {
