@@ -2,11 +2,32 @@
 
 A modular Airbnb guest site for hosts. Edit photos, Wi‑Fi, check-in, map, and house notes in the builder, then download a single HTML file to send guests.
 
-## Pages
+## Two deployments
+
+| Site | Source | What visitors can do |
+| --- | --- | --- |
+| Main | repo root, served as-is | Browse the landing page and use the builder |
+| Preview gallery | `preview-dist/`, built by `scripts/build-preview.js` | View sample guides only — no editor, no download |
+
+## Pages (main site)
 
 - `index.html` — landing page at `/`
 - `studio.html` — the builder at `/studio`
 - `samples/*.html` — exported guest guides
+
+## Preview gallery
+
+`preview/` holds the gallery source. `scripts/build-preview.js` copies only viewer assets
+(`css/tokens.css`, `css/guest.css`, `js/theme.js`, `js/templates.js`, `js/guest-render.js`)
+into `preview-dist/`, renders a full-page guide per template, and throws if any file matching
+`studio` or `export` would ship. Point a Vercel project at this repo with:
+
+- Build command: `node scripts/build-preview.js`
+- Output directory: `preview-dist`
+
+```bash
+node scripts/build-preview.js
+```
 
 ## Use it
 
