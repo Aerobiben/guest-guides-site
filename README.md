@@ -18,9 +18,11 @@ A modular Airbnb guest site for hosts. Edit photos, Wi‑Fi, check-in, map, and 
 ## Preview gallery
 
 `preview/` holds the gallery source. `scripts/build-preview.js` copies only viewer assets
-(`css/tokens.css`, `css/guest.css`, `js/theme.js`, `js/templates.js`, `js/guest-render.js`)
-into `preview-dist/`, renders a full-page guide per template, and throws if any file matching
-`studio` or `export` would ship. Point a Vercel project at this repo with:
+(`css/tokens.css`, `css/guest.css`, `js/theme.js`, `js/guest-render.js`) into `preview-dist/`,
+renders a full-page guide per guidebook, and fails the build if a file matching `studio` or
+`export` would ship, or if `index.html` references a file the bundle does not contain.
+
+Vercel project settings:
 
 - Build command: `node scripts/build-preview.js`
 - Output directory: `preview-dist`
@@ -28,6 +30,40 @@ into `preview-dist/`, renders a full-page guide per template, and throws if any 
 ```bash
 node scripts/build-preview.js
 ```
+
+### Where the data comes from
+
+Guidebook content lives in a **private** repository so door codes, Wi‑Fi passwords and phone
+numbers stay out of this public repo. The build reads it over the GitHub contents API and bakes
+the result into static HTML, so the token never reaches a visitor's browser.
+
+Sources are tried in order, and the build falls back rather than failing:
+
+1. `GUIDEBOOK_DATA_DIR` — a local directory of `.json` files (handy offline)
+2. `GUIDEBOOK_DATA_REPO` — the private repo, via the contents API
+3. the bundled sample templates
+
+| Variable | Default | Purpose |
+| --- | --- | --- |
+| `GUIDEBOOK_DATA_REPO` | — | `owner/name` of the private data repo |
+| `GUIDEBOOK_DATA_TOKEN` | — | Read-only token with access to that repo |
+| `GUIDEBOOK_DATA_REF` | `main` | Branch to read |
+| `GUIDEBOOK_DATA_PATH` | `guidebooks` | Directory of `.json` files |
+| `GUIDEBOOK_DATA_DIR` | — | Local directory, overrides the repo |
+| `GUIDEBOOK_DATA_API` | `https://api.github.com` | For GitHub Enterprise or testing |
+
+### Creating the private data repo
+
+```bash
+node scripts/init-data-repo.js          # writes ./data-repo (gitignored)
+gh repo create <owner>/guest-guides-data --private
+cd data-repo && git init -b main && git add . && git commit -m "Add guidebook data"
+git remote add origin git@github.com:<owner>/guest-guides-data.git && git push -u origin main
+```
+
+Then add `GUIDEBOOK_DATA_TOKEN` to the preview project in Vercel. The scaffold includes a
+workflow that pings a Vercel deploy hook whenever `guidebooks/**` changes, so editing data
+rebuilds the gallery.
 
 ## Use it
 
