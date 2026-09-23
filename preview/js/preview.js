@@ -1,8 +1,4 @@
-const GALLERY = STARTER_TEMPLATES.map((guide) => ({
-  guide,
-  slug: SAMPLE_SLUGS[guide.id] || "",
-}));
-
+let gallery = [];
 let activeIndex = 0;
 
 function heroPhoto(guide) {
@@ -19,12 +15,12 @@ function icon(path) {
 
 function renderPicker() {
   const list = document.querySelector("#guide-picker");
-  list.innerHTML = GALLERY.map((entry, index) => `
+  list.innerHTML = gallery.map((guide, index) => `
     <button class="guide-option ${index === activeIndex ? "is-active" : ""}" type="button" data-index="${index}">
-      <img src="${escapeHtml(heroPhoto(entry.guide))}" alt="" loading="lazy" />
+      <img src="${escapeHtml(heroPhoto(guide))}" alt="" loading="lazy" />
       <span>
-        <strong>${escapeHtml(entry.guide.propertyName || entry.guide.title)}</strong>
-        <span>${escapeHtml(place(entry.guide))}</span>
+        <strong>${escapeHtml(guide.propertyName || guide.title)}</strong>
+        <span>${escapeHtml(place(guide))}</span>
       </span>
     </button>
   `).join("");
@@ -34,6 +30,14 @@ function renderPicker() {
       render();
     };
   });
+}
+
+function countSections(guide) {
+  let count = 4;
+  if (guide.wifi.network || guide.wifi.password) count += 1;
+  if ((guide.recommendations || []).length) count += 1;
+  if ((guide.houseManual || []).length || (guide.houseRules || []).length) count += 1;
+  return count;
 }
 
 function renderFacts(guide) {
@@ -53,28 +57,43 @@ function renderFacts(guide) {
   `).join("");
 }
 
-function countSections(guide) {
-  let count = 4;
-  if (guide.wifi.network || guide.wifi.password) count += 1;
-  if ((guide.recommendations || []).length) count += 1;
-  if ((guide.houseManual || []).length || (guide.houseRules || []).length) count += 1;
-  return count;
-}
-
 function render() {
-  const { guide, slug } = GALLERY[activeIndex];
+  const guide = gallery[activeIndex];
+  if (!guide) return;
   renderPicker();
   renderFacts(guide);
   document.querySelector("#stage-title").textContent = guide.propertyName || guide.title;
   document.querySelector("#stage-meta").textContent = `${place(guide)} · hosted by ${guide.hostName || "your host"}`;
   const link = document.querySelector("#fullscreen-link");
-  link.classList.toggle("hidden", !slug);
-  if (slug) link.href = `./guides/${slug}.html`;
+  link.classList.toggle("hidden", !guide.slug);
+  if (guide.slug) link.href = `./guides/${guide.slug}.html`;
   hydrateGuest(document.querySelector("#guest-preview"), guide, document.documentElement.dataset.theme);
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+function showLoadError() {
+  document.querySelector("#stage-title").textContent = "Guides unavailable";
+  document.querySelector("#stage-meta").textContent = "This gallery could not load its guidebook data.";
+  document.querySelector("#fullscreen-link").classList.add("hidden");
+}
+
+async function loadGuidebooks() {
+  const res = await fetch("./data/guidebooks.json", { cache: "no-cache" });
+  if (!res.ok) throw new Error(`guidebooks.json ${res.status}`);
+  const payload = await res.json();
+  return payload.guides || [];
+}
+
+document.addEventListener("DOMContentLoaded", async () => {
   initTheme("#theme-toggle");
   document.addEventListener("themechange", render);
+  try {
+    gallery = await loadGuidebooks();
+  } catch (error) {
+    console.error(error);
+  }
+  if (!gallery.length) {
+    showLoadError();
+    return;
+  }
   render();
 });
