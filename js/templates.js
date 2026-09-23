@@ -7,7 +7,7 @@ const DEFAULT_PHOTOS = {
   hike: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=800&q=80",
   bologna: "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?auto=format&fit=crop&w=1600&q=80",
   paris: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=1600&q=80",
-  glasgow: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?auto=format&fit=crop&w=1600&q=80",
+  glasgow: "https://images.unsplash.com/photo-1552832230-c0197dd311b5?auto=format&fit=crop&w=1600&q=80",
 };
 
 function makeId(prefix = "gb") {
@@ -305,6 +305,14 @@ const STARTER_TEMPLATES = [
   glasgowGuidebook(),
 ];
 
+const SAMPLE_SLUGS = {
+  "gb-richmond": "clement-street-hideaway",
+  "gb-mundus": "mundus-bologna",
+  "gb-lilas": "les-lilas",
+  "gb-glasgow": "bnbhost-glasgow",
+};
+
+globalThis.SAMPLE_SLUGS = SAMPLE_SLUGS;
 globalThis.STARTER_TEMPLATES = STARTER_TEMPLATES;
 globalThis.blankGuidebook = blankGuidebook;
 globalThis.makeId = makeId;
