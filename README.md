@@ -6,8 +6,22 @@ A modular Airbnb guest site for hosts. Edit photos, Wi‑Fi, check-in, map, and 
 
 | Site | Source | What visitors can do |
 | --- | --- | --- |
-| Main | repo root, served as-is | Browse the landing page and use the builder |
+| Main | repo root, served as-is | Browse the landing page and sample guides; the builder needs a password |
 | Preview gallery | `preview-dist/`, built by `scripts/build-preview.js` | View sample guides only — no editor, no download |
+
+## Builder password
+
+`middleware.js` puts HTTP Basic Auth in front of `/studio` and the studio-only assets.
+The landing page, the exported sample guides and the preview gallery stay public.
+
+| Variable | Default | Purpose |
+| --- | --- | --- |
+| `STUDIO_USER` | `host` | Username for the prompt |
+| `STUDIO_PASSWORD` | — | Password. Rotate it in the Vercel project settings. |
+
+With no `STUDIO_PASSWORD` set the gate fails closed and returns 503, so a misconfigured
+deployment never exposes the builder. Native Vercel password protection would be simpler but
+requires a Pro plan.
 
 ## Pages (main site)
 
