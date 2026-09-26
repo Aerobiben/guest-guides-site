@@ -21,6 +21,7 @@ const LOCAL = [
   ["css/preview.css", "css/preview.css"],
   ["js/preview.js", "js/preview.js"],
   ["robots.txt", "robots.txt"],
+  ["og-image.jpg", "og-image.jpg"],
 ];
 
 function copy(from, to) {
