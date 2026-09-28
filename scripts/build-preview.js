@@ -67,7 +67,8 @@ async function main() {
   );
 
   const shipped = listFiles(OUT);
-  const forbidden = shipped.filter((file) => /studio|export/.test(file));
+  const forbiddenNames = new Set(["studio.html", "studio.css", "studio.js", "export.js"]);
+  const forbidden = shipped.filter((file) => forbiddenNames.has(path.basename(file)));
   if (forbidden.length) {
     throw new Error(`Builder assets must not ship in the preview bundle: ${forbidden.join(", ")}`);
   }

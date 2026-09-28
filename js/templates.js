@@ -8,6 +8,13 @@ const DEFAULT_PHOTOS = {
   bologna: "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?auto=format&fit=crop&w=960&q=75",
   paris: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=960&q=75",
   glasgow: "https://images.unsplash.com/photo-1552832230-c0197dd311b5?auto=format&fit=crop&w=960&q=75",
+  fog: "https://images.unsplash.com/photo-1501594907352-04cda38ebc29?auto=format&fit=crop&w=960&q=75",
+  lisbon: "https://images.unsplash.com/photo-1555881400-74d7acaacd8b?auto=format&fit=crop&w=960&q=75",
+  tokyo: "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?auto=format&fit=crop&w=960&q=75",
+  cdmx: "https://images.unsplash.com/photo-1518659526051-707ba0fd610c?auto=format&fit=crop&w=960&q=75",
+  tram: "https://images.unsplash.com/photo-1528702748617-c82ea3ce87cd?auto=format&fit=crop&w=720&q=75",
+  lantern: "https://images.unsplash.com/photo-1528360983277-13d401cdc186?auto=format&fit=crop&w=720&q=75",
+  taco: "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&fit=crop&w=720&q=75",
 };
 
 function makeId(prefix = "gb") {
@@ -122,94 +129,94 @@ function blankGuidebook() {
   };
 }
 
-function richmondGuidebook() {
+function sunsetGuidebook() {
   return {
-    id: "gb-richmond",
-    title: "Clement Street Hideaway",
+    id: "gb-sunset",
+    title: "Sunset Garden Studio",
     theme: "auto",
-    propertyName: "Clement Street Hideaway",
-    hostName: "Ben Schumacher",
-    hostPhone: "+1 (415) 555-0148",
-    hostEmail: "host@example.com",
+    propertyName: "Sunset Garden Studio",
+    hostName: "Maya",
+    hostPhone: "+1 (415) 555-0100",
+    hostEmail: "maya.host@example.com",
     listingUrl: "https://www.airbnb.com/",
     intro: {
-      welcome: "Welcome home. We are so glad you chose our little hideaway in the Inner Richmond.",
-      about: "A quiet one-bedroom apartment a short walk from Golden Gate Park, bakeries on Clement, and the 1 and 38 buses into downtown.",
+      welcome: "Welcome to the Outer Sunset. The studio opens onto a small garden, two blocks from the N-Judah and a short walk to Ocean Beach.",
+      about: "A one-room stay with a real kitchen, blackout blinds, and a heater that actually works in the fog.",
     },
     address: {
-      search: "2nd Avenue, San Francisco, CA 94118",
-      line1: "2nd Avenue, San Francisco, CA 94118",
-      streetNumber: "2",
-      streetName: "2nd Avenue",
+      search: "Outer Sunset, San Francisco, CA",
+      line1: "Outer Sunset, San Francisco, CA",
+      streetNumber: "",
+      streetName: "",
       city: "San Francisco",
       state: "California",
-      postal: "94118",
+      postal: "94122",
       country: "United States",
-      lat: "37.7793",
-      lng: "-122.4794",
+      lat: "37.7601",
+      lng: "-122.5050",
       linkBehavior: "automatic",
     },
     photos: [
       { id: "ph-1", url: DEFAULT_PHOTOS.hero, caption: "Living room" },
       { id: "ph-2", url: DEFAULT_PHOTOS.living, caption: "Sofa nook" },
       { id: "ph-3", url: DEFAULT_PHOTOS.kitchen, caption: "Kitchen" },
-      { id: "ph-4", url: DEFAULT_PHOTOS.bedroom, caption: "Bedroom" },
+      { id: "ph-4", url: DEFAULT_PHOTOS.fog, caption: "Ocean Beach" },
     ],
     wifi: {
-      network: "ClementGuest",
-      password: "GoldenGate2026",
-      notes: "The router is on the bookshelf by the TV. 5 GHz is faster if your phone sees both.",
+      network: "SunsetGuest",
+      password: "oceanview",
+      notes: "The router is on the shelf by the TV. 5 GHz is faster if your phone sees both.",
     },
     checkIn: {
       time: "15:00",
-      accessCode: "4819#",
-      instructions: "The building door is on 2nd Avenue. Enter 4819# on the keypad, then take the stairs to 2R. The apartment lockbox is under the plant to the left of the door.",
+      accessCode: "1024#",
+      instructions: "Use the keypad on the garden gate, then the lockbox under the bench by the studio door. Code is 1024#.",
     },
     checkOut: {
       time: "11:00",
-      instructions: "Leave keys in the lockbox, start the dishwasher if you used it, and drop the thermostat to 68°F. You can leave luggage in the hall closet if you have a late flight — just text us.",
+      instructions: "Leave keys in the lockbox, start the dishwasher if you used it, and set the heat to 18°C / 64°F.",
     },
     parking: {
-      notes: "Street parking is free on 2nd Avenue with Tuesday street sweeping 8–10am. The closest garage is California Street Garage, a 6-minute walk.",
+      notes: "Street parking is usually easy west of 46th Avenue. Watch Tuesday street sweeping, 8–10am.",
     },
     directions: {
-      notes: "From SFO, take BART to Civic Center, then the 38 Geary toward the Richmond. Get off at 6th Avenue and walk north. Rideshare drop-off is safest on Clement at 2nd.",
+      notes: "From SFO, BART to Civic Center, then the N-Judah toward Ocean Beach. Get off at Judah & 46th. Rideshare drop-off is on Judah.",
     },
     houseManual: [
-      { id: "hm-1", title: "Heat & lights", body: "Thermostat is in the hallway. Lights are dimmable from the panel by the front door." },
-      { id: "hm-2", title: "Trash", body: "Kitchen bin bags go in the blue carts in the alley. Recycling is the yellow lid." },
-      { id: "hm-3", title: "Coffee", body: "Beans are in the canister marked Guest. The grinder and pour-over live next to the kettle." },
+      { id: "hm-1", title: "Heat & lights", body: "Thermostat is by the front door. The floor lamp is on a smart plug named Studio Lamp." },
+      { id: "hm-2", title: "Trash", body: "Kitchen bags go in the black cart in the side yard. Recycling is the blue lid." },
+      { id: "hm-3", title: "Coffee", body: "Beans are in the tin marked Guest. Pour-over and kettle live next to the stove." },
     ],
     houseRules: [
       "Quiet hours 10pm–8am",
       "No smoking or vaping indoors",
       "No parties or extra overnight guests without a note",
-      "Shoes off in the bedroom, please",
+      "Please keep the garden gate latched",
     ],
     recommendations: [
       {
         id: "rec-1",
-        name: "Good Luck Cafe",
+        name: "Andytown Coffee",
         category: "Coffee",
-        notes: "Best flat white on the block. Open from 7am.",
-        url: "https://maps.google.com/?q=Good+Luck+Cafe+San+Francisco",
+        notes: "Snowy Plovers and a window seat. A 12-minute walk toward the beach.",
+        url: "https://maps.google.com/?q=Andytown+Coffee+San+Francisco",
         image: DEFAULT_PHOTOS.cafe,
       },
       {
         id: "rec-2",
-        name: "Golden Gate Park",
+        name: "Ocean Beach",
         category: "Walk",
-        notes: "Enter at 6th & Fulton. Stow Lake is a 20-minute loop.",
-        url: "https://maps.google.com/?q=Golden+Gate+Park",
-        image: DEFAULT_PHOTOS.hike,
+        notes: "Head west on Judah until you hit sand. Sunset is the whole point.",
+        url: "https://maps.google.com/?q=Ocean+Beach+San+Francisco",
+        image: DEFAULT_PHOTOS.fog,
       },
     ],
     bookAgain: {
-      message: "If you want the same apartment next time, book from this link so the calendar stays in sync.",
+      message: "If you want the same studio next time, book from this link so the calendar stays in sync.",
     },
     emergency: {
       localNumber: "911",
-      notes: "Nearest ER is UCSF at Parnassus. Building manager: 415-555-0199.",
+      notes: "Nearest ER is UCSF at Parnassus, about 15 minutes by car.",
     },
   };
 }
@@ -291,15 +298,27 @@ function lesLilasGuidebook() {
       lng: "2.418",
       linkBehavior: "automatic",
     },
-    photos: [{ id: "ph-l1", url: DEFAULT_PHOTOS.paris, caption: "Paris" }],
-    wifi: { network: "LilasFibre", password: "courtyard", notes: "" },
+    photos: [
+      { id: "ph-l1", url: DEFAULT_PHOTOS.paris, caption: "Paris from the window" },
+      { id: "ph-l2", url: DEFAULT_PHOTOS.living, caption: "Courtyard apartment" },
+    ],
+    wifi: { network: "LilasFibre", password: "courtyard", notes: "Box is behind the TV. 5 GHz is LilasFibre-5." },
     checkIn: { time: "16:00", accessCode: "A 1204", instructions: "Building code on the left keypad. Apartment is 3ème gauche." },
     checkOut: { time: "11:00", instructions: "Leave keys in the bowl by the door." },
     parking: { notes: "Resident-only street parking. Use the parking at Porte des Lilas." },
     directions: { notes: "Métro line 11, station Porte des Lilas. From CDG, RER B to Châtelet then line 11." },
-    houseManual: [],
+    houseManual: [{ id: "hm-l1", title: "Shutters", body: "Pull the cord slowly — they stick if you yank. Close them before you leave." }],
     houseRules: ["No smoking", "Take shoes off at the door"],
-    recommendations: [],
+    recommendations: [
+      {
+        id: "rec-l1",
+        name: "Du Pain et des Idées",
+        category: "Bakery",
+        notes: "Pistachio escargot if they still have it after 10am. Walk or take line 11 to République, then 15 minutes on foot.",
+        url: "https://maps.google.com/?q=Du+Pain+et+des+Id%C3%A9es+Paris",
+        image: DEFAULT_PHOTOS.cafe,
+      },
+    ],
     bookAgain: { message: "Write us first — we keep a few dates for returning guests." },
     emergency: { localNumber: "112", notes: "" },
   };
@@ -329,29 +348,245 @@ function glasgowGuidebook() {
       lng: "-4.292",
       linkBehavior: "automatic",
     },
-    photos: [{ id: "ph-g1", url: DEFAULT_PHOTOS.glasgow, caption: "Glasgow" }],
-    wifi: { network: "WestEndGuest", password: "kelvingrove", notes: "" },
+    photos: [
+      { id: "ph-g1", url: DEFAULT_PHOTOS.glasgow, caption: "West End streets" },
+      { id: "ph-g2", url: DEFAULT_PHOTOS.living, caption: "Top-floor sitting room" },
+    ],
+    wifi: { network: "WestEndGuest", password: "kelvingrove", notes: "Router lives in the hall cupboard." },
     checkIn: { time: "15:00", accessCode: "1945", instructions: "Key safe is to the right of the close door, facing the street." },
     checkOut: { time: "10:30", instructions: "Leave keys in the safe and close the windows." },
     parking: { notes: "Permit zone. PayByPhone bays on the next street over." },
     directions: { notes: "From Glasgow Queen Street, subway to Hillhead. 8-minute walk from the station." },
     houseManual: [{ id: "hm-g1", title: "Heating", body: "Hive thermostat in the hall. 19°C is comfortable." }],
     houseRules: ["No smoking", "Bins out on Tuesday night"],
-    recommendations: [],
+    recommendations: [
+      {
+        id: "rec-g1",
+        name: "Kelvingrove Park",
+        category: "Walk",
+        notes: "Ten minutes downhill. Good for a first-morning coffee walk.",
+        url: "https://maps.google.com/?q=Kelvingrove+Park+Glasgow",
+        image: DEFAULT_PHOTOS.hike,
+      },
+    ],
     bookAgain: { message: "Use the listing link so we can keep your preferred dates." },
     emergency: { localNumber: "999", notes: "" },
   };
 }
 
+function lisbonGuidebook() {
+  const gb = blankGuidebook();
+  return {
+    ...gb,
+    id: "gb-lisbon",
+    title: "Alfama Terrace",
+    propertyName: "Alfama Terrace",
+    hostName: "Inês",
+    hostPhone: "+351 21 000 0000",
+    hostEmail: "ines.host@example.com",
+    listingUrl: "https://www.airbnb.com/",
+    intro: {
+      welcome: "Bem-vindos. The terrace looks over Alfama rooftops, and the 28 tram rattles two streets down.",
+      about: "A compact apartment with a proper espresso machine, thick walls, and blackout curtains for late nights.",
+    },
+    address: {
+      search: "Alfama, Lisbon, Portugal",
+      line1: "Alfama, Lisbon, Portugal",
+      streetNumber: "",
+      streetName: "",
+      city: "Lisbon",
+      state: "Lisboa",
+      postal: "1100",
+      country: "Portugal",
+      lat: "38.7129",
+      lng: "-9.1329",
+      linkBehavior: "automatic",
+    },
+    photos: [
+      { id: "ph-lx1", url: DEFAULT_PHOTOS.lisbon, caption: "Alfama rooftops" },
+      { id: "ph-lx2", url: DEFAULT_PHOTOS.tram, caption: "Tram 28" },
+      { id: "ph-lx3", url: DEFAULT_PHOTOS.living, caption: "Sitting room" },
+    ],
+    wifi: { network: "AlfamaGuest", password: "azulejo", notes: "Router is on the shelf by the terrace door." },
+    checkIn: { time: "15:00", accessCode: "3317", instructions: "Street door keypad, then second door on the left. Keys are in the tray on the table." },
+    checkOut: { time: "11:00", instructions: "Leave keys in the tray, close the terrace door, and pull the shutters." },
+    parking: { notes: "Do not drive into Alfama. Park at Santa Apolónia and walk up, or take a taxi to the square." },
+    directions: { notes: "From the airport, metro to Santa Apolónia, then a 12-minute uphill walk. Taxis know “mirante de Santa Luzia”." },
+    houseManual: [
+      { id: "hm-lx1", title: "Terrace", body: "The door sticks in humid weather — lift slightly as you pull. Please latch it before you go out." },
+      { id: "hm-lx2", title: "Coffee", body: "Beans in the tin marked Hóspedes. The espresso machine is primed; just press the cup button." },
+    ],
+    houseRules: ["No smoking indoors", "Quiet after 23:00 — the building is thin", "Please latch the terrace door"],
+    recommendations: [
+      {
+        id: "rec-lx1",
+        name: "Tram 28",
+        category: "Ride",
+        notes: "Board at Portas do Sol if you can. Sit on the right going west for the views.",
+        url: "https://maps.google.com/?q=Portas+do+Sol+Lisbon",
+        image: DEFAULT_PHOTOS.tram,
+      },
+      {
+        id: "rec-lx2",
+        name: "Fábrica Coffee Roasters",
+        category: "Coffee",
+        notes: "A downhill walk toward Chiado. Filter coffee is better than the espresso here.",
+        url: "https://maps.google.com/?q=F%C3%A1brica+Coffee+Roasters+Lisbon",
+        image: DEFAULT_PHOTOS.cafe,
+      },
+    ],
+    bookAgain: { message: "Tell us the dates before you book elsewhere — we hold returning-guest weekends when we can." },
+    emergency: { localNumber: "112", notes: "Hospital de São José is the nearest ER." },
+  };
+}
+
+function tokyoGuidebook() {
+  const gb = blankGuidebook();
+  return {
+    ...gb,
+    id: "gb-tokyo",
+    title: "Yanaka Lantern Loft",
+    propertyName: "Yanaka Lantern Loft",
+    hostName: "Yuki",
+    hostPhone: "+81 3 0000 0000",
+    hostEmail: "yuki.host@example.com",
+    listingUrl: "https://www.airbnb.com/",
+    intro: {
+      welcome: "ようこそ. The loft sits above a quiet Yanaka street, a short walk from Nippori and the cemetery paths.",
+      about: "A one-room loft with a futon that is actually comfortable, a kitchenette, and a sento two blocks away.",
+    },
+    address: {
+      search: "Yanaka, Taito City, Tokyo",
+      line1: "Yanaka, Tokyo, Japan",
+      streetNumber: "",
+      streetName: "",
+      city: "Tokyo",
+      state: "Tokyo",
+      postal: "110-0001",
+      country: "Japan",
+      lat: "35.7281",
+      lng: "139.7686",
+      linkBehavior: "automatic",
+    },
+    photos: [
+      { id: "ph-ty1", url: DEFAULT_PHOTOS.tokyo, caption: "Evening streets" },
+      { id: "ph-ty2", url: DEFAULT_PHOTOS.lantern, caption: "Lantern alley" },
+      { id: "ph-ty3", url: DEFAULT_PHOTOS.bedroom, caption: "Loft" },
+    ],
+    wifi: { network: "YanakaGuest", password: "lantern", notes: "Pocket Wi‑Fi is in the tray if the loft signal is weak." },
+    checkIn: { time: "16:00", accessCode: "8841", instructions: "Keypad on the brown door under the lantern. Shoes off at the step." },
+    checkOut: { time: "10:00", instructions: "Fold the futon, leave the keys in the tray, and lock from outside." },
+    parking: { notes: "No car parking. Nippori Station is a 7-minute walk; bikes can lean in the alley if they do not block the path." },
+    directions: { notes: "JR Yamanote to Nippori, south exit, then follow signs toward Yanaka Cemetery. The loft is the brown door with the lantern." },
+    houseManual: [
+      { id: "hm-ty1", title: "Futon", body: "Unfold onto the tatami after 8pm so the room stays a sitting space during the day." },
+      { id: "hm-ty2", title: "Trash", body: "Burnables in the beige bag, plastics in the clear one. Put bags in the hatch by 8am collection days (Mon / Thu)." },
+    ],
+    houseRules: ["Shoes off at the step", "No smoking", "Quiet after 22:00"],
+    recommendations: [
+      {
+        id: "rec-ty1",
+        name: "Yanaka Cemetery",
+        category: "Walk",
+        notes: "Five minutes from the door. Best just after sunrise, before tour groups.",
+        url: "https://maps.google.com/?q=Yanaka+Cemetery+Tokyo",
+        image: DEFAULT_PHOTOS.lantern,
+      },
+      {
+        id: "rec-ty2",
+        name: "Kayaba Coffee",
+        category: "Coffee",
+        notes: "Kissaten two streets over. Morning blend and thick toast.",
+        url: "https://maps.google.com/?q=Kayaba+Coffee+Yanaka",
+        image: DEFAULT_PHOTOS.cafe,
+      },
+    ],
+    bookAgain: { message: "Message us with dates — the loft books out around Golden Week and New Year." },
+    emergency: { localNumber: "119", notes: "Ambulance is 119. Nearest clinic is on Kototoi-dori." },
+  };
+}
+
+function romaNorteGuidebook() {
+  const gb = blankGuidebook();
+  return {
+    ...gb,
+    id: "gb-roma",
+    title: "Roma Norte Casa",
+    propertyName: "Roma Norte Casa",
+    hostName: "Sofía",
+    hostPhone: "+52 55 0000 0000",
+    hostEmail: "sofia.host@example.com",
+    listingUrl: "https://www.airbnb.com/",
+    intro: {
+      welcome: "Bienvenidos a Roma Norte. The casa is a first-floor flat on a tree street, a short walk to Parque México.",
+      about: "A one-bedroom with a real kitchen, a roof terrace two flights up, and a doorman who knows the building.",
+    },
+    address: {
+      search: "Roma Norte, Mexico City",
+      line1: "Roma Norte, Mexico City, Mexico",
+      streetNumber: "",
+      streetName: "",
+      city: "Mexico City",
+      state: "CDMX",
+      postal: "06700",
+      country: "Mexico",
+      lat: "19.4194",
+      lng: "-99.1620",
+      linkBehavior: "automatic",
+    },
+    photos: [
+      { id: "ph-mx1", url: DEFAULT_PHOTOS.cdmx, caption: "Roma Norte" },
+      { id: "ph-mx2", url: DEFAULT_PHOTOS.taco, caption: "Late tacos" },
+      { id: "ph-mx3", url: DEFAULT_PHOTOS.kitchen, caption: "Kitchen" },
+    ],
+    wifi: { network: "RomaNorteGuest", password: "jamaica", notes: "Modem is in the hall closet. 5 GHz is RomaNorteGuest-5." },
+    checkIn: { time: "15:00", accessCode: "2507", instructions: "Tell the doorman you are in 1B. Keypad on the flat door. Terrace key is on the hook." },
+    checkOut: { time: "11:00", instructions: "Leave keys on the kitchen counter and tell the doorman you are heading out." },
+    parking: { notes: "Street parking is tight. Use the public lot on Orizaba if you must drive; Metro Insurgentes is closer." },
+    directions: { notes: "Metro line 1 to Insurgentes, then a 10-minute walk into Roma Norte. From the airport, authorized taxi or Metrobus." },
+    houseManual: [
+      { id: "hm-mx1", title: "Water", body: "Do not drink the tap. A garrafón is under the sink; refill at the shop on the corner." },
+      { id: "hm-mx2", title: "Roof terrace", body: "Two flights up, door marked Azotea. Bring the hook key. Close the door so the pigeons stay out." },
+    ],
+    houseRules: ["No smoking indoors", "Quiet after 23:00", "Please do not leave food on the terrace"],
+    recommendations: [
+      {
+        id: "rec-mx1",
+        name: "Parque México",
+        category: "Walk",
+        notes: "Eight minutes south. Fountain, dogs, and shade in the afternoon.",
+        url: "https://maps.google.com/?q=Parque+M%C3%A9xico+CDMX",
+        image: DEFAULT_PHOTOS.cdmx,
+      },
+      {
+        id: "rec-mx2",
+        name: "El Turix",
+        category: "Tacos",
+        notes: "Cochinita on a paper plate. Go early; they sell out.",
+        url: "https://maps.google.com/?q=El+Turix+Roma+Norte",
+        image: DEFAULT_PHOTOS.taco,
+      },
+    ],
+    bookAgain: { message: "Write us before you rebook — we keep a few weekends for people we already know." },
+    emergency: { localNumber: "911", notes: "Hospital Ángeles Pedregal is far; closer is Hospital Español on Ejército Nacional." },
+  };
+}
+
 const STARTER_TEMPLATES = [
-  richmondGuidebook(),
+  sunsetGuidebook(),
+  lisbonGuidebook(),
+  tokyoGuidebook(),
+  romaNorteGuidebook(),
   mundusGuidebook(),
   lesLilasGuidebook(),
   glasgowGuidebook(),
 ];
 
 const SAMPLE_SLUGS = {
-  "gb-richmond": "clement-street-hideaway",
+  "gb-sunset": "sunset-garden-studio",
+  "gb-lisbon": "alfama-terrace",
+  "gb-tokyo": "yanaka-lantern-loft",
+  "gb-roma": "roma-norte-casa",
   "gb-mundus": "mundus-bologna",
   "gb-lilas": "les-lilas",
   "gb-glasgow": "bnbhost-glasgow",
@@ -362,7 +597,10 @@ globalThis.STARTER_TEMPLATES = STARTER_TEMPLATES;
 globalThis.blankGuidebook = blankGuidebook;
 globalThis.normalizeGuidebook = normalizeGuidebook;
 globalThis.makeId = makeId;
-globalThis.richmondGuidebook = richmondGuidebook;
+globalThis.sunsetGuidebook = sunsetGuidebook;
+globalThis.lisbonGuidebook = lisbonGuidebook;
+globalThis.tokyoGuidebook = tokyoGuidebook;
+globalThis.romaNorteGuidebook = romaNorteGuidebook;
 globalThis.mundusGuidebook = mundusGuidebook;
 globalThis.lesLilasGuidebook = lesLilasGuidebook;
 globalThis.glasgowGuidebook = glasgowGuidebook;

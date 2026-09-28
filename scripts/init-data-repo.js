@@ -14,7 +14,7 @@ phone numbers.
 
 \`\`\`
 guidebooks/
-  clement-street-hideaway.json
+  sunset-garden-studio.json
   ...
 \`\`\`
 

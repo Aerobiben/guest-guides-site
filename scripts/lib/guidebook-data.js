@@ -15,7 +15,9 @@ function readEnv() {
 
 function normalize(raw, context, index) {
   const guide = context.normalizeGuidebook(raw, index);
-  guide.slug = context.slugify(raw.slug || guide.propertyName || guide.title);
+  guide.slug = context.slugify(
+    raw.slug || context.SAMPLE_SLUGS[guide.id] || guide.propertyName || guide.title
+  );
   return guide;
 }
 

@@ -525,14 +525,14 @@
         <div class="guest-hero-copy">
           <p>BnBHost</p>
           <h1>West End Flat</h1>
-          <div class="guest-dots"><button type="button" data-photo="0" class="is-on"></button></div>
+          <div class="guest-dots"><button type="button" data-photo="0" class="is-on"></button><button type="button" data-photo="1" class=""></button></div>
         </div>
       </section>
       <div class="guest-body">
         <p class="guest-welcome">Welcome to the West End. You are a short walk from Kelvingrove and Byres Road.</p>
         <p class="guest-about ">A warm top-floor flat with blackout blinds and a proper kettle.</p>
-        <div class="guest-gallery guest-hidden">
-          
+        <div class="guest-gallery ">
+          <img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&amp;fit=crop&amp;w=800&amp;q=75" alt="Top-floor sitting room" width="400" height="124" loading="lazy" decoding="async" />
         </div>
         <div class="guest-actions">
           <a href="#wifi"><strong>Wi‑Fi</strong><span>WestEndGuest</span></a>
@@ -545,7 +545,7 @@
           <h2>Wi‑Fi</h2>
           <div class="guest-wifi"><div>Network</div><div><strong>WestEndGuest</strong> <button type="button" data-copy="WestEndGuest">Copy</button></div></div>
           <div class="guest-wifi"><div>Password</div><div><strong>kelvingrove</strong> <button type="button" data-copy="kelvingrove">Copy</button></div></div>
-          <p></p>
+          <p>Router lives in the hall cupboard.</p>
         </article>
 
         <article class="guest-card" id="checkin">
@@ -572,9 +572,17 @@
           <ul><li>No smoking</li><li>Bins out on Tuesday night</li></ul>
         </article>
 
-        <article class="guest-card guest-hidden" id="recs">
+        <article class="guest-card " id="recs">
           <h2>Recommendations</h2>
           
+            <a class="guest-rec" href="https://maps.google.com/?q=Kelvingrove+Park+Glasgow" target="_blank" rel="noreferrer">
+              <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&amp;fit=crop&amp;w=720&amp;q=75" alt="Kelvingrove Park" width="92" height="92" loading="lazy" decoding="async" />
+              <div>
+                <small>Walk</small>
+                <p><strong>Kelvingrove Park</strong></p>
+                <p>Ten minutes downhill. Good for a first-morning coffee walk.</p>
+              </div>
+            </a>
         </article>
 
         <article class="guest-card" id="checkout">
@@ -596,7 +604,7 @@
         <a href="#directions">Map</a>
         <a href="#parking">Parking</a>
         <a href="#house">House</a>
-        
+        <a href="#recs">Eats</a>
         <a href="#checkout">Out</a>
       </nav>
       <div class="guest-toast" data-toast>Copied</div>
@@ -604,7 +612,7 @@
   
 <script>
     (function () {
-      var photos = ["https://images.unsplash.com/photo-1552832230-c0197dd311b5?auto=format&fit=crop&w=960&q=75"];
+      var photos = ["https://images.unsplash.com/photo-1552832230-c0197dd311b5?auto=format&fit=crop&w=960&q=75","https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=800&q=75"];
       var root = document.body;
       var THEME_KEY = "guest-guide-theme";
       var hostTheme = root.getAttribute("data-guest-theme") || "auto";

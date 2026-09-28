@@ -350,7 +350,7 @@
 
 .sample-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   gap: 16px;
 }
 
@@ -480,8 +480,7 @@
   }
 
   .feature-grid,
-  .steps,
-  .sample-grid {
+  .steps {
     grid-template-columns: 1fr;
   }
 
@@ -544,6 +543,10 @@
 
   .section {
     padding: 46px 0;
+  }
+
+  .sample-grid {
+    grid-template-columns: 1fr;
   }
 
   .cta-band {

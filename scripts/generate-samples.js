@@ -7,13 +7,9 @@ const css = guestCss();
 const outDir = path.join(ROOT, "samples");
 fs.mkdirSync(outDir, { recursive: true });
 
-const files = [
-  ["les-lilas.html", context.lesLilasGuidebook()],
-  ["mundus-bologna.html", context.mundusGuidebook()],
-  ["bnbhost-glasgow.html", context.glasgowGuidebook()],
-];
-
-for (const [name, guide] of files) {
+for (const guide of context.STARTER_TEMPLATES) {
+  const slug = context.SAMPLE_SLUGS[guide.id] || context.slugify(guide.propertyName || guide.title);
+  const name = `${slug}.html`;
   fs.writeFileSync(path.join(outDir, name), context.buildGuestDocument(guide, css));
   console.log("wrote", name);
 }
