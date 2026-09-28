@@ -11,8 +11,8 @@ const DEFAULT_PHOTOS = {
   fog: "https://images.unsplash.com/photo-1501594907352-04cda38ebc29?auto=format&fit=crop&w=960&q=75",
   lisbon: "https://images.unsplash.com/photo-1555881400-74d7acaacd8b?auto=format&fit=crop&w=960&q=75",
   tokyo: "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?auto=format&fit=crop&w=960&q=75",
-  cdmx: "https://images.unsplash.com/photo-1518659526051-707ba0fd610c?auto=format&fit=crop&w=960&q=75",
-  tram: "https://images.unsplash.com/photo-1528702748617-c82ea3ce87cd?auto=format&fit=crop&w=720&q=75",
+  cdmx: "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&fit=crop&w=960&q=75",
+  tram: "https://images.unsplash.com/photo-1585208798174-6cedd86e019a?auto=format&fit=crop&w=720&q=75",
   lantern: "https://images.unsplash.com/photo-1528360983277-13d401cdc186?auto=format&fit=crop&w=720&q=75",
   taco: "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&fit=crop&w=720&q=75",
 };
@@ -535,7 +535,7 @@ function romaNorteGuidebook() {
       linkBehavior: "automatic",
     },
     photos: [
-      { id: "ph-mx1", url: DEFAULT_PHOTOS.cdmx, caption: "Roma Norte" },
+      { id: "ph-mx1", url: DEFAULT_PHOTOS.living, caption: "Sitting room" },
       { id: "ph-mx2", url: DEFAULT_PHOTOS.taco, caption: "Late tacos" },
       { id: "ph-mx3", url: DEFAULT_PHOTOS.kitchen, caption: "Kitchen" },
     ],
@@ -556,7 +556,7 @@ function romaNorteGuidebook() {
         category: "Walk",
         notes: "Eight minutes south. Fountain, dogs, and shade in the afternoon.",
         url: "https://maps.google.com/?q=Parque+M%C3%A9xico+CDMX",
-        image: DEFAULT_PHOTOS.cdmx,
+        image: DEFAULT_PHOTOS.hike,
       },
       {
         id: "rec-mx2",
