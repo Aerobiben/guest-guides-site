@@ -45,17 +45,17 @@
             <path d="M20 14.2A8.2 8.2 0 0 1 9.8 4a8.4 8.4 0 1 0 10.2 10.2Z"/>
           </svg>
         </button>
-        <button class="btn btn-ghost" id="preview-btn" type="button">
+        <button class="btn btn-ghost" id="preview-btn" type="button" aria-label="Guest preview">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true">
             <rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M11 18.5h2"/>
           </svg>
-          Guest preview
+          <span class="btn-copy">Guest preview</span>
         </button>
         <button class="btn btn-primary" id="download-btn" type="button">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
             <path d="M12 4v11m0 0 4-4m-4 4-4-4M5 19h14"/>
           </svg>
-          Download HTML
+          <span class="btn-copy">Download HTML</span>
         </button>
       </div>
     </header>
@@ -481,10 +481,13 @@
         </div>
       </main>
 
-      <aside class="preview-col">
+      <aside class="preview-col" id="preview-col">
         <div class="preview-head">
-          <h2>Guest phone preview</h2>
-          <p>Exactly what lands in the downloaded HTML file.</p>
+          <div>
+            <h2>Guest phone preview</h2>
+            <p>Exactly what lands in the downloaded HTML file.</p>
+          </div>
+          <button class="btn btn-ghost" id="preview-full-btn" type="button">Open full page</button>
         </div>
         <div class="phone">
           <div class="phone-screen guest-app" id="guest-preview"></div>

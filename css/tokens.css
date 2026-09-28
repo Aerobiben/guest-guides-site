@@ -88,6 +88,7 @@ select {
   align-items: center;
   justify-content: center;
   gap: 8px;
+  min-height: 44px;
   border: 1px solid transparent;
   border-radius: var(--radius-pill);
   padding: 11px 18px;
@@ -95,6 +96,7 @@ select {
   font-weight: 600;
   text-decoration: none;
   cursor: pointer;
+  touch-action: manipulation;
   transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
 }
 
@@ -128,6 +130,7 @@ select {
 }
 
 .btn-lg {
+  min-height: 48px;
   padding: 14px 24px;
   font-size: 15px;
 }
@@ -135,14 +138,15 @@ select {
 .btn-icon {
   display: grid;
   place-items: center;
-  width: 42px;
-  height: 42px;
+  width: 44px;
+  height: 44px;
   padding: 0;
   border-radius: 50%;
   background: var(--surface);
   border: 1px solid var(--line-strong);
   color: var(--ink-soft);
   cursor: pointer;
+  touch-action: manipulation;
 }
 
 .btn-icon:hover {

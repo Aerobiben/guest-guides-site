@@ -87,7 +87,13 @@ function renderNav() {
   qsa("[data-tab]").forEach((btn) => {
     const on = btn.dataset.tab === state.tab;
     btn.classList.toggle("is-active", on);
-    if (on) btn.scrollIntoView({ block: "nearest", inline: "nearest" });
+    if (on) {
+      const scroller = btn.parentElement;
+      if (scroller) {
+        const left = Math.max(0, btn.offsetLeft - 16);
+        scroller.scrollTo({ left, behavior: "smooth" });
+      }
+    }
   });
   qsa(".panel").forEach((panel) => {
     panel.classList.toggle("is-active", panel.dataset.panel === state.tab);
@@ -387,12 +393,21 @@ async function exportHtml() {
   downloadTextFile(`${slugify(activeGuide().propertyName || activeGuide().title)}.html`, html);
 }
 
-async function openPreview() {
+async function openFullPreview() {
   if (!guestCssCache) await loadGuestCss();
   const html = buildGuestDocument(activeGuide(), guestCssCache);
   const url = URL.createObjectURL(new Blob([html], { type: "text/html;charset=utf-8" }));
   window.open(url, "_blank", "noopener");
   setTimeout(() => URL.revokeObjectURL(url), 30000);
+}
+
+function openPreview() {
+  const col = qs("#preview-col");
+  if (col && window.matchMedia("(max-width: 1080px)").matches) {
+    col.scrollIntoView({ behavior: "smooth", block: "start" });
+    return;
+  }
+  openFullPreview();
 }
 
 function wire() {
@@ -443,6 +458,7 @@ function wire() {
   };
   qs("#download-btn").onclick = exportHtml;
   qs("#preview-btn").onclick = openPreview;
+  qs("#preview-full-btn").onclick = openFullPreview;
   let searchTimer;
   qs("#address-search").addEventListener("input", (event) => {
     clearTimeout(searchTimer);

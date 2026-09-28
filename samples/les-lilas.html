@@ -75,6 +75,7 @@
 }
 
 .guest-shell {
+  position: relative;
   max-width: 460px;
   margin: 0 auto;
   min-height: 100%;
@@ -102,8 +103,8 @@
   z-index: 2;
   display: grid;
   place-items: center;
-  width: 38px;
-  height: 38px;
+  width: 44px;
+  height: 44px;
   padding: 0;
   border: 1px solid rgba(255, 255, 255, 0.28);
   border-radius: 999px;
@@ -111,6 +112,7 @@
   backdrop-filter: blur(8px);
   color: #fff;
   cursor: pointer;
+  touch-action: manipulation;
 }
 
 .guest-theme-toggle svg {
@@ -150,7 +152,7 @@
 
 .guest-hero-copy h1 {
   margin: 0;
-  font-size: 30px;
+  font-size: clamp(24px, 7vw, 30px);
   line-height: 1.12;
   letter-spacing: -0.03em;
   font-weight: 700;
@@ -163,6 +165,7 @@
 }
 
 .guest-dots button {
+  position: relative;
   width: 8px;
   height: 8px;
   padding: 0;
@@ -170,7 +173,14 @@
   border-radius: 99px;
   background: rgba(255, 255, 255, 0.45);
   cursor: pointer;
+  touch-action: manipulation;
   transition: width 0.2s ease, background 0.2s ease;
+}
+
+.guest-dots button::after {
+  content: "";
+  position: absolute;
+  inset: -16px -12px;
 }
 
 .guest-dots button.is-on {
@@ -242,7 +252,7 @@
 
 .guest-card h2 {
   margin: 0 0 12px;
-  font-size: 11.5px;
+  font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -270,6 +280,12 @@
   color: var(--guest-accent);
 }
 
+.guest-card p a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+}
+
 .guest-card ul {
   margin: 12px 0 0;
   padding-left: 20px;
@@ -288,6 +304,7 @@
   border-top: 1px solid var(--guest-line);
   color: var(--guest-muted);
   font-size: 14px;
+  overflow-wrap: anywhere;
 }
 
 .guest-wifi:first-of-type {
@@ -296,15 +313,18 @@
 }
 
 .guest-wifi button {
+  flex: none;
   border: 0;
   background: var(--guest-accent-soft);
   color: var(--guest-accent);
   border-radius: 999px;
-  padding: 7px 13px;
+  min-height: 40px;
+  padding: 8px 14px;
   margin-left: 8px;
   font-size: 12.5px;
   font-weight: 700;
   cursor: pointer;
+  touch-action: manipulation;
 }
 
 .guest-map {
@@ -378,7 +398,8 @@
   display: flex;
   gap: 6px;
   overflow: auto;
-  padding: 12px 14px 18px;
+  -webkit-overflow-scrolling: touch;
+  padding: 12px 14px max(18px, env(safe-area-inset-bottom, 18px));
   background: var(--guest-veil);
   backdrop-filter: blur(14px);
   border-top: 1px solid var(--guest-line);
@@ -390,14 +411,19 @@
 }
 
 .guest-nav a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   flex: none;
-  padding: 9px 14px;
+  min-height: 44px;
+  padding: 10px 16px;
   border-radius: 999px;
   background: var(--guest-chip);
   color: var(--guest-soft);
-  font-size: 12.5px;
+  font-size: 13px;
   font-weight: 600;
   text-decoration: none;
+  touch-action: manipulation;
 }
 
 .guest-hidden {
@@ -407,7 +433,8 @@
 .guest-toast {
   position: fixed;
   left: 50%;
-  bottom: 84px;
+  bottom: max(84px, calc(72px + env(safe-area-inset-bottom, 0px)));
+  z-index: 5;
   transform: translateX(-50%);
   padding: 10px 16px;
   background: #1b1720;
@@ -417,6 +444,7 @@
   font-weight: 600;
   opacity: 0;
   pointer-events: none;
+  white-space: nowrap;
   transition: opacity 0.2s ease;
 }
 
@@ -427,6 +455,26 @@
 
 .guest-toast.is-on {
   opacity: 1;
+}
+
+@media (max-width: 480px) {
+  .guest-hero {
+    min-height: 280px;
+  }
+
+  .guest-hero-copy {
+    left: 16px;
+    right: 16px;
+    bottom: 16px;
+  }
+
+  .guest-body {
+    padding: 20px 16px 104px;
+  }
+
+  .guest-gallery img {
+    height: 108px;
+  }
 }
 
     html, body { margin: 0; }
