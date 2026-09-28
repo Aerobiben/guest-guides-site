@@ -75,7 +75,7 @@ async function main() {
 
   const html = fs.readFileSync(path.join(OUT, "index.html"), "utf8");
   const missing = [...html.matchAll(/(?:src|href)="\.\/([^"]+)"/g)]
-    .map((match) => match[1])
+    .map((match) => match[1].split("?")[0])
     .filter((asset) => !fs.existsSync(path.join(OUT, asset)));
   if (missing.length) {
     throw new Error(`index.html references files that are not in the bundle: ${missing.join(", ")}`);
