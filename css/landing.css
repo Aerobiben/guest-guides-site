@@ -30,6 +30,7 @@
 .nav-links a {
   display: inline-flex;
   align-items: center;
+  flex: none;
   min-height: 40px;
   padding: 9px 14px;
   border-radius: var(--radius-pill);
@@ -37,6 +38,7 @@
   font-size: 14px;
   font-weight: 500;
   text-decoration: none;
+  white-space: nowrap;
 }
 
 .nav-links a:hover {
@@ -449,6 +451,9 @@
 }
 
 .site-footer a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
   color: var(--ink-soft);
   text-decoration: none;
 }

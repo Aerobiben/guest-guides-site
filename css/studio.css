@@ -538,6 +538,7 @@ input[type="file"]::file-selector-button {
   position: sticky;
   top: 108px;
   min-width: 0;
+  scroll-margin-top: 120px;
   padding: 22px 20px 26px;
   background: var(--preview-wash);
   border: 1px solid var(--line);
@@ -551,6 +552,11 @@ input[type="file"]::file-selector-button {
   justify-content: space-between;
   gap: 12px;
   margin-bottom: 16px;
+}
+
+.preview-head .btn {
+  flex: none;
+  white-space: nowrap;
 }
 
 .preview-head h2 {
@@ -702,6 +708,7 @@ input[type="file"]::file-selector-button {
 
   .preview-col {
     padding: 18px 16px 22px;
+    scroll-margin-top: 176px;
   }
 
   .phone-screen {
