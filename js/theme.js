@@ -32,7 +32,8 @@ function setTheme(theme) {
 }
 
 function initTheme(toggleSelector) {
-  applyTheme(resolvedTheme());
+  const next = resolvedTheme();
+  if (document.documentElement.dataset.theme !== next) applyTheme(next);
   window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => {
     if (!storedTheme()) applyTheme(systemTheme());
   });

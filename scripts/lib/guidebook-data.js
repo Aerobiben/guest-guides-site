@@ -14,40 +14,7 @@ function readEnv() {
 }
 
 function normalize(raw, context, index) {
-  const base = context.blankGuidebook();
-  const guide = {
-    ...base,
-    ...raw,
-    intro: { ...base.intro, ...(raw.intro || {}) },
-    address: { ...base.address, ...(raw.address || {}) },
-    wifi: { ...base.wifi, ...(raw.wifi || {}) },
-    checkIn: { ...base.checkIn, ...(raw.checkIn || {}) },
-    checkOut: { ...base.checkOut, ...(raw.checkOut || {}) },
-    parking: { ...base.parking, ...(raw.parking || {}) },
-    directions: { ...base.directions, ...(raw.directions || {}) },
-    bookAgain: { ...base.bookAgain, ...(raw.bookAgain || {}) },
-    emergency: { ...base.emergency, ...(raw.emergency || {}) },
-    photos: (raw.photos || []).map((photo, i) => ({
-      id: photo.id || `ph-${index}-${i}`,
-      url: photo.url || "",
-      caption: photo.caption || "",
-    })),
-    houseManual: (raw.houseManual || []).map((item, i) => ({
-      id: item.id || `hm-${index}-${i}`,
-      title: item.title || "",
-      body: item.body || "",
-    })),
-    houseRules: raw.houseRules || [],
-    recommendations: (raw.recommendations || []).map((item, i) => ({
-      id: item.id || `rec-${index}-${i}`,
-      name: item.name || "",
-      category: item.category || "",
-      notes: item.notes || "",
-      url: item.url || "",
-      image: item.image || "",
-    })),
-  };
-  guide.id = raw.id || `gb-${index}`;
+  const guide = context.normalizeGuidebook(raw, index);
   guide.slug = context.slugify(raw.slug || guide.propertyName || guide.title);
   return guide;
 }

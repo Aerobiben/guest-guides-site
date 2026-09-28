@@ -1,6 +1,8 @@
 function buildGuestDocument(guidebook, guestCss) {
   const title = guidebook.propertyName || guidebook.title || "Guest guide";
-  const photos = (guidebook.photos || []).filter((photo) => photo.url).map((photo) => photo.url);
+  const photos = (guidebook.photos || [])
+    .map((photo) => safeUrl(photo.url, { allowDataImage: true }))
+    .filter(Boolean);
   const script = guestPageScript().replace("PHOTOS_PLACEHOLDER", JSON.stringify(photos));
   return `<!DOCTYPE html>
 <html lang="en">
@@ -12,7 +14,7 @@ function buildGuestDocument(guidebook, guestCss) {
   <meta name="description" content="Wi‑Fi, check-in, house notes, and local picks for your stay." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
   <meta name="color-scheme" content="${guidebook.theme === "dark" ? "dark" : guidebook.theme === "light" ? "light" : "light dark"}" />
   <style>${guestCss}
     html, body { margin: 0; }

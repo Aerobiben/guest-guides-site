@@ -11,6 +11,7 @@ function loadGuidebookModules(files = ["js/templates.js", "js/guest-render.js", 
     Math,
     Number,
     String,
+    URL,
     encodeURIComponent,
   };
   context.globalThis = context;

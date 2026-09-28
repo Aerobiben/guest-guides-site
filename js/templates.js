@@ -1,17 +1,62 @@
 const DEFAULT_PHOTOS = {
-  hero: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=1600&q=80",
-  living: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=1200&q=80",
-  kitchen: "https://images.unsplash.com/photo-1556912173-46c336c7fd55?auto=format&fit=crop&w=1200&q=80",
-  bedroom: "https://images.unsplash.com/photo-1616594039964-ae9021a400a0?auto=format&fit=crop&w=1200&q=80",
-  cafe: "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=800&q=80",
-  hike: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=800&q=80",
-  bologna: "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?auto=format&fit=crop&w=1600&q=80",
-  paris: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=1600&q=80",
-  glasgow: "https://images.unsplash.com/photo-1552832230-c0197dd311b5?auto=format&fit=crop&w=1600&q=80",
+  hero: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=960&q=75",
+  living: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=800&q=75",
+  kitchen: "https://images.unsplash.com/photo-1556912173-46c336c7fd55?auto=format&fit=crop&w=800&q=75",
+  bedroom: "https://images.unsplash.com/photo-1616594039964-ae9021a400a0?auto=format&fit=crop&w=800&q=75",
+  cafe: "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=720&q=75",
+  hike: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=720&q=75",
+  bologna: "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?auto=format&fit=crop&w=960&q=75",
+  paris: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=960&q=75",
+  glasgow: "https://images.unsplash.com/photo-1552832230-c0197dd311b5?auto=format&fit=crop&w=960&q=75",
 };
 
 function makeId(prefix = "gb") {
   return `${prefix}-${Math.random().toString(36).slice(2, 9)}`;
+}
+
+function normalizeGuidebook(raw = {}, index = 0) {
+  const base = blankGuidebook();
+  const source = raw && typeof raw === "object" ? raw : {};
+  const guide = {
+    ...base,
+    ...source,
+    intro: { ...base.intro, ...(source.intro || {}) },
+    address: { ...base.address, ...(source.address || {}) },
+    wifi: { ...base.wifi, ...(source.wifi || {}) },
+    checkIn: { ...base.checkIn, ...(source.checkIn || {}) },
+    checkOut: { ...base.checkOut, ...(source.checkOut || {}) },
+    parking: { ...base.parking, ...(source.parking || {}) },
+    directions: { ...base.directions, ...(source.directions || {}) },
+    bookAgain: { ...base.bookAgain, ...(source.bookAgain || {}) },
+    emergency: { ...base.emergency, ...(source.emergency || {}) },
+    photos: Array.isArray(source.photos) && source.photos.length
+      ? source.photos.map((photo, i) => ({
+          id: photo?.id || `ph-${index}-${i}`,
+          url: photo?.url || "",
+          caption: photo?.caption || "",
+        }))
+      : base.photos,
+    houseManual: Array.isArray(source.houseManual)
+      ? source.houseManual.map((item, i) => ({
+          id: item?.id || `hm-${index}-${i}`,
+          title: item?.title || "",
+          body: item?.body || "",
+        }))
+      : [],
+    houseRules: Array.isArray(source.houseRules) ? source.houseRules : [],
+    recommendations: Array.isArray(source.recommendations)
+      ? source.recommendations.map((item, i) => ({
+          id: item?.id || `rec-${index}-${i}`,
+          name: item?.name || "",
+          category: item?.category || "",
+          notes: item?.notes || "",
+          url: item?.url || "",
+          image: item?.image || "",
+        }))
+      : [],
+  };
+  if (source.id) guide.id = source.id;
+  return guide;
 }
 
 function blankGuidebook() {
@@ -315,6 +360,7 @@ const SAMPLE_SLUGS = {
 globalThis.SAMPLE_SLUGS = SAMPLE_SLUGS;
 globalThis.STARTER_TEMPLATES = STARTER_TEMPLATES;
 globalThis.blankGuidebook = blankGuidebook;
+globalThis.normalizeGuidebook = normalizeGuidebook;
 globalThis.makeId = makeId;
 globalThis.richmondGuidebook = richmondGuidebook;
 globalThis.mundusGuidebook = mundusGuidebook;

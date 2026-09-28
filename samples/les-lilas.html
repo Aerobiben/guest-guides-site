@@ -8,7 +8,7 @@
   <meta name="description" content="Wi‑Fi, check-in, house notes, and local picks for your stay." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
   <meta name="color-scheme" content="light dark" />
   <style>.guest-app {
   --guest-bg: #f3efe9;
@@ -61,6 +61,11 @@
     --guest-veil: rgba(23, 20, 29, 0.92);
     color-scheme: dark;
   }
+}
+
+.guest-app,
+.guest-app * {
+  box-sizing: border-box;
 }
 
 .guest-app {
@@ -132,6 +137,16 @@
   display: none;
 }
 
+@media (prefers-color-scheme: dark) {
+  .guest-app[data-guest-theme="auto"] .guest-theme-toggle .icon-moon {
+    display: block;
+  }
+
+  .guest-app[data-guest-theme="auto"] .guest-theme-toggle .icon-sun {
+    display: none;
+  }
+}
+
 .guest-hero-copy {
   position: absolute;
   left: 22px;
@@ -180,7 +195,7 @@
 .guest-dots button::after {
   content: "";
   position: absolute;
-  inset: -18px;
+  inset: -16px -4px;
 }
 
 .guest-dots button.is-on {
@@ -339,6 +354,12 @@
   filter: invert(0.9) hue-rotate(180deg) saturate(0.8);
 }
 
+@media (prefers-color-scheme: dark) {
+  .guest-app[data-guest-theme="auto"] .guest-map {
+    filter: invert(0.9) hue-rotate(180deg) saturate(0.8);
+  }
+}
+
 .guest-rec {
   display: grid;
   grid-template-columns: 92px 1fr;
@@ -457,6 +478,13 @@
   opacity: 1;
 }
 
+@media (prefers-reduced-transparency: reduce) {
+  .guest-nav,
+  .guest-theme-toggle {
+    backdrop-filter: none;
+  }
+}
+
 @media (max-width: 480px) {
   .guest-hero {
     min-height: 280px;
@@ -485,7 +513,7 @@
 <body class="guest-app" data-guest-theme="auto">
 
     <div class="guest-shell">
-      <section class="guest-hero" style="background-image:url('https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&amp;fit=crop&amp;w=1600&amp;q=80')" data-hero>
+      <section class="guest-hero" style="background-image:url("https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=960&q=75")" data-hero>
         <button class="guest-theme-toggle" type="button" data-theme-toggle aria-label="Toggle dark mode">
           <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
             <circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M2.5 12h2M19.5 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"/>
@@ -530,7 +558,7 @@
           <h2>Directions</h2>
           <p>Les Lilas, France, Les Lilas, Île-de-France, 93260, France</p>
           <p>Métro line 11, station Porte des Lilas. From CDG, RER B to Châtelet then line 11.</p>
-          <iframe class="guest-map" title="Map" src="https://www.openstreetmap.org/export/embed.html?bbox=2.4080000000000004%2C48.871%2C2.428%2C48.891&layer=mapnik&marker=48.881%2C2.418"></iframe>
+          <iframe class="guest-map" title="Map" src="https://www.openstreetmap.org/export/embed.html?bbox=2.4080000000000004%2C48.871%2C2.428%2C48.891&amp;layer=mapnik&amp;marker=48.881%2C2.418" loading="lazy"></iframe>
         </article>
 
         <article class="guest-card" id="parking">
@@ -568,7 +596,7 @@
         <a href="#directions">Map</a>
         <a href="#parking">Parking</a>
         <a href="#house">House</a>
-        <a href="#recs">Eats</a>
+        
         <a href="#checkout">Out</a>
       </nav>
       <div class="guest-toast" data-toast>Copied</div>
@@ -576,32 +604,56 @@
   
 <script>
     (function () {
-      var photos = ["https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=1600&q=80"];
+      var photos = ["https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=960&q=75"];
       var root = document.body;
       var THEME_KEY = "guest-guide-theme";
-      try {
-        var saved = localStorage.getItem(THEME_KEY);
-        if (saved === "light" || saved === "dark") root.dataset.guestTheme = saved;
-      } catch (e) {}
+      var hostTheme = root.getAttribute("data-guest-theme") || "auto";
+      if (hostTheme === "auto") {
+        try {
+          var saved = localStorage.getItem(THEME_KEY);
+          if (saved === "light" || saved === "dark") root.dataset.guestTheme = saved;
+        } catch (e) {}
+      }
       function resolved() {
         var mode = root.dataset.guestTheme;
         if (mode === "dark" || mode === "light") return mode;
         return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      }
+      function fallbackCopy(text) {
+        var field = document.createElement("textarea");
+        field.value = text;
+        field.setAttribute("readonly", "");
+        field.style.position = "fixed";
+        field.style.left = "-9999px";
+        document.body.appendChild(field);
+        field.select();
+        var ok = false;
+        try { ok = document.execCommand("copy"); } catch (e) {}
+        field.remove();
+        return ok;
+      }
+      function copyText(text) {
+        if (navigator.clipboard && window.isSecureContext) {
+          return navigator.clipboard.writeText(text).then(function () { return true; }).catch(function () { return fallbackCopy(text); });
+        }
+        return Promise.resolve(fallbackCopy(text));
       }
       var themeBtn = document.querySelector("[data-theme-toggle]");
       if (themeBtn) {
         themeBtn.addEventListener("click", function () {
           var next = resolved() === "dark" ? "light" : "dark";
           root.dataset.guestTheme = next;
-          try { localStorage.setItem(THEME_KEY, next); } catch (e) {}
+          if (hostTheme === "auto") {
+            try { localStorage.setItem(THEME_KEY, next); } catch (e) {}
+          }
         });
       }
       var hero = document.querySelector("[data-hero]");
       document.querySelectorAll("[data-photo]").forEach(function (btn) {
         btn.addEventListener("click", function () {
           var i = Number(btn.getAttribute("data-photo"));
-          if (!photos[i]) return;
-          hero.style.backgroundImage = "url('" + photos[i] + "')";
+          if (!photos[i] || !hero) return;
+          hero.style.backgroundImage = "url(" + JSON.stringify(photos[i]) + ")";
           document.querySelectorAll("[data-photo]").forEach(function (el) { el.classList.toggle("is-on", el === btn); });
         });
       });
@@ -609,10 +661,12 @@
       document.querySelectorAll("[data-copy]").forEach(function (btn) {
         btn.addEventListener("click", function () {
           var text = btn.getAttribute("data-copy") || "";
-          if (navigator.clipboard) navigator.clipboard.writeText(text);
-          toast.textContent = "Copied";
-          toast.classList.add("is-on");
-          setTimeout(function () { toast.classList.remove("is-on"); }, 1200);
+          copyText(text).then(function (ok) {
+            if (!toast) return;
+            toast.textContent = ok ? "Copied" : "Copy failed";
+            toast.classList.add("is-on");
+            setTimeout(function () { toast.classList.remove("is-on"); }, 1400);
+          });
         });
       });
     })();

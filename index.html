@@ -13,7 +13,9 @@
   <meta property="og:type" content="website" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'" />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" /></noscript>
   <link rel="stylesheet" href="./css/tokens.css" />
   <link rel="stylesheet" href="./css/landing.css" />
   <link rel="stylesheet" href="./css/guest.css" />
@@ -204,7 +206,7 @@
       </div>
       <div class="sample-grid">
         <a class="sample" href="./samples/les-lilas.html">
-          <img src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=800&q=70" alt="Paris rooftops at sunset" loading="lazy" />
+          <img src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=800&q=70" alt="Paris rooftops at sunset" width="800" height="178" loading="lazy" decoding="async" />
           <div class="sample-body">
             <strong>Les Lilas</strong>
             <span>Paris, France · métro line 11</span>
@@ -212,7 +214,7 @@
           </div>
         </a>
         <a class="sample" href="./samples/mundus-bologna.html">
-          <img src="https://images.unsplash.com/photo-1516483638261-f4dbaf036963?auto=format&fit=crop&w=800&q=70" alt="Bologna rooftops" loading="lazy" />
+          <img src="https://images.unsplash.com/photo-1516483638261-f4dbaf036963?auto=format&fit=crop&w=800&q=70" alt="Bologna rooftops" width="800" height="178" loading="lazy" decoding="async" />
           <div class="sample-body">
             <strong>Mundus Bologna</strong>
             <span>Bologna, Italy · under the portici</span>
@@ -220,7 +222,7 @@
           </div>
         </a>
         <a class="sample" href="./samples/bnbhost-glasgow.html">
-          <img src="https://images.unsplash.com/photo-1552832230-c0197dd311b5?auto=format&fit=crop&w=800&q=70" alt="Glasgow street" loading="lazy" />
+          <img src="https://images.unsplash.com/photo-1552832230-c0197dd311b5?auto=format&fit=crop&w=800&q=70" alt="Glasgow street" width="800" height="178" loading="lazy" decoding="async" />
           <div class="sample-body">
             <strong>BnBHost Glasgow</strong>
             <span>Glasgow, Scotland · West End flat</span>

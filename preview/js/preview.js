@@ -13,22 +13,31 @@ function icon(path) {
   return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">${path}</svg>`;
 }
 
+let pickerWired = false;
+
 function renderPicker() {
   const list = document.querySelector("#guide-picker");
-  list.innerHTML = gallery.map((guide, index) => `
-    <button class="guide-option ${index === activeIndex ? "is-active" : ""}" type="button" data-index="${index}">
-      <img src="${escapeHtml(heroPhoto(guide))}" alt="" loading="lazy" />
-      <span>
-        <strong>${escapeHtml(guide.propertyName || guide.title)}</strong>
-        <span>${escapeHtml(place(guide))}</span>
-      </span>
-    </button>
-  `).join("");
+  if (!pickerWired) {
+    list.innerHTML = gallery.map((guide, index) => `
+      <button class="guide-option ${index === activeIndex ? "is-active" : ""}" type="button" data-index="${index}">
+        <img src="${escapeHtml(heroPhoto(guide))}" alt="" width="56" height="56" loading="lazy" decoding="async" />
+        <span>
+          <strong>${escapeHtml(guide.propertyName || guide.title)}</strong>
+          <span>${escapeHtml(place(guide))}</span>
+        </span>
+      </button>
+    `).join("");
+    list.querySelectorAll("[data-index]").forEach((btn) => {
+      btn.onclick = () => {
+        activeIndex = Number(btn.dataset.index);
+        render();
+      };
+    });
+    pickerWired = true;
+    return;
+  }
   list.querySelectorAll("[data-index]").forEach((btn) => {
-    btn.onclick = () => {
-      activeIndex = Number(btn.dataset.index);
-      render();
-    };
+    btn.classList.toggle("is-active", Number(btn.dataset.index) === activeIndex);
   });
 }
 
@@ -67,7 +76,7 @@ function render() {
   const link = document.querySelector("#fullscreen-link");
   link.classList.toggle("hidden", !guide.slug);
   if (guide.slug) link.href = `./guides/${guide.slug}.html`;
-  hydrateGuest(document.querySelector("#guest-preview"), guide, document.documentElement.dataset.theme);
+  hydrateGuest(document.querySelector("#guest-preview"), guide);
 }
 
 function showLoadError() {
@@ -77,7 +86,7 @@ function showLoadError() {
 }
 
 async function loadGuidebooks() {
-  const res = await fetch("./data/guidebooks.json", { cache: "no-cache" });
+  const res = await fetch("./data/guidebooks.json");
   if (!res.ok) throw new Error(`guidebooks.json ${res.status}`);
   const payload = await res.json();
   return payload.guides || [];

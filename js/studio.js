@@ -1,5 +1,6 @@
 const STORAGE_KEY = "digital-guidebook-studio-v1";
 let guestCssCache = "";
+let lastScrolledTab = "";
 let state = loadState();
 
 function loadState() {
@@ -7,7 +8,13 @@ function loadState() {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (raw) {
       const saved = JSON.parse(raw);
-      saved.guides = saved.guides.map((guide) => ({ ...blankGuidebook(), ...guide, id: guide.id }));
+      saved.guides = (saved.guides || []).map((guide, i) => normalizeGuidebook(guide, i));
+      if (!saved.guides.length) throw new Error("empty");
+      if (!saved.guides.some((guide) => guide.id === saved.activeId)) {
+        saved.activeId = saved.guides[0].id;
+      }
+      saved.tab = saved.tab || "intro";
+      saved.view = saved.view || "editor";
       return saved;
     }
   } catch {
@@ -18,7 +25,11 @@ function loadState() {
 }
 
 function saveState() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  } catch {
+    console.warn("Guidebook could not be saved in this browser (storage may be full).");
+  }
 }
 
 function activeGuide() {
@@ -36,7 +47,7 @@ function updateGuide(mutator) {
   const guide = activeGuide();
   mutator(guide);
   saveState();
-  renderPreview();
+  schedulePreview();
 }
 
 function qs(sel, root = document) {
@@ -53,14 +64,17 @@ function bindValue(selector, path, kind = "input") {
   const guide = activeGuide();
   const parts = path.split(".");
   let cursor = guide;
-  for (let i = 0; i < parts.length - 1; i += 1) cursor = cursor[parts[i]];
+  for (let i = 0; i < parts.length - 1; i += 1) {
+    if (!cursor[parts[i]] || typeof cursor[parts[i]] !== "object") return;
+    cursor = cursor[parts[i]];
+  }
   const key = parts[parts.length - 1];
   if (el.type === "file") return;
   el.value = cursor[key] ?? "";
   el.oninput = el.onchange = () => {
     cursor[key] = el.value;
     saveState();
-    renderPreview();
+    schedulePreview();
     if (path.startsWith("address.")) refreshMap();
     renderHeading();
   };
@@ -87,12 +101,13 @@ function renderNav() {
   qsa("[data-tab]").forEach((btn) => {
     const on = btn.dataset.tab === state.tab;
     btn.classList.toggle("is-active", on);
-    if (on) {
+    if (on && state.tab !== lastScrolledTab) {
       const scroller = btn.parentElement;
       if (scroller) {
         const left = Math.max(0, btn.offsetLeft - 16);
         scroller.scrollTo({ left, behavior: "smooth" });
       }
+      lastScrolledTab = state.tab;
     }
   });
   qsa(".panel").forEach((panel) => {
@@ -158,7 +173,7 @@ function renderPhotos() {
   const guide = activeGuide();
   list.innerHTML = guide.photos.map((photo, index) => `
     <div class="photo-row">
-      <img src="${escapeHtml(photo.url)}" alt="" />
+      <img ${photo.url ? `src="${escapeHtml(photo.url)}"` : ""} alt="" width="92" height="92" decoding="async" />
       <div class="stack">
         <input class="input" data-photo-url="${photo.id}" placeholder="${index === 0 ? "Hero photo URL" : "Photo URL"}" value="${escapeHtml(photo.url)}" />
         <input class="input" data-photo-caption="${photo.id}" placeholder="Caption" value="${escapeHtml(photo.caption || "")}" />
@@ -170,26 +185,34 @@ function renderPhotos() {
   list.querySelectorAll("[data-photo-url]").forEach((el) => {
     el.oninput = () => {
       const photo = guide.photos.find((item) => item.id === el.dataset.photoUrl);
+      if (!photo) return;
       photo.url = el.value;
       saveState();
-      renderPreview();
+      schedulePreview();
     };
   });
   list.querySelectorAll("[data-photo-caption]").forEach((el) => {
     el.oninput = () => {
       const photo = guide.photos.find((item) => item.id === el.dataset.photoCaption);
+      if (!photo) return;
       photo.caption = el.value;
       saveState();
-      renderPreview();
+      schedulePreview();
     };
   });
   list.querySelectorAll("[data-photo-file]").forEach((el) => {
     el.onchange = () => {
       const file = el.files?.[0];
       if (!file) return;
+      if (file.size > 1_200_000) {
+        el.value = "";
+        window.alert("Please use a photo under 1.2 MB, or paste an image URL instead.");
+        return;
+      }
       const reader = new FileReader();
       reader.onload = () => {
         const photo = guide.photos.find((item) => item.id === el.dataset.photoFile);
+        if (!photo) return;
         photo.url = String(reader.result);
         saveState();
         render();
@@ -221,16 +244,20 @@ function renderRepeat(kind) {
     `).join("");
     list.querySelectorAll("[data-hm-title]").forEach((el) => {
       el.oninput = () => {
-        guide.houseManual.find((item) => item.id === el.dataset.hmTitle).title = el.value;
+        const item = guide.houseManual.find((entry) => entry.id === el.dataset.hmTitle);
+        if (!item) return;
+        item.title = el.value;
         saveState();
-        renderPreview();
+        schedulePreview();
       };
     });
     list.querySelectorAll("[data-hm-body]").forEach((el) => {
       el.oninput = () => {
-        guide.houseManual.find((item) => item.id === el.dataset.hmBody).body = el.value;
+        const item = guide.houseManual.find((entry) => entry.id === el.dataset.hmBody);
+        if (!item) return;
+        item.body = el.value;
         saveState();
-        renderPreview();
+        schedulePreview();
       };
     });
     list.querySelectorAll("[data-hm-remove]").forEach((el) => {
@@ -245,7 +272,7 @@ function renderRepeat(kind) {
     const list = qs("#rec-list");
     list.innerHTML = guide.recommendations.map((item) => `
       <div class="repeat-row">
-        <img src="${escapeHtml(item.image || "")}" alt="" />
+        <img ${item.image ? `src="${escapeHtml(item.image)}"` : ""} alt="" width="92" height="92" decoding="async" />
         <div class="stack">
           <input class="input" data-rec-name="${item.id}" placeholder="Name" value="${escapeHtml(item.name)}" />
           <input class="input" data-rec-cat="${item.id}" placeholder="Category, e.g. Coffee" value="${escapeHtml(item.category || "")}" />
@@ -260,9 +287,10 @@ function renderRepeat(kind) {
       list.querySelectorAll(`[${attr}]`).forEach((el) => {
         el.oninput = () => {
           const rec = guide.recommendations.find((item) => item.id === el.getAttribute(attr));
+          if (!rec) return;
           rec[field] = el.value;
           saveState();
-          renderPreview();
+          schedulePreview();
         };
       });
     };
@@ -326,7 +354,7 @@ function fillForm() {
   qs("#rules-input").oninput = () => {
     g.houseRules = qs("#rules-input").value.split("\n").map((line) => line.trim()).filter(Boolean);
     saveState();
-    renderPreview();
+    schedulePreview();
   };
   renderPhotos();
   renderRepeat("manual");
@@ -337,32 +365,50 @@ function fillForm() {
 }
 
 function refreshMap() {
-  qs("#map-frame").src = osmEmbed(activeGuide());
+  const frame = qs("#map-frame");
+  if (!frame) return;
+  frame.src = osmEmbed(activeGuide()) || "about:blank";
 }
 
+let searchAbort;
 async function searchAddress(query) {
   const box = qs("#search-results");
   if (!query || query.length < 3) {
     box.classList.add("hidden");
+    searchAbort?.abort();
     return;
   }
-  const url = `https://nominatim.openstreetmap.org/search?format=jsonv2&limit=5&q=${encodeURIComponent(query)}`;
-  const res = await fetch(url, { headers: { Accept: "application/json" } });
-  if (!res.ok) return;
-  const results = await res.json();
+  searchAbort?.abort();
+  searchAbort = new AbortController();
+  const url = `https://nominatim.openstreetmap.org/search?format=jsonv2&addressdetails=1&limit=5&q=${encodeURIComponent(query)}`;
+  let results;
+  try {
+    const res = await fetch(url, { headers: { Accept: "application/json" }, signal: searchAbort.signal });
+    if (!res.ok) return;
+    results = await res.json();
+  } catch (error) {
+    if (error?.name === "AbortError") return;
+    return;
+  }
   box.classList.remove("hidden");
   box.innerHTML = `<ul>${results.map((item, i) => `<li data-hit="${i}">${escapeHtml(item.display_name)}</li>`).join("")}</ul>`;
   box.querySelectorAll("[data-hit]").forEach((el) => {
     el.onclick = () => {
       const hit = results[Number(el.dataset.hit)];
+      if (!hit) return;
       const g = activeGuide();
+      const addr = hit.address || {};
+      const parts = hit.display_name.split(",").map((part) => part.trim());
       g.address.search = hit.display_name;
       g.address.line1 = hit.display_name;
       g.address.lat = hit.lat;
       g.address.lng = hit.lon;
-      const parts = hit.display_name.split(",").map((part) => part.trim());
-      g.address.streetName = parts[0] || g.address.streetName;
-      g.address.city = hit.address?.city || parts[1] || g.address.city;
+      g.address.streetNumber = addr.house_number || g.address.streetNumber;
+      g.address.streetName = addr.road || parts[0] || g.address.streetName;
+      g.address.city = addr.city || addr.town || addr.village || g.address.city;
+      g.address.state = addr.state || g.address.state;
+      g.address.postal = addr.postcode || g.address.postal;
+      g.address.country = addr.country || g.address.country;
       saveState();
       box.classList.add("hidden");
       render();
@@ -370,8 +416,14 @@ async function searchAddress(query) {
   });
 }
 
+let previewTimer = 0;
+function schedulePreview() {
+  clearTimeout(previewTimer);
+  previewTimer = setTimeout(renderPreview, 140);
+}
+
 function renderPreview() {
-  hydrateGuest(qs("#guest-preview"), activeGuide(), document.documentElement.dataset.theme);
+  hydrateGuest(qs("#guest-preview"), activeGuide());
 }
 
 function render() {
