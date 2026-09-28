@@ -24,7 +24,8 @@ function safeUrl(value, { allowDataImage = false, allowTel = false, allowHash = 
 
 function cssUrl(value, options) {
   const href = safeUrl(value, options);
-  return href ? `url(${JSON.stringify(href)})` : "";
+  if (!href) return "";
+  return `url('${href.replace(/\\/g, "\\\\").replace(/'/g, "\\'")}')`;
 }
 
 function attrUrl(value, options) {
@@ -115,7 +116,8 @@ function renderGuestInner(guidebook) {
 
   return `
     <div class="guest-shell">
-      <section class="guest-hero" style="${hero ? `background-image:${cssUrl(hero.url, { allowDataImage: true })}` : ""}" data-hero>
+      <section class="guest-hero" data-hero>
+        ${hero ? `<img class="guest-hero-photo" src="${attrUrl(hero.url, { allowDataImage: true })}" alt="${escapeHtml(hero.caption || guidebook.propertyName || "")}" width="800" height="330" decoding="async" />` : ""}
         <button class="guest-theme-toggle" type="button" data-theme-toggle aria-label="Toggle dark mode">
           <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
             <circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M2.5 12h2M19.5 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"/>
@@ -266,12 +268,26 @@ function guestPageScript() {
         });
       }
       var hero = document.querySelector("[data-hero]");
+      function showPhoto(i) {
+        if (!photos[i] || !hero) return;
+        var img = hero.querySelector(".guest-hero-photo");
+        if (!img) {
+          img = document.createElement("img");
+          img.className = "guest-hero-photo";
+          img.alt = "";
+          img.width = 800;
+          img.height = 330;
+          img.decoding = "async";
+          hero.insertBefore(img, hero.firstChild);
+        }
+        img.src = photos[i];
+        document.querySelectorAll("[data-photo]").forEach(function (el) {
+          el.classList.toggle("is-on", Number(el.getAttribute("data-photo")) === i);
+        });
+      }
       document.querySelectorAll("[data-photo]").forEach(function (btn) {
         btn.addEventListener("click", function () {
-          var i = Number(btn.getAttribute("data-photo"));
-          if (!photos[i] || !hero) return;
-          hero.style.backgroundImage = "url(" + JSON.stringify(photos[i]) + ")";
-          document.querySelectorAll("[data-photo]").forEach(function (el) { el.classList.toggle("is-on", el === btn); });
+          showPhoto(Number(btn.getAttribute("data-photo")));
         });
       });
       var toast = document.querySelector("[data-toast]");
@@ -321,7 +337,17 @@ function hydrateGuest(root, guidebook, previewTheme) {
   const hero = root.querySelector("[data-hero]");
   const showPhoto = (index) => {
     if (!photos[index] || !hero) return;
-    hero.style.backgroundImage = cssUrl(photos[index], { allowDataImage: true });
+    let img = hero.querySelector(".guest-hero-photo");
+    if (!img) {
+      img = document.createElement("img");
+      img.className = "guest-hero-photo";
+      img.alt = "";
+      img.width = 800;
+      img.height = 330;
+      img.decoding = "async";
+      hero.prepend(img);
+    }
+    img.src = photos[index];
     root.querySelectorAll("[data-photo]").forEach((el) => {
       el.classList.toggle("is-on", Number(el.getAttribute("data-photo")) === index);
     });
