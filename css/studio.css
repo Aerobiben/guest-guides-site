@@ -491,6 +491,11 @@ input[type="file"]::file-selector-button {
 .guides-list {
   display: grid;
   gap: 12px;
+  margin-top: 16px;
+}
+
+.follow {
+  margin-top: 14px;
 }
 
 .guide-chip {

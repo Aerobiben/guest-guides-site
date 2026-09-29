@@ -366,6 +366,15 @@
   touch-action: manipulation;
 }
 
+.guest-copy-field {
+  position: fixed;
+  left: -9999px;
+  top: 0;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
 .guest-card > p .guest-copy {
   margin: 4px 0 0;
 }
@@ -705,8 +714,7 @@ oceanview" data-copied="Wi‑Fi copied">Copy both</button></p>
   const field = document.createElement("textarea");
   field.value = text;
   field.setAttribute("readonly", "");
-  field.style.position = "fixed";
-  field.style.left = "-9999px";
+  field.className = "guest-copy-field";
   document.body.appendChild(field);
   field.select();
   let ok = false;

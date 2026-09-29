@@ -353,6 +353,15 @@
   touch-action: manipulation;
 }
 
+.guest-copy-field {
+  position: fixed;
+  left: -9999px;
+  top: 0;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
 .guest-card > p .guest-copy {
   margin: 4px 0 0;
 }

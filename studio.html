@@ -12,10 +12,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" />
-  <link rel="stylesheet" href="./css/tokens.css?v=4" />
-  <link rel="stylesheet" href="./css/studio.css?v=4" />
-  <link rel="stylesheet" href="./css/guest.css?v=4" />
-  <script src="./js/theme.js?v=4"></script>
+  <link rel="stylesheet" href="./css/tokens.css?v=5" />
+  <link rel="stylesheet" href="./css/studio.css?v=5" />
+  <link rel="stylesheet" href="./css/guest.css?v=5" />
+  <script src="./js/theme.js?v=5"></script>
 </head>
 <body>
   <div class="app-frame">
@@ -140,7 +140,7 @@
             <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
             New guidebook
           </button>
-          <div id="guides-list" class="guides-list" style="margin-top:16px"></div>
+          <div id="guides-list" class="guides-list"></div>
         </div>
 
         <div id="templates-panel" class="hidden">
@@ -203,7 +203,7 @@
                       <input class="input" id="street-name" />
                     </label>
                   </div>
-                  <div class="grid-2" style="margin-top:14px">
+                  <div class="grid-2 follow">
                     <label class="field">
                       <span class="field-label">City</span>
                       <input class="input" id="city" />
@@ -213,7 +213,7 @@
                       <input class="input" id="state" />
                     </label>
                   </div>
-                  <div class="grid-2" style="margin-top:14px">
+                  <div class="grid-2 follow">
                     <label class="field">
                       <span class="field-label">Postal code</span>
                       <input class="input" id="postal" />
@@ -223,7 +223,7 @@
                       <input class="input" id="country" />
                     </label>
                   </div>
-                  <div class="grid-2" style="margin-top:14px">
+                  <div class="grid-2 follow">
                     <label class="field">
                       <span class="field-label">Latitude</span>
                       <input class="input" id="lat" />
@@ -273,7 +273,7 @@
                   <input class="input" id="property-name" />
                 </label>
               </div>
-              <div class="grid-2" style="margin-top:14px">
+              <div class="grid-2 follow">
                 <label class="field">
                   <span class="field-label">Host name</span>
                   <input class="input" id="host-name" />
@@ -283,7 +283,7 @@
                   <input class="input" id="host-phone" />
                 </label>
               </div>
-              <label class="field" style="margin-top:14px">
+              <label class="field follow">
                 <span class="field-label">Guest theme</span>
                 <select id="guest-theme">
                   <option value="auto">Auto — follow the guest's phone setting</option>
@@ -338,7 +338,7 @@
                   <input class="input" id="access-code" />
                 </label>
               </div>
-              <label class="field" style="margin-top:14px">
+              <label class="field follow">
                 <span class="field-label">Check-in instructions</span>
                 <textarea id="checkin-notes"></textarea>
               </label>
@@ -376,7 +376,7 @@
                   <input class="input" id="wifi-password" />
                 </label>
               </div>
-              <label class="field" style="margin-top:14px">
+              <label class="field follow">
                 <span class="field-label">Notes</span>
                 <textarea id="wifi-notes" placeholder="Where the router lives, which band is faster…"></textarea>
               </label>
@@ -451,7 +451,7 @@
                   <input class="input" id="listing-url" />
                 </label>
               </div>
-              <label class="field" style="margin-top:14px">
+              <label class="field follow">
                 <span class="field-label">Book-again note</span>
                 <textarea id="book-message"></textarea>
               </label>
@@ -492,9 +492,9 @@
     </div>
   </div>
 
-  <script src="./js/templates.js?v=4"></script>
-  <script src="./js/guest-render.js?v=4"></script>
-  <script src="./js/export.js?v=4"></script>
-  <script src="./js/studio.js?v=4"></script>
+  <script src="./js/templates.js?v=5"></script>
+  <script src="./js/guest-render.js?v=5"></script>
+  <script src="./js/export.js?v=5"></script>
+  <script src="./js/studio.js?v=5"></script>
 </body>
 </html>
