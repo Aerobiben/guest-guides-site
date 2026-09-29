@@ -7,30 +7,23 @@
   <title>Guest guide previews — Digital Guidebook</title>
   <meta name="description" content="Browse read-only previews of phone-friendly Airbnb guest guides: Wi‑Fi, check-in, directions, house notes and local picks." />
   <meta name="robots" content="index,follow" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; form-action 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: http: https:; frame-src https://www.openstreetmap.org; connect-src 'self'; worker-src 'none'" />
   <meta property="og:title" content="Guest guide previews" />
   <meta property="og:description" content="See exactly what a guest sees when they open the link." />
   <meta property="og:type" content="website" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'" />
-  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" /></noscript>
-  <link rel="stylesheet" href="./css/tokens.css" />
-  <link rel="stylesheet" href="./css/preview.css" />
-  <link rel="stylesheet" href="./css/guest.css?v=2" />
-  <script>
-    try {
-      var saved = localStorage.getItem("digital-guidebook-theme");
-      document.documentElement.dataset.theme = saved === "light" || saved === "dark"
-        ? saved
-        : (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
-    } catch (e) {}
-  </script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" />
+  <link rel="stylesheet" href="./css/tokens.css?v=5" />
+  <link rel="stylesheet" href="./css/preview.css?v=5" />
+  <link rel="stylesheet" href="./css/guest.css?v=5" />
+  <script src="./js/theme.js?v=5"></script>
 </head>
 <body>
   <div class="wrap">
     <header class="preview-bar">
-      <div class="brand-mark">
+      <a class="brand-mark" href="https://guest-guides.vercel.app">
         <span class="brand-glyph">
           <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
             <path d="M4 11.5 12 4l8 7.5V20a1 1 0 0 1-1 1h-5v-6H10v6H5a1 1 0 0 1-1-1v-8.5Z" fill="currentColor"/>
@@ -40,7 +33,7 @@
           <strong>Guest guide previews</strong>
           <span>See what lands on a guest's phone</span>
         </span>
-      </div>
+      </a>
       <div class="bar-actions">
         <span class="readonly-chip">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
@@ -64,7 +57,7 @@
         <div class="picker-head">
           <span class="eyebrow-text">Sample stays</span>
           <h1>Pick a guide</h1>
-          <p>Each one is a real exported guest guide. Tap through the sections on the phone exactly as a guest would.</p>
+          <p>Each one is a real exported guest guide. Tap through the sections on the phone, swipe the cover photo, or use ↑↓ to move between stays.</p>
         </div>
         <div class="guide-picker" id="guide-picker"></div>
         <div class="viewer-note">
@@ -81,7 +74,7 @@
             <h2 id="stage-title">Guest guide</h2>
             <p id="stage-meta">Live preview</p>
           </div>
-          <a class="btn btn-ghost" id="fullscreen-link" href="#" target="_blank" rel="noreferrer">
+          <a class="btn btn-ghost" id="fullscreen-link" href="#" target="_blank" rel="noopener noreferrer">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
               <path d="M14 4h6v6M20 4l-7.5 7.5M10 20H4v-6M4 20l7.5-7.5"/>
             </svg>
@@ -101,12 +94,11 @@
 
     <footer class="preview-footer">
       <span>Digital Guidebook — preview gallery.</span>
-      <span>Guides render the same in light and dark.</span>
+      <span><a href="https://guest-guides.vercel.app">Main site</a> · Guides render the same in light and dark.</span>
     </footer>
   </div>
 
-  <script src="./js/theme.js"></script>
-  <script src="./js/guest-render.js?v=2"></script>
-  <script src="./js/preview.js"></script>
+  <script src="./js/guest-render.js?v=5"></script>
+  <script src="./js/preview.js?v=5"></script>
 </body>
 </html>

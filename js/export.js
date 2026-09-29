@@ -3,18 +3,19 @@ function buildGuestDocument(guidebook, guestCss) {
   const photos = (guidebook.photos || [])
     .map((photo) => safeUrl(photo.url, { allowDataImage: true }))
     .filter(Boolean);
-  const script = guestPageScript().replace("PHOTOS_PLACEHOLDER", JSON.stringify(photos));
+  const script = guestPageScript().replace("PHOTOS_PLACEHOLDER", jsonForScript(photos));
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; base-uri 'none'; object-src 'none'; form-action 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src data: http: https:; frame-src https://www.openstreetmap.org; connect-src 'none'" />
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%235b2d9b'/%3E%3C/svg%3E" />
   <title>${escapeHtml(title)} — guest guide</title>
   <meta name="description" content="Wi‑Fi, check-in, house notes, and local picks for your stay." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700&display=swap" rel="stylesheet" />
   <meta name="color-scheme" content="${guidebook.theme === "dark" ? "dark" : guidebook.theme === "light" ? "light" : "light dark"}" />
   <style>${guestCss}
     html, body { margin: 0; }
@@ -22,7 +23,7 @@ function buildGuestDocument(guidebook, guestCss) {
     @media (prefers-color-scheme: dark) { html { background: #100e15; } }
   </style>
 </head>
-<body class="guest-app" data-guest-theme="${escapeHtml(guidebook.theme || "auto")}">
+<body class="guest-app" data-guest-theme="${escapeHtml(guidebook.theme === "dark" || guidebook.theme === "light" ? guidebook.theme : "auto")}">
 ${renderGuestInner(guidebook)}
 <script>${script}</script>
 </body>

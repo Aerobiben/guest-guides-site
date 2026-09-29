@@ -2,18 +2,18 @@
 // sample guides and the preview gallery stay public; only the pages and assets
 // that let someone adjust a guidebook are matched below.
 export const config = {
-  matcher: ["/studio", "/studio.html", "/js/studio.js", "/js/export.js", "/css/studio.css"],
+  matcher: ["/studio", "/studio/", "/studio.html", "/js/studio.js", "/js/export.js", "/css/studio.css"],
 };
 
 const REALM = 'Basic realm="Digital Guidebook builder", charset="UTF-8"';
 
 function constantTimeEqual(a, b) {
   const encoder = new TextEncoder();
-  const left = encoder.encode(a);
-  const right = encoder.encode(b);
-  if (left.length !== right.length) return false;
-  let diff = 0;
-  for (let i = 0; i < left.length; i += 1) diff |= left[i] ^ right[i];
+  const left = encoder.encode(String(a ?? ""));
+  const right = encoder.encode(String(b ?? ""));
+  const len = Math.max(left.length, right.length, 1);
+  let diff = left.length ^ right.length;
+  for (let i = 0; i < len; i += 1) diff |= (left[i] ?? 0) ^ (right[i] ?? 0);
   return diff === 0;
 }
 
@@ -100,6 +100,7 @@ function page(title, message, status, headers = {}) {
       "content-type": "text/html; charset=utf-8",
       "cache-control": "no-store",
       "x-robots-tag": "noindex",
+      "content-security-policy": "default-src 'none'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'",
       ...headers,
     },
   });

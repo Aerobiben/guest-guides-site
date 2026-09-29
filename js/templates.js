@@ -21,12 +21,22 @@ function makeId(prefix = "gb") {
   return `${prefix}-${Math.random().toString(36).slice(2, 9)}`;
 }
 
+function fieldId(value, fallback) {
+  const clean = String(value ?? "").replace(/[^a-zA-Z0-9_-]/g, "").slice(0, 80);
+  return clean || fallback;
+}
+
 function normalizeGuidebook(raw = {}, index = 0) {
   const base = blankGuidebook();
   const source = raw && typeof raw === "object" ? raw : {};
   const guide = {
     ...base,
-    ...source,
+    title: String(source.title ?? base.title),
+    propertyName: String(source.propertyName ?? base.propertyName),
+    hostName: String(source.hostName ?? base.hostName),
+    hostPhone: String(source.hostPhone ?? base.hostPhone),
+    hostEmail: String(source.hostEmail ?? base.hostEmail),
+    listingUrl: String(source.listingUrl ?? base.listingUrl),
     intro: { ...base.intro, ...(source.intro || {}) },
     address: { ...base.address, ...(source.address || {}) },
     wifi: { ...base.wifi, ...(source.wifi || {}) },
@@ -38,31 +48,34 @@ function normalizeGuidebook(raw = {}, index = 0) {
     emergency: { ...base.emergency, ...(source.emergency || {}) },
     photos: Array.isArray(source.photos) && source.photos.length
       ? source.photos.map((photo, i) => ({
-          id: photo?.id || `ph-${index}-${i}`,
-          url: photo?.url || "",
-          caption: photo?.caption || "",
+          id: fieldId(photo?.id, `ph-${index}-${i}`),
+          url: String(photo?.url || ""),
+          caption: String(photo?.caption || ""),
         }))
       : base.photos,
     houseManual: Array.isArray(source.houseManual)
       ? source.houseManual.map((item, i) => ({
-          id: item?.id || `hm-${index}-${i}`,
-          title: item?.title || "",
-          body: item?.body || "",
+          id: fieldId(item?.id, `hm-${index}-${i}`),
+          title: String(item?.title || ""),
+          body: String(item?.body || ""),
         }))
       : [],
-    houseRules: Array.isArray(source.houseRules) ? source.houseRules : [],
+    houseRules: Array.isArray(source.houseRules)
+      ? source.houseRules.map((rule) => String(rule ?? "")).filter(Boolean)
+      : [],
     recommendations: Array.isArray(source.recommendations)
       ? source.recommendations.map((item, i) => ({
-          id: item?.id || `rec-${index}-${i}`,
-          name: item?.name || "",
-          category: item?.category || "",
-          notes: item?.notes || "",
-          url: item?.url || "",
-          image: item?.image || "",
+          id: fieldId(item?.id, `rec-${index}-${i}`),
+          name: String(item?.name || ""),
+          category: String(item?.category || ""),
+          notes: String(item?.notes || ""),
+          url: String(item?.url || ""),
+          image: String(item?.image || ""),
         }))
       : [],
   };
-  if (source.id) guide.id = source.id;
+  guide.theme = source.theme === "dark" || source.theme === "light" ? source.theme : "auto";
+  guide.id = fieldId(source.id, guide.id);
   return guide;
 }
 

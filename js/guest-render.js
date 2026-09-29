@@ -3,18 +3,22 @@ function escapeHtml(value) {
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
 }
+
+const SAFE_DATA_IMAGE = /^data:image\/(png|jpe?g|gif|webp|avif);base64,/i;
 
 function safeUrl(value, { allowDataImage = false, allowTel = false, allowHash = true } = {}) {
   const raw = String(value ?? "").trim();
-  if (!raw) return "";
-  if (allowHash && raw.startsWith("#")) return raw;
-  if (allowDataImage && /^data:image\/[a-z0-9.+-]+;base64,/i.test(raw)) return raw;
+  if (!raw || raw.length > 2_000_000) return "";
+  if (raw.startsWith("//")) return "";
+  if (allowHash && raw.startsWith("#") && !raw.includes(":")) return raw;
+  if (allowDataImage && SAFE_DATA_IMAGE.test(raw)) return raw;
   try {
     const url = new URL(raw);
     const protocol = url.protocol.toLowerCase();
-    if (protocol === "http:" || protocol === "https:") return raw;
+    if (protocol === "http:" || protocol === "https:") return url.href;
     if (allowTel && protocol === "tel:") return raw;
   } catch {
     /* ignore */
@@ -22,14 +26,22 @@ function safeUrl(value, { allowDataImage = false, allowTel = false, allowHash = 
   return "";
 }
 
-function cssUrl(value, options) {
-  const href = safeUrl(value, options);
-  if (!href) return "";
-  return `url('${href.replace(/\\/g, "\\\\").replace(/'/g, "\\'")}')`;
+function jsonForScript(value) {
+  return JSON.stringify(value)
+    .replace(/</g, "\\u003c")
+    .replace(/>/g, "\\u003e")
+    .replace(/&/g, "\\u0026")
+    .replace(/\u2028/g, "\\u2028")
+    .replace(/\u2029/g, "\\u2029");
 }
 
 function attrUrl(value, options) {
   return escapeHtml(safeUrl(value, options));
+}
+
+function copyControl(value, label = "Copy", done = "Copied") {
+  if (!value) return "";
+  return `<button class="guest-copy" type="button" data-copy="${escapeHtml(value)}" data-copied="${escapeHtml(done)}">${escapeHtml(label)}</button>`;
 }
 
 function mapsUrl(guidebook) {
@@ -80,8 +92,7 @@ function fallbackCopy(text) {
   const field = document.createElement("textarea");
   field.value = text;
   field.setAttribute("readonly", "");
-  field.style.position = "fixed";
-  field.style.left = "-9999px";
+  field.className = "guest-copy-field";
   document.body.appendChild(field);
   field.select();
   let ok = false;
@@ -129,45 +140,49 @@ function renderGuestInner(guidebook) {
         <div class="guest-hero-copy">
           <p>${escapeHtml(guidebook.hostName || "Your host")}</p>
           <h1>${escapeHtml(guidebook.propertyName || guidebook.title || "Guest guide")}</h1>
-          <div class="guest-dots">${photos.map((_, i) => `<button type="button" data-photo="${i}" class="${i === 0 ? "is-on" : ""}"></button>`).join("")}</div>
+          <div class="guest-dots">${photos.map((_, i) => `<button type="button" data-photo="${i}" class="${i === 0 ? "is-on" : ""}" aria-label="Photo ${i + 1} of ${photos.length}"></button>`).join("")}</div>
         </div>
       </section>
       <div class="guest-body">
         <p class="guest-welcome">${escapeHtml((guidebook.intro || {}).welcome || "Welcome. This guide has everything you need for the stay.")}</p>
         <p class="guest-about ${(guidebook.intro || {}).about ? "" : "guest-hidden"}">${escapeHtml((guidebook.intro || {}).about)}</p>
         <div class="guest-gallery ${rest.length ? "" : "guest-hidden"}">
-          ${rest.map((photo) => `<img src="${attrUrl(photo.url, { allowDataImage: true })}" alt="${escapeHtml(photo.caption || guidebook.propertyName)}" width="400" height="124" loading="lazy" decoding="async" />`).join("")}
+          ${rest.map((photo, i) => `
+            <button class="guest-gallery-shot" type="button" data-photo="${i + 1}" aria-label="Show photo ${i + 2} of ${photos.length}">
+              <img src="${attrUrl(photo.url, { allowDataImage: true })}" alt="${escapeHtml(photo.caption || guidebook.propertyName)}" width="400" height="124" loading="lazy" decoding="async" />
+            </button>`).join("")}
         </div>
         <div class="guest-actions">
           <a href="${hasWifi ? "#wifi" : "#checkin"}"><strong>Wi‑Fi</strong><span>${escapeHtml(wifi.network || "Details inside")}</span></a>
           <a href="#checkin"><strong>Check-in</strong><span>${escapeHtml(checkIn.time || "See notes")}</span></a>
-          <a href="${mapsUrl(guidebook)}" target="_blank" rel="noreferrer"><strong>Map</strong><span>${escapeHtml((guidebook.address || {}).city || "Directions")}</span></a>
+          <a href="${escapeHtml(mapsUrl(guidebook))}" target="_blank" rel="noopener noreferrer"><strong>Map</strong><span>${escapeHtml((guidebook.address || {}).city || "Directions")}</span></a>
           <a href="${hostTel ? escapeHtml(hostTel) : "#book"}"><strong>Host</strong><span>${escapeHtml(guidebook.hostPhone || guidebook.hostName || "Message us")}</span></a>
         </div>
 
         <article class="guest-card ${hasWifi ? "" : "guest-hidden"}" id="wifi">
           <h2>Wi‑Fi</h2>
-          <div class="guest-wifi"><div>Network</div><div><strong>${escapeHtml(wifi.network)}</strong> <button type="button" data-copy="${escapeHtml(wifi.network)}">Copy</button></div></div>
-          <div class="guest-wifi"><div>Password</div><div><strong>${escapeHtml(wifi.password)}</strong> <button type="button" data-copy="${escapeHtml(wifi.password)}">Copy</button></div></div>
-          <p>${escapeHtml(wifi.notes)}</p>
+          <div class="guest-wifi"><div>Network</div><div><strong>${escapeHtml(wifi.network)}</strong> ${copyControl(wifi.network)}</div></div>
+          <div class="guest-wifi"><div>Password</div><div><strong>${escapeHtml(wifi.password)}</strong> ${copyControl(wifi.password)}</div></div>
+          ${wifi.network && wifi.password ? `<p>${copyControl(`${wifi.network}\n${wifi.password}`, "Copy both", "Wi‑Fi copied")}</p>` : ""}
+          ${wifi.notes ? `<p>${escapeHtml(wifi.notes)}</p>` : ""}
         </article>
 
         <article class="guest-card" id="checkin">
           <h2>Check-in</h2>
-          <p>From <strong>${escapeHtml(checkIn.time || "—")}</strong>${checkIn.accessCode ? ` · Door code <strong>${escapeHtml(checkIn.accessCode)}</strong>` : ""}</p>
-          <p>${escapeHtml(checkIn.instructions)}</p>
+          <p>From <strong>${escapeHtml(checkIn.time || "—")}</strong>${checkIn.accessCode ? ` · Door code <strong>${escapeHtml(checkIn.accessCode)}</strong> ${copyControl(checkIn.accessCode, "Copy code", "Code copied")}` : ""}</p>
+          ${checkIn.instructions ? `<p>${escapeHtml(checkIn.instructions)}</p>` : ""}
         </article>
 
         <article class="guest-card" id="directions">
           <h2>Directions</h2>
-          <p>${escapeHtml(hasAddress)}</p>
-          <p>${escapeHtml(directions.notes)}</p>
-          ${mapSrc ? `<iframe class="guest-map" title="Map" src="${escapeHtml(mapSrc)}" loading="lazy"></iframe>` : ""}
+          ${hasAddress ? `<p>${escapeHtml(hasAddress)}</p>` : ""}
+          ${directions.notes ? `<p>${escapeHtml(directions.notes)}</p>` : ""}
+          ${mapSrc ? `<iframe class="guest-map" title="Map" src="${escapeHtml(mapSrc)}" loading="lazy" referrerpolicy="no-referrer" sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox"></iframe>` : ""}
         </article>
 
-        <article class="guest-card" id="parking">
+        <article class="guest-card ${parking.notes ? "" : "guest-hidden"}" id="parking">
           <h2>Parking</h2>
-          <p>${escapeHtml(parking.notes || "Ask us if you are arriving by car.")}</p>
+          <p>${escapeHtml(parking.notes)}</p>
         </article>
 
         <article class="guest-card" id="house">
@@ -182,7 +197,7 @@ function renderGuestInner(guidebook) {
             const href = attrUrl(rec.url) || mapsUrl(guidebook);
             const image = attrUrl(rec.image, { allowDataImage: true });
             return `
-            <a class="guest-rec" href="${href}" target="_blank" rel="noreferrer">
+            <a class="guest-rec" href="${href}" target="_blank" rel="noopener noreferrer">
               ${image ? `<img src="${image}" alt="${escapeHtml(rec.name)}" width="92" height="92" loading="lazy" decoding="async" />` : "<div></div>"}
               <div>
                 <small>${escapeHtml(rec.category || "Nearby")}</small>
@@ -202,7 +217,7 @@ function renderGuestInner(guidebook) {
         <article class="guest-card" id="book">
           <h2>Book again</h2>
           <p>${escapeHtml(bookAgain.message)}</p>
-          ${listingHref ? `<p><a href="${listingHref}" target="_blank" rel="noreferrer">Open the listing</a></p>` : ""}
+          ${listingHref ? `<p><a href="${listingHref}" target="_blank" rel="noopener noreferrer">Open the listing</a></p>` : ""}
           <p>Emergency: ${escapeHtml(emergency.localNumber || "local emergency services")}. ${escapeHtml(emergency.notes)}</p>
         </article>
       </div>
@@ -210,18 +225,118 @@ function renderGuestInner(guidebook) {
         ${hasWifi ? `<a href="#wifi">Wi‑Fi</a>` : ""}
         <a href="#checkin">Check-in</a>
         <a href="#directions">Map</a>
-        <a href="#parking">Parking</a>
+        ${parking.notes ? `<a href="#parking">Parking</a>` : ""}
         <a href="#house">House</a>
         ${recs.length ? `<a href="#recs">Eats</a>` : ""}
         <a href="#checkout">Out</a>
       </nav>
-      <div class="guest-toast" data-toast>Copied</div>
+      <div class="guest-toast" data-toast role="status" aria-live="polite">Copied</div>
     </div>
   `;
 }
 
+function bindGuestInteractions(root, photos, options = {}) {
+  const list = (photos || []).filter(Boolean);
+  let index = Math.max(0, Math.min(Number(options.startIndex) || 0, Math.max(0, list.length - 1)));
+  const hero = root.querySelector("[data-hero]");
+
+  function showPhoto(next) {
+    if (!list.length || !hero) return;
+    index = ((next % list.length) + list.length) % list.length;
+    let img = hero.querySelector(".guest-hero-photo");
+    if (!img) {
+      img = document.createElement("img");
+      img.className = "guest-hero-photo";
+      img.alt = "";
+      img.width = 800;
+      img.height = 330;
+      img.decoding = "async";
+      hero.insertBefore(img, hero.firstChild);
+    }
+    img.src = list[index];
+    root.querySelectorAll("[data-photo]").forEach((el) => {
+      el.classList.toggle("is-on", Number(el.getAttribute("data-photo")) === index);
+    });
+    if (root.dataset) root.dataset.previewPhoto = String(index);
+  }
+
+  root.querySelectorAll("[data-photo]").forEach((btn) => {
+    btn.addEventListener("click", () => showPhoto(Number(btn.getAttribute("data-photo"))));
+  });
+
+  if (hero && list.length > 1) {
+    let startX = 0;
+    let tracking = false;
+    hero.addEventListener("pointerdown", (event) => {
+      if (event.target.closest("button")) return;
+      tracking = true;
+      startX = event.clientX;
+    });
+    hero.addEventListener("pointerup", (event) => {
+      if (!tracking) return;
+      tracking = false;
+      const dx = event.clientX - startX;
+      if (Math.abs(dx) < 48) return;
+      showPhoto(index + (dx < 0 ? 1 : -1));
+    });
+    hero.addEventListener("keydown", (event) => {
+      if (event.key === "ArrowRight") {
+        event.preventDefault();
+        showPhoto(index + 1);
+      } else if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        showPhoto(index - 1);
+      }
+    });
+    hero.setAttribute("tabindex", "0");
+    hero.setAttribute("role", "region");
+    hero.setAttribute("aria-label", "Stay photos");
+  }
+
+  if (index > 0) showPhoto(index);
+
+  const toast = root.querySelector("[data-toast]");
+  root.querySelectorAll("[data-copy]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      copyText(btn.getAttribute("data-copy") || "").then((ok) => {
+        if (!toast) return;
+        toast.textContent = ok ? (btn.getAttribute("data-copied") || "Copied") : "Copy failed";
+        toast.classList.add("is-on");
+        setTimeout(() => toast.classList.remove("is-on"), 1400);
+      });
+    });
+  });
+
+  const navLinks = [...root.querySelectorAll(".guest-nav a[href^='#']")];
+  const overflowY = root.classList.contains("guest-app") ? getComputedStyle(root).overflowY : "";
+  const observerRoot = overflowY === "auto" || overflowY === "scroll" ? root : null;
+  const sections = navLinks
+    .map((link) => root.querySelector(link.getAttribute("href")))
+    .filter(Boolean);
+  if (sections.length && "IntersectionObserver" in window) {
+    const observer = new IntersectionObserver((entries) => {
+      const visible = entries
+        .filter((entry) => entry.isIntersecting)
+        .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+      if (!visible) return;
+      navLinks.forEach((link) => {
+        link.classList.toggle("is-on", link.getAttribute("href") === `#${visible.target.id}`);
+      });
+    }, { root: observerRoot, rootMargin: "-10% 0px -58% 0px", threshold: [0, 0.2, 0.55] });
+    sections.forEach((section) => observer.observe(section));
+  }
+
+  if (typeof options.onThemeToggle === "function") {
+    const toggle = root.querySelector("[data-theme-toggle]");
+    if (toggle) toggle.addEventListener("click", options.onThemeToggle);
+  }
+}
+
 function guestPageScript() {
   return `
+    ${fallbackCopy.toString()}
+    ${copyText.toString()}
+    ${bindGuestInteractions.toString()}
     (function () {
       var photos = PHOTOS_PLACEHOLDER;
       var root = document.body;
@@ -238,69 +353,14 @@ function guestPageScript() {
         if (mode === "dark" || mode === "light") return mode;
         return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
       }
-      function fallbackCopy(text) {
-        var field = document.createElement("textarea");
-        field.value = text;
-        field.setAttribute("readonly", "");
-        field.style.position = "fixed";
-        field.style.left = "-9999px";
-        document.body.appendChild(field);
-        field.select();
-        var ok = false;
-        try { ok = document.execCommand("copy"); } catch (e) {}
-        field.remove();
-        return ok;
-      }
-      function copyText(text) {
-        if (navigator.clipboard && window.isSecureContext) {
-          return navigator.clipboard.writeText(text).then(function () { return true; }).catch(function () { return fallbackCopy(text); });
-        }
-        return Promise.resolve(fallbackCopy(text));
-      }
-      var themeBtn = document.querySelector("[data-theme-toggle]");
-      if (themeBtn) {
-        themeBtn.addEventListener("click", function () {
+      bindGuestInteractions(root, photos, {
+        onThemeToggle: function () {
           var next = resolved() === "dark" ? "light" : "dark";
           root.dataset.guestTheme = next;
           if (hostTheme === "auto") {
             try { localStorage.setItem(THEME_KEY, next); } catch (e) {}
           }
-        });
-      }
-      var hero = document.querySelector("[data-hero]");
-      function showPhoto(i) {
-        if (!photos[i] || !hero) return;
-        var img = hero.querySelector(".guest-hero-photo");
-        if (!img) {
-          img = document.createElement("img");
-          img.className = "guest-hero-photo";
-          img.alt = "";
-          img.width = 800;
-          img.height = 330;
-          img.decoding = "async";
-          hero.insertBefore(img, hero.firstChild);
         }
-        img.src = photos[i];
-        document.querySelectorAll("[data-photo]").forEach(function (el) {
-          el.classList.toggle("is-on", Number(el.getAttribute("data-photo")) === i);
-        });
-      }
-      document.querySelectorAll("[data-photo]").forEach(function (btn) {
-        btn.addEventListener("click", function () {
-          showPhoto(Number(btn.getAttribute("data-photo")));
-        });
-      });
-      var toast = document.querySelector("[data-toast]");
-      document.querySelectorAll("[data-copy]").forEach(function (btn) {
-        btn.addEventListener("click", function () {
-          var text = btn.getAttribute("data-copy") || "";
-          copyText(text).then(function (ok) {
-            if (!toast) return;
-            toast.textContent = ok ? "Copied" : "Copy failed";
-            toast.classList.add("is-on");
-            setTimeout(function () { toast.classList.remove("is-on"); }, 1400);
-          });
-        });
       });
     })();
   `;
@@ -310,9 +370,10 @@ function systemGuestTheme() {
   return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
 }
 
-function hydrateGuest(root, guidebook, previewTheme) {
+function hydrateGuest(root, guidebook, previewTheme, options = {}) {
   if (!root) return;
-  const scrollTop = root.scrollTop;
+  const preserveScroll = options.preserveScroll !== false;
+  const scrollTop = preserveScroll ? root.scrollTop : 0;
   const keepPhoto = Number(root.dataset.previewPhoto || 0);
   const keepTheme = root.dataset.guestThemePreview;
   root.innerHTML = renderGuestInner(guidebook);
@@ -324,55 +385,23 @@ function hydrateGuest(root, guidebook, previewTheme) {
   } else {
     root.dataset.guestTheme = theme;
   }
-  const toggle = root.querySelector("[data-theme-toggle]");
-  if (toggle) {
-    toggle.addEventListener("click", () => {
-      root.dataset.guestTheme = root.dataset.guestTheme === "dark" ? "light" : "dark";
-      root.dataset.guestThemePreview = root.dataset.guestTheme;
-    });
-  }
   const photos = (guidebook.photos || [])
     .map((photo) => safeUrl(photo.url, { allowDataImage: true }))
     .filter(Boolean);
-  const hero = root.querySelector("[data-hero]");
-  const showPhoto = (index) => {
-    if (!photos[index] || !hero) return;
-    let img = hero.querySelector(".guest-hero-photo");
-    if (!img) {
-      img = document.createElement("img");
-      img.className = "guest-hero-photo";
-      img.alt = "";
-      img.width = 800;
-      img.height = 330;
-      img.decoding = "async";
-      hero.prepend(img);
-    }
-    img.src = photos[index];
-    root.querySelectorAll("[data-photo]").forEach((el) => {
-      el.classList.toggle("is-on", Number(el.getAttribute("data-photo")) === index);
-    });
-    root.dataset.previewPhoto = String(index);
-  };
-  root.querySelectorAll("[data-photo]").forEach((btn) => {
-    btn.addEventListener("click", () => showPhoto(Number(btn.getAttribute("data-photo"))));
-  });
-  if (keepPhoto > 0) showPhoto(Math.min(keepPhoto, photos.length - 1));
-  const toast = root.querySelector("[data-toast]");
-  root.querySelectorAll("[data-copy]").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      copyText(btn.getAttribute("data-copy") || "").then((ok) => {
-        if (!toast) return;
-        toast.textContent = ok ? "Copied" : "Copy failed";
-        toast.classList.add("is-on");
-        setTimeout(() => toast.classList.remove("is-on"), 1400);
-      });
-    });
+  bindGuestInteractions(root, photos, {
+    startIndex: keepPhoto,
+    onThemeToggle: () => {
+      root.dataset.guestTheme = root.dataset.guestTheme === "dark" ? "light" : "dark";
+      root.dataset.guestThemePreview = root.dataset.guestTheme;
+    },
   });
   root.scrollTop = scrollTop;
 }
 
 globalThis.escapeHtml = escapeHtml;
 globalThis.safeUrl = safeUrl;
+globalThis.attrUrl = attrUrl;
+globalThis.jsonForScript = jsonForScript;
 globalThis.fullAddress = fullAddress;
 globalThis.mapsUrl = mapsUrl;
 globalThis.osmEmbed = osmEmbed;
