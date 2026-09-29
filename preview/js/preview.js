@@ -20,7 +20,7 @@ function renderPicker() {
   if (!pickerWired) {
     list.innerHTML = gallery.map((guide, index) => `
       <button class="guide-option ${index === activeIndex ? "is-active" : ""}" type="button" data-index="${index}">
-        <img src="${escapeHtml(heroPhoto(guide))}" alt="" width="56" height="56" loading="lazy" decoding="async" />
+        <img src="${escapeHtml(heroPhoto(guide))}" alt="" width="56" height="56" decoding="async" loading="eager" />
         <span>
           <strong>${escapeHtml(guide.propertyName || guide.title)}</strong>
           <span>${escapeHtml(place(guide))}</span>
@@ -76,7 +76,10 @@ function render() {
   const link = document.querySelector("#fullscreen-link");
   link.classList.toggle("hidden", !guide.slug);
   if (guide.slug) link.href = `./guides/${guide.slug}.html`;
-  hydrateGuest(document.querySelector("#guest-preview"), guide);
+  const stage = document.querySelector("#guest-preview");
+  const switching = stage.dataset.activeGuide !== guide.id;
+  hydrateGuest(stage, guide, document.documentElement.dataset.theme, { preserveScroll: !switching });
+  stage.dataset.activeGuide = guide.id;
 }
 
 function showLoadError() {
@@ -105,4 +108,16 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
   render();
+  document.addEventListener("keydown", (event) => {
+    if (event.target.closest("input, textarea, [contenteditable]")) return;
+    if (event.key === "ArrowDown" || event.key === "j") {
+      event.preventDefault();
+      activeIndex = Math.min(gallery.length - 1, activeIndex + 1);
+      render();
+    } else if (event.key === "ArrowUp" || event.key === "k") {
+      event.preventDefault();
+      activeIndex = Math.max(0, activeIndex - 1);
+      render();
+    }
+  });
 });

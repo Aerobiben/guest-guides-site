@@ -285,6 +285,15 @@
   font-size: 13.5px;
 }
 
+.preview-footer a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.preview-footer a:hover {
+  text-decoration: underline;
+}
+
 @media (max-width: 1160px) {
   .preview-layout {
     grid-template-columns: minmax(0, 300px) minmax(0, 1fr);

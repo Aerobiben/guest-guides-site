@@ -250,6 +250,16 @@
   font-size: 16px;
 }
 
+.section-head a {
+  color: var(--accent);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.section-head a:hover {
+  text-decoration: underline;
+}
+
 .eyebrow-text {
   font-size: 12px;
   font-weight: 700;
