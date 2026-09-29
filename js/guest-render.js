@@ -3,23 +3,36 @@ function escapeHtml(value) {
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
 }
+
+const SAFE_DATA_IMAGE = /^data:image\/(png|jpe?g|gif|webp|avif);base64,/i;
 
 function safeUrl(value, { allowDataImage = false, allowTel = false, allowHash = true } = {}) {
   const raw = String(value ?? "").trim();
-  if (!raw) return "";
-  if (allowHash && raw.startsWith("#")) return raw;
-  if (allowDataImage && /^data:image\/[a-z0-9.+-]+;base64,/i.test(raw)) return raw;
+  if (!raw || raw.length > 2_000_000) return "";
+  if (raw.startsWith("//")) return "";
+  if (allowHash && raw.startsWith("#") && !raw.includes(":")) return raw;
+  if (allowDataImage && SAFE_DATA_IMAGE.test(raw)) return raw;
   try {
     const url = new URL(raw);
     const protocol = url.protocol.toLowerCase();
-    if (protocol === "http:" || protocol === "https:") return raw;
+    if (protocol === "http:" || protocol === "https:") return url.href;
     if (allowTel && protocol === "tel:") return raw;
   } catch {
     /* ignore */
   }
   return "";
+}
+
+function jsonForScript(value) {
+  return JSON.stringify(value)
+    .replace(/</g, "\\u003c")
+    .replace(/>/g, "\\u003e")
+    .replace(/&/g, "\\u0026")
+    .replace(/\u2028/g, "\\u2028")
+    .replace(/\u2029/g, "\\u2029");
 }
 
 function attrUrl(value, options) {
@@ -143,7 +156,7 @@ function renderGuestInner(guidebook) {
         <div class="guest-actions">
           <a href="${hasWifi ? "#wifi" : "#checkin"}"><strong>Wi‑Fi</strong><span>${escapeHtml(wifi.network || "Details inside")}</span></a>
           <a href="#checkin"><strong>Check-in</strong><span>${escapeHtml(checkIn.time || "See notes")}</span></a>
-          <a href="${mapsUrl(guidebook)}" target="_blank" rel="noreferrer"><strong>Map</strong><span>${escapeHtml((guidebook.address || {}).city || "Directions")}</span></a>
+          <a href="${escapeHtml(mapsUrl(guidebook))}" target="_blank" rel="noopener noreferrer"><strong>Map</strong><span>${escapeHtml((guidebook.address || {}).city || "Directions")}</span></a>
           <a href="${hostTel ? escapeHtml(hostTel) : "#book"}"><strong>Host</strong><span>${escapeHtml(guidebook.hostPhone || guidebook.hostName || "Message us")}</span></a>
         </div>
 
@@ -165,7 +178,7 @@ function renderGuestInner(guidebook) {
           <h2>Directions</h2>
           ${hasAddress ? `<p>${escapeHtml(hasAddress)}</p>` : ""}
           ${directions.notes ? `<p>${escapeHtml(directions.notes)}</p>` : ""}
-          ${mapSrc ? `<iframe class="guest-map" title="Map" src="${escapeHtml(mapSrc)}" loading="lazy"></iframe>` : ""}
+          ${mapSrc ? `<iframe class="guest-map" title="Map" src="${escapeHtml(mapSrc)}" loading="lazy" referrerpolicy="no-referrer" sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox"></iframe>` : ""}
         </article>
 
         <article class="guest-card ${parking.notes ? "" : "guest-hidden"}" id="parking">
@@ -185,7 +198,7 @@ function renderGuestInner(guidebook) {
             const href = attrUrl(rec.url) || mapsUrl(guidebook);
             const image = attrUrl(rec.image, { allowDataImage: true });
             return `
-            <a class="guest-rec" href="${href}" target="_blank" rel="noreferrer">
+            <a class="guest-rec" href="${href}" target="_blank" rel="noopener noreferrer">
               ${image ? `<img src="${image}" alt="${escapeHtml(rec.name)}" width="92" height="92" loading="lazy" decoding="async" />` : "<div></div>"}
               <div>
                 <small>${escapeHtml(rec.category || "Nearby")}</small>
@@ -205,7 +218,7 @@ function renderGuestInner(guidebook) {
         <article class="guest-card" id="book">
           <h2>Book again</h2>
           <p>${escapeHtml(bookAgain.message)}</p>
-          ${listingHref ? `<p><a href="${listingHref}" target="_blank" rel="noreferrer">Open the listing</a></p>` : ""}
+          ${listingHref ? `<p><a href="${listingHref}" target="_blank" rel="noopener noreferrer">Open the listing</a></p>` : ""}
           <p>Emergency: ${escapeHtml(emergency.localNumber || "local emergency services")}. ${escapeHtml(emergency.notes)}</p>
         </article>
       </div>
@@ -388,6 +401,8 @@ function hydrateGuest(root, guidebook, previewTheme, options = {}) {
 
 globalThis.escapeHtml = escapeHtml;
 globalThis.safeUrl = safeUrl;
+globalThis.attrUrl = attrUrl;
+globalThis.jsonForScript = jsonForScript;
 globalThis.fullAddress = fullAddress;
 globalThis.mapsUrl = mapsUrl;
 globalThis.osmEmbed = osmEmbed;

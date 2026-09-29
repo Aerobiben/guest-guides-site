@@ -3,12 +3,13 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; base-uri 'none'; object-src 'none'; form-action 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src data: http: https:; frame-src https://www.openstreetmap.org; connect-src 'none'" />
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%235b2d9b'/%3E%3C/svg%3E" />
   <title>Roma Norte Casa — guest guide</title>
   <meta name="description" content="Wi‑Fi, check-in, house notes, and local picks for your stay." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700&display=swap" rel="stylesheet" />
   <meta name="color-scheme" content="light dark" />
   <style>.guest-app {
   --guest-bg: #f3efe9;
@@ -613,7 +614,7 @@
         <div class="guest-actions">
           <a href="#wifi"><strong>Wi‑Fi</strong><span>RomaNorteGuest</span></a>
           <a href="#checkin"><strong>Check-in</strong><span>15:00</span></a>
-          <a href="https://www.google.com/maps?q=Roma%20Norte%2C%20Mexico%20City%2C%20Mexico%2C%20Mexico%20City%2C%20CDMX%2C%2006700%2C%20Mexico" target="_blank" rel="noreferrer"><strong>Map</strong><span>Mexico City</span></a>
+          <a href="https://www.google.com/maps?q=Roma%20Norte%2C%20Mexico%20City%2C%20Mexico%2C%20Mexico%20City%2C%20CDMX%2C%2006700%2C%20Mexico" target="_blank" rel="noopener noreferrer"><strong>Map</strong><span>Mexico City</span></a>
           <a href="tel:+525500000000"><strong>Host</strong><span>+52 55 0000 0000</span></a>
         </div>
 
@@ -636,7 +637,7 @@ jamaica" data-copied="Wi‑Fi copied">Copy both</button></p>
           <h2>Directions</h2>
           <p>Roma Norte, Mexico City, Mexico, Mexico City, CDMX, 06700, Mexico</p>
           <p>Metro line 1 to Insurgentes, then a 10-minute walk into Roma Norte. From the airport, authorized taxi or Metrobus.</p>
-          <iframe class="guest-map" title="Map" src="https://www.openstreetmap.org/export/embed.html?bbox=-99.17200000000001%2C19.409399999999998%2C-99.152%2C19.4294&amp;layer=mapnik&amp;marker=19.4194%2C-99.162" loading="lazy"></iframe>
+          <iframe class="guest-map" title="Map" src="https://www.openstreetmap.org/export/embed.html?bbox=-99.17200000000001%2C19.409399999999998%2C-99.152%2C19.4294&amp;layer=mapnik&amp;marker=19.4194%2C-99.162" loading="lazy" referrerpolicy="no-referrer" sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox"></iframe>
         </article>
 
         <article class="guest-card " id="parking">
@@ -653,7 +654,7 @@ jamaica" data-copied="Wi‑Fi copied">Copy both</button></p>
         <article class="guest-card " id="recs">
           <h2>Recommendations</h2>
           
-            <a class="guest-rec" href="https://maps.google.com/?q=Parque+M%C3%A9xico+CDMX" target="_blank" rel="noreferrer">
+            <a class="guest-rec" href="https://maps.google.com/?q=Parque+M%C3%A9xico+CDMX" target="_blank" rel="noopener noreferrer">
               <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&amp;fit=crop&amp;w=720&amp;q=75" alt="Parque México" width="92" height="92" loading="lazy" decoding="async" />
               <div>
                 <small>Walk</small>
@@ -661,7 +662,7 @@ jamaica" data-copied="Wi‑Fi copied">Copy both</button></p>
                 <p>Eight minutes south. Fountain, dogs, and shade in the afternoon.</p>
               </div>
             </a>
-            <a class="guest-rec" href="https://maps.google.com/?q=El+Turix+Roma+Norte" target="_blank" rel="noreferrer">
+            <a class="guest-rec" href="https://maps.google.com/?q=El+Turix+Roma+Norte" target="_blank" rel="noopener noreferrer">
               <img src="https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&amp;fit=crop&amp;w=720&amp;q=75" alt="El Turix" width="92" height="92" loading="lazy" decoding="async" />
               <div>
                 <small>Tacos</small>
@@ -680,7 +681,7 @@ jamaica" data-copied="Wi‑Fi copied">Copy both</button></p>
         <article class="guest-card" id="book">
           <h2>Book again</h2>
           <p>Write us before you rebook — we keep a few weekends for people we already know.</p>
-          <p><a href="https://www.airbnb.com/" target="_blank" rel="noreferrer">Open the listing</a></p>
+          <p><a href="https://www.airbnb.com/" target="_blank" rel="noopener noreferrer">Open the listing</a></p>
           <p>Emergency: 911. Hospital Ángeles Pedregal is far; closer is Hospital Español on Ejército Nacional.</p>
         </article>
       </div>
@@ -818,7 +819,7 @@ jamaica" data-copied="Wi‑Fi copied">Copy both</button></p>
   }
 }
     (function () {
-      var photos = ["https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=800&q=75","https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&fit=crop&w=720&q=75","https://images.unsplash.com/photo-1556912173-46c336c7fd55?auto=format&fit=crop&w=800&q=75"];
+      var photos = ["https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format\u0026fit=crop\u0026w=800\u0026q=75","https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format\u0026fit=crop\u0026w=720\u0026q=75","https://images.unsplash.com/photo-1556912173-46c336c7fd55?auto=format\u0026fit=crop\u0026w=800\u0026q=75"];
       var root = document.body;
       var THEME_KEY = "guest-guide-theme";
       var hostTheme = root.getAttribute("data-guest-theme") || "auto";

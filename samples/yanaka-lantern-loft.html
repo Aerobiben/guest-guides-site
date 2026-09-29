@@ -3,12 +3,13 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; base-uri 'none'; object-src 'none'; form-action 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src data: http: https:; frame-src https://www.openstreetmap.org; connect-src 'none'" />
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%235b2d9b'/%3E%3C/svg%3E" />
   <title>Yanaka Lantern Loft — guest guide</title>
   <meta name="description" content="Wi‑Fi, check-in, house notes, and local picks for your stay." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700&display=swap" rel="stylesheet" />
   <meta name="color-scheme" content="light dark" />
   <style>.guest-app {
   --guest-bg: #f3efe9;
@@ -613,7 +614,7 @@
         <div class="guest-actions">
           <a href="#wifi"><strong>Wi‑Fi</strong><span>YanakaGuest</span></a>
           <a href="#checkin"><strong>Check-in</strong><span>16:00</span></a>
-          <a href="https://www.google.com/maps?q=Yanaka%2C%20Tokyo%2C%20Japan%2C%20Tokyo%2C%20110-0001%2C%20Japan" target="_blank" rel="noreferrer"><strong>Map</strong><span>Tokyo</span></a>
+          <a href="https://www.google.com/maps?q=Yanaka%2C%20Tokyo%2C%20Japan%2C%20Tokyo%2C%20110-0001%2C%20Japan" target="_blank" rel="noopener noreferrer"><strong>Map</strong><span>Tokyo</span></a>
           <a href="tel:+81300000000"><strong>Host</strong><span>+81 3 0000 0000</span></a>
         </div>
 
@@ -636,7 +637,7 @@ lantern" data-copied="Wi‑Fi copied">Copy both</button></p>
           <h2>Directions</h2>
           <p>Yanaka, Tokyo, Japan, Tokyo, 110-0001, Japan</p>
           <p>JR Yamanote to Nippori, south exit, then follow signs toward Yanaka Cemetery. The loft is the brown door with the lantern.</p>
-          <iframe class="guest-map" title="Map" src="https://www.openstreetmap.org/export/embed.html?bbox=139.7586%2C35.7181%2C139.77859999999998%2C35.738099999999996&amp;layer=mapnik&amp;marker=35.7281%2C139.7686" loading="lazy"></iframe>
+          <iframe class="guest-map" title="Map" src="https://www.openstreetmap.org/export/embed.html?bbox=139.7586%2C35.7181%2C139.77859999999998%2C35.738099999999996&amp;layer=mapnik&amp;marker=35.7281%2C139.7686" loading="lazy" referrerpolicy="no-referrer" sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox"></iframe>
         </article>
 
         <article class="guest-card " id="parking">
@@ -653,7 +654,7 @@ lantern" data-copied="Wi‑Fi copied">Copy both</button></p>
         <article class="guest-card " id="recs">
           <h2>Recommendations</h2>
           
-            <a class="guest-rec" href="https://maps.google.com/?q=Yanaka+Cemetery+Tokyo" target="_blank" rel="noreferrer">
+            <a class="guest-rec" href="https://maps.google.com/?q=Yanaka+Cemetery+Tokyo" target="_blank" rel="noopener noreferrer">
               <img src="https://images.unsplash.com/photo-1528360983277-13d401cdc186?auto=format&amp;fit=crop&amp;w=720&amp;q=75" alt="Yanaka Cemetery" width="92" height="92" loading="lazy" decoding="async" />
               <div>
                 <small>Walk</small>
@@ -661,7 +662,7 @@ lantern" data-copied="Wi‑Fi copied">Copy both</button></p>
                 <p>Five minutes from the door. Best just after sunrise, before tour groups.</p>
               </div>
             </a>
-            <a class="guest-rec" href="https://maps.google.com/?q=Kayaba+Coffee+Yanaka" target="_blank" rel="noreferrer">
+            <a class="guest-rec" href="https://maps.google.com/?q=Kayaba+Coffee+Yanaka" target="_blank" rel="noopener noreferrer">
               <img src="https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&amp;fit=crop&amp;w=720&amp;q=75" alt="Kayaba Coffee" width="92" height="92" loading="lazy" decoding="async" />
               <div>
                 <small>Coffee</small>
@@ -680,7 +681,7 @@ lantern" data-copied="Wi‑Fi copied">Copy both</button></p>
         <article class="guest-card" id="book">
           <h2>Book again</h2>
           <p>Message us with dates — the loft books out around Golden Week and New Year.</p>
-          <p><a href="https://www.airbnb.com/" target="_blank" rel="noreferrer">Open the listing</a></p>
+          <p><a href="https://www.airbnb.com/" target="_blank" rel="noopener noreferrer">Open the listing</a></p>
           <p>Emergency: 119. Ambulance is 119. Nearest clinic is on Kototoi-dori.</p>
         </article>
       </div>
@@ -818,7 +819,7 @@ lantern" data-copied="Wi‑Fi copied">Copy both</button></p>
   }
 }
     (function () {
-      var photos = ["https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?auto=format&fit=crop&w=960&q=75","https://images.unsplash.com/photo-1528360983277-13d401cdc186?auto=format&fit=crop&w=720&q=75","https://images.unsplash.com/photo-1616594039964-ae9021a400a0?auto=format&fit=crop&w=800&q=75"];
+      var photos = ["https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?auto=format\u0026fit=crop\u0026w=960\u0026q=75","https://images.unsplash.com/photo-1528360983277-13d401cdc186?auto=format\u0026fit=crop\u0026w=720\u0026q=75","https://images.unsplash.com/photo-1616594039964-ae9021a400a0?auto=format\u0026fit=crop\u0026w=800\u0026q=75"];
       var root = document.body;
       var THEME_KEY = "guest-guide-theme";
       var hostTheme = root.getAttribute("data-guest-theme") || "auto";

@@ -20,7 +20,7 @@ function renderPicker() {
   if (!pickerWired) {
     list.innerHTML = gallery.map((guide, index) => `
       <button class="guide-option ${index === activeIndex ? "is-active" : ""}" type="button" data-index="${index}">
-        <img src="${escapeHtml(heroPhoto(guide))}" alt="" width="56" height="56" decoding="async" loading="eager" />
+        <img src="${attrUrl(heroPhoto(guide))}" alt="" width="56" height="56" decoding="async" loading="eager" />
         <span>
           <strong>${escapeHtml(guide.propertyName || guide.title)}</strong>
           <span>${escapeHtml(place(guide))}</span>
