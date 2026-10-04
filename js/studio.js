@@ -447,6 +447,16 @@ function schedulePreview() {
 }
 
 function renderPreview() {
+  const title = qs(".preview-head h2");
+  const copy = qs(".preview-head p");
+  if (state.view === "templates") {
+    if (title) title.textContent = "Sample preview";
+    if (copy) copy.textContent = "A fictional example. Start from a template to edit your own copy.";
+    hydrateGuest(qs("#guest-preview"), STARTER_TEMPLATES[0]);
+    return;
+  }
+  if (title) title.textContent = "Guest phone preview";
+  if (copy) copy.textContent = "This is the downloaded file — it is not published on this site.";
   hydrateGuest(qs("#guest-preview"), activeGuide());
 }
 
