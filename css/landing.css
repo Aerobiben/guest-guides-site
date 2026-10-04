@@ -385,6 +385,7 @@
   width: 100%;
   height: 178px;
   object-fit: cover;
+  object-position: center;
   background: var(--surface-sunken);
 }
 
