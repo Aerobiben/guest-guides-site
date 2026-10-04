@@ -7,21 +7,22 @@ function loadState() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (raw) {
+      if (raw.length > 4_000_000) throw new Error("too large");
       const saved = JSON.parse(raw);
       saved.guides = (saved.guides || []).map((guide, i) => normalizeGuidebook(guide, i));
       if (!saved.guides.length) throw new Error("empty");
       if (!saved.guides.some((guide) => guide.id === saved.activeId)) {
         saved.activeId = saved.guides[0].id;
       }
-      saved.tab = saved.tab || "intro";
-      saved.view = saved.view || "editor";
+      saved.tab = typeof saved.tab === "string" ? saved.tab : "intro";
+      saved.view = ["editor", "guides", "templates"].includes(saved.view) ? saved.view : "editor";
       return saved;
     }
   } catch {
     /* ignore */
   }
-  const first = structuredClone(STARTER_TEMPLATES[0]);
-  return { guides: [first], activeId: first.id, tab: "intro", view: "editor" };
+  const first = blankGuidebook();
+  return { guides: [first], activeId: first.id, tab: "intro", view: "templates" };
 }
 
 function saveState() {
@@ -92,7 +93,7 @@ function renderHeading() {
 function renderNav() {
   qsa("[data-view]").forEach((btn) => {
     const view = btn.dataset.view;
-    const on = view === state.view || (view === "guides" && state.view === "editor");
+    const on = view === state.view;
     btn.classList.toggle("is-active", on);
   });
   qsa("[data-section]").forEach((btn) => {
@@ -123,10 +124,10 @@ function renderGuides() {
   list.innerHTML = state.guides.map((guide) => `
     <div class="guide-chip">
       <div>
-        <button class="chip-open" data-open="${guide.id}">${escapeHtml(guide.propertyName || guide.title)}</button>
-        <p class="hint">${escapeHtml(guide.address.city || "No location yet")} · ${guide.photos.filter((photo) => photo.url).length} photos</p>
+        <button class="chip-open" data-open="${escapeHtml(guide.id)}">${escapeHtml(guide.propertyName || guide.title)}</button>
+        <p class="hint">${escapeHtml(guide.address.city || "No location yet")} · ${guide.photos.filter((photo) => photo.url).length} photos${guide.fromSample ? " · started from a sample" : ""}</p>
       </div>
-      <button class="text-btn" data-delete="${guide.id}" ${state.guides.length === 1 ? "disabled" : ""}>Delete</button>
+      <button class="text-btn" data-delete="${escapeHtml(guide.id)}" ${state.guides.length === 1 ? "disabled" : ""}>Delete</button>
     </div>
   `).join("");
   list.querySelectorAll("[data-open]").forEach((btn) => {
@@ -135,6 +136,9 @@ function renderGuides() {
   list.querySelectorAll("[data-delete]").forEach((btn) => {
     btn.onclick = () => {
       if (state.guides.length === 1) return;
+      const target = state.guides.find((guide) => guide.id === btn.dataset.delete);
+      const name = target?.propertyName || target?.title || "this guidebook";
+      if (!window.confirm(`Delete “${name}”? This only removes the draft saved in this browser.`)) return;
       state.guides = state.guides.filter((guide) => guide.id !== btn.dataset.delete);
       if (!state.guides.some((guide) => guide.id === state.activeId)) state.activeId = state.guides[0].id;
       saveState();
@@ -149,9 +153,9 @@ function renderTemplates() {
     <div class="guide-chip">
       <div>
         <strong>${escapeHtml(tpl.title)}</strong>
-        <p class="hint">${escapeHtml([tpl.address.city, tpl.address.country].filter(Boolean).join(", "))}</p>
+        <p class="hint">${escapeHtml([tpl.address.city, tpl.address.country].filter(Boolean).join(", "))} · fictional sample</p>
       </div>
-      <button class="add-btn" data-use="${tpl.id}">Use template</button>
+      <button class="add-btn" data-use="${escapeHtml(tpl.id)}">Start from this</button>
     </div>
   `).join("");
   list.querySelectorAll("[data-use]").forEach((btn) => {
@@ -159,7 +163,14 @@ function renderTemplates() {
       const tpl = STARTER_TEMPLATES.find((item) => item.id === btn.dataset.use);
       const copy = structuredClone(tpl);
       copy.id = makeId();
-      state.guides.unshift(copy);
+      copy.demo = false;
+      copy.fromSample = true;
+      copy.listingUrl = "";
+      if (state.guides.length === 1 && isUnusedBlank(state.guides[0])) {
+        state.guides = [copy];
+      } else {
+        state.guides.unshift(copy);
+      }
       state.activeId = copy.id;
       state.view = "editor";
       saveState();
@@ -173,13 +184,13 @@ function renderPhotos() {
   const guide = activeGuide();
   list.innerHTML = guide.photos.map((photo, index) => `
     <div class="photo-row">
-      <img ${photo.url ? `src="${escapeHtml(photo.url)}"` : ""} alt="" width="92" height="92" decoding="async" />
+      <img ${photo.url ? `src="${attrUrl(photo.url, { allowDataImage: true })}"` : ""} alt="" width="92" height="92" decoding="async" />
       <div class="stack">
-        <input class="input" data-photo-url="${photo.id}" placeholder="${index === 0 ? "Hero photo URL" : "Photo URL"}" value="${escapeHtml(photo.url)}" />
-        <input class="input" data-photo-caption="${photo.id}" placeholder="Caption" value="${escapeHtml(photo.caption || "")}" />
-        <input type="file" accept="image/*" data-photo-file="${photo.id}" />
+        <input class="input" data-photo-url="${escapeHtml(photo.id)}" placeholder="${index === 0 ? "Hero photo URL" : "Photo URL"}" value="${escapeHtml(photo.url)}" />
+        <input class="input" data-photo-caption="${escapeHtml(photo.id)}" placeholder="Caption" value="${escapeHtml(photo.caption || "")}" />
+        <input type="file" accept="image/png,image/jpeg,image/webp,image/gif,image/avif" data-photo-file="${escapeHtml(photo.id)}" />
       </div>
-      <button class="text-btn" data-photo-remove="${photo.id}" ${guide.photos.length === 1 ? "disabled" : ""}>Remove</button>
+      <button class="text-btn" data-photo-remove="${escapeHtml(photo.id)}" ${guide.photos.length === 1 ? "disabled" : ""}>Remove</button>
     </div>
   `).join("");
   list.querySelectorAll("[data-photo-url]").forEach((el) => {
@@ -204,6 +215,12 @@ function renderPhotos() {
     el.onchange = () => {
       const file = el.files?.[0];
       if (!file) return;
+      const type = String(file.type || "").toLowerCase();
+      if (!/^image\/(png|jpe?g|gif|webp|avif)$/.test(type)) {
+        el.value = "";
+        window.alert("Please use a JPG, PNG, WebP, GIF, or AVIF photo.");
+        return;
+      }
       if (file.size > 1_200_000) {
         el.value = "";
         window.alert("Please use a photo under 1.2 MB, or paste an image URL instead.");
@@ -236,10 +253,10 @@ function renderRepeat(kind) {
     list.innerHTML = guide.houseManual.map((item) => `
       <div class="repeat-row repeat-row-plain">
         <div class="stack">
-          <input class="input" data-hm-title="${item.id}" placeholder="Title, e.g. Heat &amp; lights" value="${escapeHtml(item.title)}" />
-          <textarea data-hm-body="${item.id}" placeholder="How it works">${escapeHtml(item.body)}</textarea>
+          <input class="input" data-hm-title="${escapeHtml(item.id)}" placeholder="Title, e.g. Heat &amp; lights" value="${escapeHtml(item.title)}" />
+          <textarea data-hm-body="${escapeHtml(item.id)}" placeholder="How it works">${escapeHtml(item.body)}</textarea>
         </div>
-        <button class="text-btn" data-hm-remove="${item.id}">Remove</button>
+        <button class="text-btn" data-hm-remove="${escapeHtml(item.id)}">Remove</button>
       </div>
     `).join("");
     list.querySelectorAll("[data-hm-title]").forEach((el) => {
@@ -272,15 +289,15 @@ function renderRepeat(kind) {
     const list = qs("#rec-list");
     list.innerHTML = guide.recommendations.map((item) => `
       <div class="repeat-row">
-        <img ${item.image ? `src="${escapeHtml(item.image)}"` : ""} alt="" width="92" height="92" decoding="async" />
+        <img ${item.image ? `src="${attrUrl(item.image, { allowDataImage: true })}"` : ""} alt="" width="92" height="92" decoding="async" />
         <div class="stack">
-          <input class="input" data-rec-name="${item.id}" placeholder="Name" value="${escapeHtml(item.name)}" />
-          <input class="input" data-rec-cat="${item.id}" placeholder="Category, e.g. Coffee" value="${escapeHtml(item.category || "")}" />
-          <textarea data-rec-notes="${item.id}" placeholder="Why you send guests there">${escapeHtml(item.notes)}</textarea>
-          <input class="input" data-rec-url="${item.id}" placeholder="Link" value="${escapeHtml(item.url || "")}" />
-          <input class="input" data-rec-image="${item.id}" placeholder="Image URL" value="${escapeHtml(item.image || "")}" />
+          <input class="input" data-rec-name="${escapeHtml(item.id)}" placeholder="Name" value="${escapeHtml(item.name)}" />
+          <input class="input" data-rec-cat="${escapeHtml(item.id)}" placeholder="Category, e.g. Coffee" value="${escapeHtml(item.category || "")}" />
+          <textarea data-rec-notes="${escapeHtml(item.id)}" placeholder="Why you send guests there">${escapeHtml(item.notes)}</textarea>
+          <input class="input" data-rec-url="${escapeHtml(item.id)}" placeholder="Link" value="${escapeHtml(item.url || "")}" />
+          <input class="input" data-rec-image="${escapeHtml(item.id)}" placeholder="Image URL" value="${escapeHtml(item.image || "")}" />
         </div>
-        <button class="text-btn" data-rec-remove="${item.id}">Remove</button>
+        <button class="text-btn" data-rec-remove="${escapeHtml(item.id)}">Remove</button>
       </div>
     `).join("");
     const bind = (attr, field) => {
@@ -351,6 +368,13 @@ function fillForm() {
     g.title = qs("#title-field").value;
     saveState();
   };
+  const listingHint = qs("#listing-hint");
+  if (listingHint) {
+    listingHint.textContent = isSampleListing(g.listingUrl)
+      ? "This is still a sample listing link. Paste your own Airbnb or booking URL before guests use it."
+      : "Your Airbnb or booking page. Guests tap this to book again. Leave blank if you do not have one yet.";
+  }
+  renderSampleBanner();
   qs("#rules-input").oninput = () => {
     g.houseRules = qs("#rules-input").value.split("\n").map((line) => line.trim()).filter(Boolean);
     saveState();
@@ -423,7 +447,44 @@ function schedulePreview() {
 }
 
 function renderPreview() {
+  const title = qs(".preview-head h2");
+  const copy = qs(".preview-head p");
+  if (state.view === "templates") {
+    if (title) title.textContent = "Sample preview";
+    if (copy) copy.textContent = "A fictional example. Start from a template to edit your own copy.";
+    hydrateGuest(qs("#guest-preview"), STARTER_TEMPLATES[0]);
+    return;
+  }
+  if (title) title.textContent = "Guest phone preview";
+  if (copy) copy.textContent = "This is the downloaded file — it is not published on this site.";
   hydrateGuest(qs("#guest-preview"), activeGuide());
+}
+
+function isUnusedBlank(guide) {
+  return Boolean(guide)
+    && !guide.fromSample
+    && !guide.propertyName
+    && !guide.hostName
+    && !guide.listingUrl
+    && !guide.intro?.welcome
+    && !guide.wifi?.network
+    && !guide.checkIn?.accessCode
+    && !(guide.photos || []).some((photo) => photo.url);
+}
+
+function renderSampleBanner() {
+  const banner = qs("#sample-banner");
+  if (!banner) return;
+  banner.classList.toggle("hidden", !activeGuide().fromSample);
+}
+
+function showStudioToast(message) {
+  const toast = qs("#studio-toast");
+  if (!toast) return;
+  toast.textContent = message;
+  toast.classList.add("is-on");
+  clearTimeout(showStudioToast.timer);
+  showStudioToast.timer = setTimeout(() => toast.classList.remove("is-on"), 4200);
 }
 
 function render() {
@@ -431,6 +492,7 @@ function render() {
   renderGuides();
   renderTemplates();
   if (state.view === "editor") fillForm();
+  else renderSampleBanner();
   renderPreview();
 }
 
@@ -443,6 +505,7 @@ async function exportHtml() {
   if (!guestCssCache) await loadGuestCss();
   const html = buildGuestDocument(activeGuide(), guestCssCache);
   downloadTextFile(`${slugify(activeGuide().propertyName || activeGuide().title)}.html`, html);
+  showStudioToast("Downloaded to this device. Nothing was published here — send the file or host it yourself.");
 }
 
 async function openFullPreview() {
@@ -511,6 +574,11 @@ function wire() {
   qs("#download-btn").onclick = exportHtml;
   qs("#preview-btn").onclick = openPreview;
   qs("#preview-full-btn").onclick = openFullPreview;
+  qs("#dismiss-sample-banner")?.addEventListener("click", () => {
+    activeGuide().fromSample = false;
+    saveState();
+    renderSampleBanner();
+  });
   let searchTimer;
   qs("#address-search").addEventListener("input", (event) => {
     clearTimeout(searchTimer);

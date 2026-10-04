@@ -6,22 +6,16 @@
   <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
   <title>Builder — Digital Guidebook</title>
   <meta name="description" content="Build a modular Airbnb guest guide: swap photos and stay details, then download a phone-ready HTML file for your guests." />
-  <script>
-    try {
-      var saved = localStorage.getItem("digital-guidebook-theme");
-      document.documentElement.dataset.theme = saved === "light" || saved === "dark"
-        ? saved
-        : (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
-    } catch (e) {}
-  </script>
+  <meta name="robots" content="noindex" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; form-action 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: http: https:; frame-src https://www.openstreetmap.org; connect-src 'self' https://nominatim.openstreetmap.org; worker-src 'none'" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'" />
-  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" /></noscript>
-  <link rel="stylesheet" href="./css/tokens.css" />
-  <link rel="stylesheet" href="./css/studio.css" />
-  <link rel="stylesheet" href="./css/guest.css?v=2" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" />
+  <link rel="stylesheet" href="./css/tokens.css?v=7" />
+  <link rel="stylesheet" href="./css/studio.css?v=7" />
+  <link rel="stylesheet" href="./css/guest.css?v=7" />
+  <script src="./js/theme.js?v=7"></script>
 </head>
 <body>
   <div class="app-frame">
@@ -34,11 +28,11 @@
         </span>
         <span class="brand-text">
           <strong>Digital Guidebook</strong>
-          <span>Modular guest guides you can hand over as HTML</span>
+          <span>Draft in the browser, download an HTML file</span>
         </span>
       </a>
       <div class="topbar-actions">
-        <span class="save-chip"><i></i> Saved in this browser</span>
+        <span class="save-chip" title="Drafts never leave this browser unless you download the HTML file."><i></i> Saved in this browser only</span>
         <button class="btn-icon" id="theme-toggle" type="button" aria-label="Toggle dark mode" title="Toggle dark mode">
           <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
             <circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M2.5 12h2M19.5 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"/>
@@ -140,20 +134,20 @@
           <div class="page-head">
             <span class="eyebrow">Library</span>
             <h1>Your guidebooks</h1>
-            <p>Every guidebook is a modular pack of photos and stay details. Open one to edit it, then download the HTML you hand to the guest.</p>
+            <p>Drafts stay in this browser. Open one to edit it, then download the HTML file you send to the guest — nothing is published from here.</p>
           </div>
           <button class="add-btn" id="new-guide" type="button">
             <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
             New guidebook
           </button>
-          <div id="guides-list" class="guides-list" style="margin-top:16px"></div>
+          <div id="guides-list" class="guides-list"></div>
         </div>
 
         <div id="templates-panel" class="hidden">
           <div class="page-head">
             <span class="eyebrow">Starters</span>
             <h1>Templates</h1>
-            <p>Start from a sample stay, then swap the pictures and the important info.</p>
+            <p>Start from a fictional sample stay. The photos are from real listings; names, door codes, and Wi‑Fi are made up. Swap them for yours before you send the file.</p>
           </div>
           <div id="templates-list" class="guides-list"></div>
         </div>
@@ -162,7 +156,14 @@
           <div class="page-head">
             <span class="eyebrow">Guidebook</span>
             <h1 id="guide-title">Create guidebook</h1>
-            <p id="guide-subtitle">Edit any section on the left. The phone preview updates as you type.</p>
+            <p id="guide-subtitle">Edit any section. The phone preview updates as you type.</p>
+          </div>
+          <div id="sample-banner" class="notice-banner hidden">
+            <div>
+              <strong>This started from a sample stay.</strong>
+              <p>Replace the door code, Wi‑Fi, and listing link before you send it. The photos are from a real listing used as a visual example.</p>
+            </div>
+            <button class="text-btn" id="dismiss-sample-banner" type="button">Got it</button>
           </div>
 
           <div class="tabs">
@@ -179,13 +180,13 @@
           <section class="panel" data-panel="basic">
             <div class="card">
               <div class="card-head">
-                <h2>Business name or address</h2>
-                <p>Search to populate the fields below, or type them in yourself.</p>
+                <h2>Find the stay</h2>
+                <p>Search a street or neighborhood to fill the fields, or type them in yourself.</p>
               </div>
               <div class="grid-2">
                 <label class="field">
                   <span class="field-label">Search</span>
-                  <input class="input" id="address-search" placeholder="Search by business name or address" />
+                  <input class="input" id="address-search" placeholder="Search by stay name or street address" />
                   <div id="search-results" class="search-results hidden"></div>
                 </label>
                 <label class="field">
@@ -197,7 +198,7 @@
 
             <div class="card">
               <div class="address-layout">
-                <iframe id="map-frame" class="map-frame" title="Property map" loading="lazy"></iframe>
+                <iframe id="map-frame" class="map-frame" title="Property map" loading="lazy" referrerpolicy="no-referrer" sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox"></iframe>
                 <div>
                   <div class="grid-2">
                     <label class="field">
@@ -209,7 +210,7 @@
                       <input class="input" id="street-name" />
                     </label>
                   </div>
-                  <div class="grid-2" style="margin-top:14px">
+                  <div class="grid-2 follow">
                     <label class="field">
                       <span class="field-label">City</span>
                       <input class="input" id="city" />
@@ -219,7 +220,7 @@
                       <input class="input" id="state" />
                     </label>
                   </div>
-                  <div class="grid-2" style="margin-top:14px">
+                  <div class="grid-2 follow">
                     <label class="field">
                       <span class="field-label">Postal code</span>
                       <input class="input" id="postal" />
@@ -229,7 +230,7 @@
                       <input class="input" id="country" />
                     </label>
                   </div>
-                  <div class="grid-2" style="margin-top:14px">
+                  <div class="grid-2 follow">
                     <label class="field">
                       <span class="field-label">Latitude</span>
                       <input class="input" id="lat" />
@@ -246,15 +247,16 @@
             <div class="card">
               <div class="card-head">
                 <h2>How the map opens</h2>
-                <p>Choose what happens when a guest taps the map link.</p>
+                <p>Choose what the guest map link opens in Google Maps.</p>
               </div>
               <label class="field">
-                <span class="field-label">Link behavior</span>
+                <span class="field-label">Map link</span>
                 <select id="link-behavior">
-                  <option value="automatic">Automatic — defaults to Google Maps</option>
-                  <option value="address">Use address — opens the specific address</option>
-                  <option value="latlng">Latitude &amp; longitude — opens the geo point</option>
+                  <option value="automatic">Automatic — use the map pin when we have coordinates</option>
+                  <option value="address">Use the written address</option>
+                  <option value="latlng">Use latitude &amp; longitude only</option>
                 </select>
+                <span class="hint">Automatic and “use coordinates” need latitude and longitude. Search an address to fill those, or type them in.</span>
               </label>
               <label class="field">
                 <span class="field-label">Getting here</span>
@@ -267,19 +269,21 @@
             <div class="card">
               <div class="card-head">
                 <h2>The basics</h2>
-                <p>What the guest sees first when they open the link.</p>
+                <p>What the guest sees first when they open the guide.</p>
               </div>
               <div class="grid-2">
                 <label class="field">
                   <span class="field-label">Guidebook title</span>
-                  <input class="input" id="title-field" />
+                  <input class="input" id="title-field" placeholder="For your library, e.g. Downtown loft" />
+                  <span class="hint">Only you see this in the builder. Guests do not.</span>
                 </label>
                 <label class="field">
                   <span class="field-label">Property name</span>
-                  <input class="input" id="property-name" />
+                  <input class="input" id="property-name" placeholder="Shown on the guest cover" />
+                  <span class="hint">This is the name on the cover. If you leave it empty, guests see the guidebook title.</span>
                 </label>
               </div>
-              <div class="grid-2" style="margin-top:14px">
+              <div class="grid-2 follow">
                 <label class="field">
                   <span class="field-label">Host name</span>
                   <input class="input" id="host-name" />
@@ -289,7 +293,7 @@
                   <input class="input" id="host-phone" />
                 </label>
               </div>
-              <label class="field" style="margin-top:14px">
+              <label class="field follow">
                 <span class="field-label">Guest theme</span>
                 <select id="guest-theme">
                   <option value="auto">Auto — follow the guest's phone setting</option>
@@ -318,7 +322,7 @@
             <div class="card">
               <div class="card-head">
                 <h2>Photos</h2>
-                <p>Paste image URLs or upload files. The first photo becomes the hero image.</p>
+                <p>Paste image URLs or upload files. The first photo becomes the hero image. Uploads must be JPG, PNG, WebP, GIF, or AVIF under 1.2&nbsp;MB — for larger photos, paste a URL instead.</p>
               </div>
               <div id="photo-list" class="photo-list"></div>
               <button class="add-btn" id="add-photo" type="button">
@@ -344,7 +348,7 @@
                   <input class="input" id="access-code" />
                 </label>
               </div>
-              <label class="field" style="margin-top:14px">
+              <label class="field follow">
                 <span class="field-label">Check-in instructions</span>
                 <textarea id="checkin-notes"></textarea>
               </label>
@@ -382,7 +386,7 @@
                   <input class="input" id="wifi-password" />
                 </label>
               </div>
-              <label class="field" style="margin-top:14px">
+              <label class="field follow">
                 <span class="field-label">Notes</span>
                 <textarea id="wifi-notes" placeholder="Where the router lives, which band is faster…"></textarea>
               </label>
@@ -454,10 +458,11 @@
                 </label>
                 <label class="field">
                   <span class="field-label">Listing URL</span>
-                  <input class="input" id="listing-url" />
+                  <input class="input" id="listing-url" placeholder="https://www.airbnb.com/rooms/…" />
+                  <span class="hint" id="listing-hint">Your Airbnb or booking page. Guests tap this to book again. Leave blank if you do not have one yet.</span>
                 </label>
               </div>
-              <label class="field" style="margin-top:14px">
+              <label class="field follow">
                 <span class="field-label">Book-again note</span>
                 <textarea id="book-message"></textarea>
               </label>
@@ -487,7 +492,7 @@
         <div class="preview-head">
           <div>
             <h2>Guest phone preview</h2>
-            <p>Exactly what lands in the downloaded HTML file.</p>
+            <p>This is the downloaded file — it is not published on this site.</p>
           </div>
           <button class="btn btn-ghost" id="preview-full-btn" type="button">Full page</button>
         </div>
@@ -498,10 +503,11 @@
     </div>
   </div>
 
-  <script src="./js/theme.js"></script>
-  <script src="./js/templates.js"></script>
-  <script src="./js/guest-render.js?v=2"></script>
-  <script src="./js/export.js"></script>
-  <script src="./js/studio.js"></script>
+  <div id="studio-toast" class="studio-toast" role="status" aria-live="polite"></div>
+
+  <script src="./js/templates.js?v=7"></script>
+  <script src="./js/guest-render.js?v=7"></script>
+  <script src="./js/export.js?v=7"></script>
+  <script src="./js/studio.js?v=7"></script>
 </body>
 </html>

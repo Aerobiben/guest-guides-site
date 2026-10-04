@@ -1,24 +1,66 @@
-const DEFAULT_PHOTOS = {
-  hero: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=960&q=75",
-  living: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=800&q=75",
-  kitchen: "https://images.unsplash.com/photo-1556912173-46c336c7fd55?auto=format&fit=crop&w=800&q=75",
-  bedroom: "https://images.unsplash.com/photo-1616594039964-ae9021a400a0?auto=format&fit=crop&w=800&q=75",
-  cafe: "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=720&q=75",
-  hike: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=720&q=75",
-  bologna: "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?auto=format&fit=crop&w=960&q=75",
-  paris: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=960&q=75",
-  glasgow: "https://images.unsplash.com/photo-1552832230-c0197dd311b5?auto=format&fit=crop&w=960&q=75",
-  fog: "https://images.unsplash.com/photo-1501594907352-04cda38ebc29?auto=format&fit=crop&w=960&q=75",
-  lisbon: "https://images.unsplash.com/photo-1555881400-74d7acaacd8b?auto=format&fit=crop&w=960&q=75",
-  tokyo: "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?auto=format&fit=crop&w=960&q=75",
-  cdmx: "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&fit=crop&w=960&q=75",
-  tram: "https://images.unsplash.com/photo-1585208798174-6cedd86e019a?auto=format&fit=crop&w=720&q=75",
-  lantern: "https://images.unsplash.com/photo-1528360983277-13d401cdc186?auto=format&fit=crop&w=720&q=75",
-  taco: "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?auto=format&fit=crop&w=720&q=75",
+function airbnbPhoto(path) {
+  return `https://a0.muscache.com/im/pictures/${path}?im_w=1200`;
+}
+
+const AIRBNB = {
+  sunset: {
+    listing: "https://www.airbnb.com/rooms/3079929",
+    living: airbnbPhoto("airflow/Hosting-3079929/original/67bf0f10-3eac-4356-8857-fdbb61012dab.jpg"),
+    kitchen: airbnbPhoto("airflow/Hosting-3079929/original/350d217a-d79c-4ac6-aeab-32d3badb21dc.jpg"),
+    bedroom: airbnbPhoto("airflow/Hosting-3079929/original/e090dbdc-a311-424f-9b0a-f6bd191599b3.jpg"),
+    garden: airbnbPhoto("airflow/Hosting-3079929/original/7581a943-8516-4328-b2d8-fbc1cfda6a3a.jpg"),
+  },
+  lisbon: {
+    listing: "https://www.airbnb.com/rooms/495237",
+    living: airbnbPhoto("miso/Hosting-495237/original/c7d872aa-c20e-4271-a003-507273a3ef0c.jpeg"),
+    terrace: airbnbPhoto("miso/Hosting-495237/original/d4473fcd-b464-484b-a9ac-1339c6d3f378.jpeg"),
+    kitchen: airbnbPhoto("miso/Hosting-495237/original/5f4b1022-de4c-44eb-a27e-a12bfde3ec7f.jpeg"),
+    breakfast: airbnbPhoto("miso/Hosting-495237/original/f481f6b4-a1de-4c32-ac7b-9c2adfe02ea5.jpeg"),
+  },
+  tokyo: {
+    listing: "https://www.airbnb.com/rooms/6719865",
+    tatami: airbnbPhoto("106035557/bf134f9c_original.jpg"),
+    garden: airbnbPhoto("106034715/58e1f3b7_original.jpg"),
+    dining: airbnbPhoto("106034680/13c1ec22_original.jpg"),
+    futon: airbnbPhoto("hosting/Hosting-6719865/original/23714b1f-097a-422b-847f-d4eecfab6eac.jpeg"),
+  },
+  roma: {
+    listing: "https://www.airbnb.com/rooms/953052904610923157",
+    loft: airbnbPhoto("airflow/Hosting-953052904610923157/original/06f064ff-3b10-4a2d-b6c6-02c8bde04a6c.jpg"),
+    kitchen: airbnbPhoto("airflow/Hosting-953052904610923157/original/4752b58b-3690-41c3-a503-f0ff290303a4.jpg"),
+    bedroom: airbnbPhoto("airflow/Hosting-953052904610923157/original/9834c2d1-96bf-4ef7-86e8-0d554921cf14.jpg"),
+    terrace: airbnbPhoto("airflow/Hosting-953052904610923157/original/27692c9b-f207-4ee3-9552-a12e4a2d6402.jpg"),
+  },
+  mundus: {
+    listing: "https://www.airbnb.com/rooms/738225000657298753",
+    terrace: airbnbPhoto("hosting/Hosting-738225000657298753/original/314b8300-6d12-4c3c-b207-f242ffa0600b.jpeg"),
+    living: airbnbPhoto("hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6NzM4MjI1MDAwNjU3Mjk4NzUz/original/1be81420-2f75-4faf-a648-88927f74c880.jpeg"),
+    loft: airbnbPhoto("hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6NzM4MjI1MDAwNjU3Mjk4NzUz/original/181d5c19-e6b2-4bdb-8946-84b6c24857c1.jpeg"),
+    mezzanine: airbnbPhoto("hosting/Hosting-U3RheVN1cHBseUxpc3Rpbmc6NzM4MjI1MDAwNjU3Mjk4NzUz/original/7368e407-8e47-4114-a768-2d79e80a2348.jpeg"),
+  },
+  lilas: {
+    listing: "https://www.airbnb.com/rooms/20794994",
+    living: airbnbPhoto("79198232-7884-4356-9cc8-71d0c17f4c55.jpg"),
+    column: airbnbPhoto("c08bb59a-4f84-486c-9110-eeb0db08f6e3.jpg"),
+    plants: airbnbPhoto("684df33c-48a4-403e-ac0a-aa3aeebaba6f.jpg"),
+    salon: airbnbPhoto("81da2f6c-33ae-4f17-a9bf-491aaead2400.jpg"),
+  },
+  glasgow: {
+    listing: "https://www.airbnb.com/rooms/1370329958509772935",
+    living: airbnbPhoto("prohost-api/Hosting-1370329958509772935/original/914077fa-3c00-43ae-a353-e2fe2a0c7d49.jpeg"),
+    lounge: airbnbPhoto("prohost-api/Hosting-1370329958509772935/original/97c4ef6a-cd50-4ce5-a961-66e77df572d0.jpeg"),
+    open: airbnbPhoto("prohost-api/Hosting-1370329958509772935/original/c2868095-b05f-40cd-a365-046e0560028d.jpeg"),
+    kitchen: airbnbPhoto("prohost-api/Hosting-1370329958509772935/original/bb99d8ab-9a03-480f-9c8d-2e8f32a802a0.jpeg"),
+  },
 };
 
 function makeId(prefix = "gb") {
   return `${prefix}-${Math.random().toString(36).slice(2, 9)}`;
+}
+
+function fieldId(value, fallback) {
+  const clean = String(value ?? "").replace(/[^a-zA-Z0-9_-]/g, "").slice(0, 80);
+  return clean || fallback;
 }
 
 function normalizeGuidebook(raw = {}, index = 0) {
@@ -26,7 +68,12 @@ function normalizeGuidebook(raw = {}, index = 0) {
   const source = raw && typeof raw === "object" ? raw : {};
   const guide = {
     ...base,
-    ...source,
+    title: String(source.title ?? base.title),
+    propertyName: String(source.propertyName ?? base.propertyName),
+    hostName: String(source.hostName ?? base.hostName),
+    hostPhone: String(source.hostPhone ?? base.hostPhone),
+    hostEmail: String(source.hostEmail ?? base.hostEmail),
+    listingUrl: String(source.listingUrl ?? base.listingUrl),
     intro: { ...base.intro, ...(source.intro || {}) },
     address: { ...base.address, ...(source.address || {}) },
     wifi: { ...base.wifi, ...(source.wifi || {}) },
@@ -38,32 +85,43 @@ function normalizeGuidebook(raw = {}, index = 0) {
     emergency: { ...base.emergency, ...(source.emergency || {}) },
     photos: Array.isArray(source.photos) && source.photos.length
       ? source.photos.map((photo, i) => ({
-          id: photo?.id || `ph-${index}-${i}`,
-          url: photo?.url || "",
-          caption: photo?.caption || "",
+          id: fieldId(photo?.id, `ph-${index}-${i}`),
+          url: String(photo?.url || ""),
+          caption: String(photo?.caption || ""),
         }))
       : base.photos,
     houseManual: Array.isArray(source.houseManual)
       ? source.houseManual.map((item, i) => ({
-          id: item?.id || `hm-${index}-${i}`,
-          title: item?.title || "",
-          body: item?.body || "",
+          id: fieldId(item?.id, `hm-${index}-${i}`),
+          title: String(item?.title || ""),
+          body: String(item?.body || ""),
         }))
       : [],
-    houseRules: Array.isArray(source.houseRules) ? source.houseRules : [],
+    houseRules: Array.isArray(source.houseRules)
+      ? source.houseRules.map((rule) => String(rule ?? "")).filter(Boolean)
+      : [],
     recommendations: Array.isArray(source.recommendations)
       ? source.recommendations.map((item, i) => ({
-          id: item?.id || `rec-${index}-${i}`,
-          name: item?.name || "",
-          category: item?.category || "",
-          notes: item?.notes || "",
-          url: item?.url || "",
-          image: item?.image || "",
+          id: fieldId(item?.id, `rec-${index}-${i}`),
+          name: String(item?.name || ""),
+          category: String(item?.category || ""),
+          notes: String(item?.notes || ""),
+          url: String(item?.url || ""),
+          image: String(item?.image || ""),
         }))
       : [],
   };
-  if (source.id) guide.id = source.id;
+  guide.theme = source.theme === "dark" || source.theme === "light" ? source.theme : "auto";
+  guide.id = fieldId(source.id, guide.id);
+  guide.demo = source.demo === true;
+  guide.fromSample = source.fromSample === true
+    || (source.fromSample !== false && isSampleListing(guide.listingUrl));
   return guide;
+}
+
+function isSampleListing(url) {
+  const raw = String(url || "").trim();
+  return Object.values(AIRBNB).some((item) => item.listing === raw);
 }
 
 function blankGuidebook() {
@@ -76,6 +134,8 @@ function blankGuidebook() {
     hostPhone: "",
     hostEmail: "",
     listingUrl: "",
+    demo: false,
+    fromSample: false,
     intro: {
       welcome: "",
       about: "",
@@ -138,7 +198,7 @@ function sunsetGuidebook() {
     hostName: "Maya",
     hostPhone: "+1 (415) 555-0100",
     hostEmail: "maya.host@example.com",
-    listingUrl: "https://www.airbnb.com/",
+    listingUrl: AIRBNB.sunset.listing,
     intro: {
       welcome: "Welcome to the Outer Sunset. The studio opens onto a small garden, two blocks from the N-Judah and a short walk to Ocean Beach.",
       about: "A one-room stay with a real kitchen, blackout blinds, and a heater that actually works in the fog.",
@@ -157,10 +217,10 @@ function sunsetGuidebook() {
       linkBehavior: "automatic",
     },
     photos: [
-      { id: "ph-1", url: DEFAULT_PHOTOS.hero, caption: "Living room" },
-      { id: "ph-2", url: DEFAULT_PHOTOS.living, caption: "Sofa nook" },
-      { id: "ph-3", url: DEFAULT_PHOTOS.kitchen, caption: "Kitchen" },
-      { id: "ph-4", url: DEFAULT_PHOTOS.fog, caption: "Ocean Beach" },
+      { id: "ph-1", url: AIRBNB.sunset.living, caption: "Living room" },
+      { id: "ph-2", url: AIRBNB.sunset.kitchen, caption: "Kitchen" },
+      { id: "ph-3", url: AIRBNB.sunset.bedroom, caption: "Bedroom" },
+      { id: "ph-4", url: AIRBNB.sunset.garden, caption: "Garden bedroom" },
     ],
     wifi: {
       network: "SunsetGuest",
@@ -200,7 +260,7 @@ function sunsetGuidebook() {
         category: "Coffee",
         notes: "Snowy Plovers and a window seat. A 12-minute walk toward the beach.",
         url: "https://maps.google.com/?q=Andytown+Coffee+San+Francisco",
-        image: DEFAULT_PHOTOS.cafe,
+        image: AIRBNB.sunset.kitchen,
       },
       {
         id: "rec-2",
@@ -208,7 +268,7 @@ function sunsetGuidebook() {
         category: "Walk",
         notes: "Head west on Judah until you hit sand. Sunset is the whole point.",
         url: "https://maps.google.com/?q=Ocean+Beach+San+Francisco",
-        image: DEFAULT_PHOTOS.fog,
+        image: AIRBNB.sunset.garden,
       },
     ],
     bookAgain: {
@@ -230,7 +290,7 @@ function mundusGuidebook() {
     propertyName: "Mundus Bologna",
     hostName: "Mundus Hosts",
     hostPhone: "+39 051 000 0000",
-    listingUrl: "https://www.airbnb.com/",
+    listingUrl: AIRBNB.mundus.listing,
     intro: {
       welcome: "Benvenuti a Bologna. The apartment is in the university quarter, a short walk from Piazza Maggiore.",
       about: "A bright two-room stay with a full kitchen, fast Wi‑Fi, and a coffee bar on the ground floor.",
@@ -249,8 +309,10 @@ function mundusGuidebook() {
       linkBehavior: "automatic",
     },
     photos: [
-      { id: "ph-m1", url: DEFAULT_PHOTOS.bologna, caption: "Bologna rooftops" },
-      { id: "ph-m2", url: DEFAULT_PHOTOS.living, caption: "Apartment" },
+      { id: "ph-m1", url: AIRBNB.mundus.terrace, caption: "Terrace jacuzzi" },
+      { id: "ph-m2", url: AIRBNB.mundus.living, caption: "Living kitchen" },
+      { id: "ph-m3", url: AIRBNB.mundus.loft, caption: "Loft bedroom" },
+      { id: "ph-m4", url: AIRBNB.mundus.mezzanine, caption: "Mezzanine" },
     ],
     wifi: { network: "MundusGuest", password: "portici2026", notes: "Modem is in the cupboard near the entry." },
     checkIn: { time: "15:00", accessCode: "2288", instructions: "Ring Mundus at the street door, then take the elevator to the 3rd floor." },
@@ -266,7 +328,7 @@ function mundusGuidebook() {
         category: "Gelato",
         notes: "Pistachio is the move.",
         url: "https://maps.google.com/?q=Cremeria+Santo+Stefano+Bologna",
-        image: DEFAULT_PHOTOS.cafe,
+        image: AIRBNB.mundus.living,
       },
     ],
     bookAgain: { message: "Ask us for a returning-guest rate before you book elsewhere." },
@@ -283,6 +345,7 @@ function lesLilasGuidebook() {
     propertyName: "Les Lilas",
     hostName: "Camille",
     hostPhone: "+33 6 00 00 00 00",
+    listingUrl: AIRBNB.lilas.listing,
     intro: {
       welcome: "Bienvenue. The apartment is on a quiet street near the métro, with bakeries on every corner.",
       about: "A classic Parisian one-bedroom with a courtyard view.",
@@ -299,8 +362,10 @@ function lesLilasGuidebook() {
       linkBehavior: "automatic",
     },
     photos: [
-      { id: "ph-l1", url: DEFAULT_PHOTOS.paris, caption: "Paris from the window" },
-      { id: "ph-l2", url: DEFAULT_PHOTOS.living, caption: "Courtyard apartment" },
+      { id: "ph-l1", url: AIRBNB.lilas.living, caption: "Living room, Bastille view" },
+      { id: "ph-l2", url: AIRBNB.lilas.column, caption: "Window on the column" },
+      { id: "ph-l3", url: AIRBNB.lilas.plants, caption: "Salon" },
+      { id: "ph-l4", url: AIRBNB.lilas.salon, caption: "Fireplace room" },
     ],
     wifi: { network: "LilasFibre", password: "courtyard", notes: "Box is behind the TV. 5 GHz is LilasFibre-5." },
     checkIn: { time: "16:00", accessCode: "A 1204", instructions: "Building code on the left keypad. Apartment is 3ème gauche." },
@@ -316,7 +381,7 @@ function lesLilasGuidebook() {
         category: "Bakery",
         notes: "Pistachio escargot if they still have it after 10am. Walk or take line 11 to République, then 15 minutes on foot.",
         url: "https://maps.google.com/?q=Du+Pain+et+des+Id%C3%A9es+Paris",
-        image: DEFAULT_PHOTOS.cafe,
+        image: AIRBNB.lilas.plants,
       },
     ],
     bookAgain: { message: "Write us first — we keep a few dates for returning guests." },
@@ -333,6 +398,7 @@ function glasgowGuidebook() {
     propertyName: "West End Flat",
     hostName: "BnBHost",
     hostPhone: "+44 141 000 0000",
+    listingUrl: AIRBNB.glasgow.listing,
     intro: {
       welcome: "Welcome to the West End. You are a short walk from Kelvingrove and Byres Road.",
       about: "A warm top-floor flat with blackout blinds and a proper kettle.",
@@ -349,8 +415,10 @@ function glasgowGuidebook() {
       linkBehavior: "automatic",
     },
     photos: [
-      { id: "ph-g1", url: DEFAULT_PHOTOS.glasgow, caption: "West End streets" },
-      { id: "ph-g2", url: DEFAULT_PHOTOS.living, caption: "Top-floor sitting room" },
+      { id: "ph-g1", url: AIRBNB.glasgow.living, caption: "Bay living room" },
+      { id: "ph-g2", url: AIRBNB.glasgow.lounge, caption: "Lounge" },
+      { id: "ph-g3", url: AIRBNB.glasgow.open, caption: "Open kitchen" },
+      { id: "ph-g4", url: AIRBNB.glasgow.kitchen, caption: "Kitchen" },
     ],
     wifi: { network: "WestEndGuest", password: "kelvingrove", notes: "Router lives in the hall cupboard." },
     checkIn: { time: "15:00", accessCode: "1945", instructions: "Key safe is to the right of the close door, facing the street." },
@@ -366,7 +434,7 @@ function glasgowGuidebook() {
         category: "Walk",
         notes: "Ten minutes downhill. Good for a first-morning coffee walk.",
         url: "https://maps.google.com/?q=Kelvingrove+Park+Glasgow",
-        image: DEFAULT_PHOTOS.hike,
+        image: AIRBNB.glasgow.living,
       },
     ],
     bookAgain: { message: "Use the listing link so we can keep your preferred dates." },
@@ -384,7 +452,7 @@ function lisbonGuidebook() {
     hostName: "Inês",
     hostPhone: "+351 21 000 0000",
     hostEmail: "ines.host@example.com",
-    listingUrl: "https://www.airbnb.com/",
+    listingUrl: AIRBNB.lisbon.listing,
     intro: {
       welcome: "Bem-vindos. The terrace looks over Alfama rooftops, and the 28 tram rattles two streets down.",
       about: "A compact apartment with a proper espresso machine, thick walls, and blackout curtains for late nights.",
@@ -403,9 +471,10 @@ function lisbonGuidebook() {
       linkBehavior: "automatic",
     },
     photos: [
-      { id: "ph-lx1", url: DEFAULT_PHOTOS.lisbon, caption: "Alfama rooftops" },
-      { id: "ph-lx2", url: DEFAULT_PHOTOS.tram, caption: "Tram 28" },
-      { id: "ph-lx3", url: DEFAULT_PHOTOS.living, caption: "Sitting room" },
+      { id: "ph-lx1", url: AIRBNB.lisbon.living, caption: "Sitting room" },
+      { id: "ph-lx2", url: AIRBNB.lisbon.terrace, caption: "Terrace" },
+      { id: "ph-lx3", url: AIRBNB.lisbon.kitchen, caption: "Kitchen" },
+      { id: "ph-lx4", url: AIRBNB.lisbon.breakfast, caption: "Breakfast table" },
     ],
     wifi: { network: "AlfamaGuest", password: "azulejo", notes: "Router is on the shelf by the terrace door." },
     checkIn: { time: "15:00", accessCode: "3317", instructions: "Street door keypad, then second door on the left. Keys are in the tray on the table." },
@@ -424,7 +493,7 @@ function lisbonGuidebook() {
         category: "Ride",
         notes: "Board at Portas do Sol if you can. Sit on the right going west for the views.",
         url: "https://maps.google.com/?q=Portas+do+Sol+Lisbon",
-        image: DEFAULT_PHOTOS.tram,
+        image: AIRBNB.lisbon.terrace,
       },
       {
         id: "rec-lx2",
@@ -432,7 +501,7 @@ function lisbonGuidebook() {
         category: "Coffee",
         notes: "A downhill walk toward Chiado. Filter coffee is better than the espresso here.",
         url: "https://maps.google.com/?q=F%C3%A1brica+Coffee+Roasters+Lisbon",
-        image: DEFAULT_PHOTOS.cafe,
+        image: AIRBNB.lisbon.breakfast,
       },
     ],
     bookAgain: { message: "Tell us the dates before you book elsewhere — we hold returning-guest weekends when we can." },
@@ -450,7 +519,7 @@ function tokyoGuidebook() {
     hostName: "Yuki",
     hostPhone: "+81 3 0000 0000",
     hostEmail: "yuki.host@example.com",
-    listingUrl: "https://www.airbnb.com/",
+    listingUrl: AIRBNB.tokyo.listing,
     intro: {
       welcome: "ようこそ. The loft sits above a quiet Yanaka street, a short walk from Nippori and the cemetery paths.",
       about: "A one-room loft with a futon that is actually comfortable, a kitchenette, and a sento two blocks away.",
@@ -469,9 +538,10 @@ function tokyoGuidebook() {
       linkBehavior: "automatic",
     },
     photos: [
-      { id: "ph-ty1", url: DEFAULT_PHOTOS.tokyo, caption: "Evening streets" },
-      { id: "ph-ty2", url: DEFAULT_PHOTOS.lantern, caption: "Lantern alley" },
-      { id: "ph-ty3", url: DEFAULT_PHOTOS.bedroom, caption: "Loft" },
+      { id: "ph-ty1", url: AIRBNB.tokyo.tatami, caption: "Tatami room" },
+      { id: "ph-ty2", url: AIRBNB.tokyo.garden, caption: "Garden sitting room" },
+      { id: "ph-ty3", url: AIRBNB.tokyo.dining, caption: "Dining and shoji" },
+      { id: "ph-ty4", url: AIRBNB.tokyo.futon, caption: "Futon room" },
     ],
     wifi: { network: "YanakaGuest", password: "lantern", notes: "Pocket Wi‑Fi is in the tray if the loft signal is weak." },
     checkIn: { time: "16:00", accessCode: "8841", instructions: "Keypad on the brown door under the lantern. Shoes off at the step." },
@@ -490,7 +560,7 @@ function tokyoGuidebook() {
         category: "Walk",
         notes: "Five minutes from the door. Best just after sunrise, before tour groups.",
         url: "https://maps.google.com/?q=Yanaka+Cemetery+Tokyo",
-        image: DEFAULT_PHOTOS.lantern,
+        image: AIRBNB.tokyo.garden,
       },
       {
         id: "rec-ty2",
@@ -498,7 +568,7 @@ function tokyoGuidebook() {
         category: "Coffee",
         notes: "Kissaten two streets over. Morning blend and thick toast.",
         url: "https://maps.google.com/?q=Kayaba+Coffee+Yanaka",
-        image: DEFAULT_PHOTOS.cafe,
+        image: AIRBNB.tokyo.dining,
       },
     ],
     bookAgain: { message: "Message us with dates — the loft books out around Golden Week and New Year." },
@@ -516,7 +586,7 @@ function romaNorteGuidebook() {
     hostName: "Sofía",
     hostPhone: "+52 55 0000 0000",
     hostEmail: "sofia.host@example.com",
-    listingUrl: "https://www.airbnb.com/",
+    listingUrl: AIRBNB.roma.listing,
     intro: {
       welcome: "Bienvenidos a Roma Norte. The casa is a first-floor flat on a tree street, a short walk to Parque México.",
       about: "A one-bedroom with a real kitchen, a roof terrace two flights up, and a doorman who knows the building.",
@@ -535,9 +605,10 @@ function romaNorteGuidebook() {
       linkBehavior: "automatic",
     },
     photos: [
-      { id: "ph-mx1", url: DEFAULT_PHOTOS.living, caption: "Sitting room" },
-      { id: "ph-mx2", url: DEFAULT_PHOTOS.taco, caption: "Late tacos" },
-      { id: "ph-mx3", url: DEFAULT_PHOTOS.kitchen, caption: "Kitchen" },
+      { id: "ph-mx1", url: AIRBNB.roma.loft, caption: "Loft living room" },
+      { id: "ph-mx2", url: AIRBNB.roma.kitchen, caption: "Kitchen" },
+      { id: "ph-mx3", url: AIRBNB.roma.bedroom, caption: "Loft bedroom" },
+      { id: "ph-mx4", url: AIRBNB.roma.terrace, caption: "Private terrace" },
     ],
     wifi: { network: "RomaNorteGuest", password: "jamaica", notes: "Modem is in the hall closet. 5 GHz is RomaNorteGuest-5." },
     checkIn: { time: "15:00", accessCode: "2507", instructions: "Tell the doorman you are in 1B. Keypad on the flat door. Terrace key is on the hook." },
@@ -556,7 +627,7 @@ function romaNorteGuidebook() {
         category: "Walk",
         notes: "Eight minutes south. Fountain, dogs, and shade in the afternoon.",
         url: "https://maps.google.com/?q=Parque+M%C3%A9xico+CDMX",
-        image: DEFAULT_PHOTOS.hike,
+        image: AIRBNB.roma.terrace,
       },
       {
         id: "rec-mx2",
@@ -564,7 +635,7 @@ function romaNorteGuidebook() {
         category: "Tacos",
         notes: "Cochinita on a paper plate. Go early; they sell out.",
         url: "https://maps.google.com/?q=El+Turix+Roma+Norte",
-        image: DEFAULT_PHOTOS.taco,
+        image: AIRBNB.roma.kitchen,
       },
     ],
     bookAgain: { message: "Write us before you rebook — we keep a few weekends for people we already know." },
@@ -580,7 +651,7 @@ const STARTER_TEMPLATES = [
   mundusGuidebook(),
   lesLilasGuidebook(),
   glasgowGuidebook(),
-];
+].map((guide) => ({ ...guide, demo: true, fromSample: false }));
 
 const SAMPLE_SLUGS = {
   "gb-sunset": "sunset-garden-studio",
@@ -596,6 +667,7 @@ globalThis.SAMPLE_SLUGS = SAMPLE_SLUGS;
 globalThis.STARTER_TEMPLATES = STARTER_TEMPLATES;
 globalThis.blankGuidebook = blankGuidebook;
 globalThis.normalizeGuidebook = normalizeGuidebook;
+globalThis.isSampleListing = isSampleListing;
 globalThis.makeId = makeId;
 globalThis.sunsetGuidebook = sunsetGuidebook;
 globalThis.lisbonGuidebook = lisbonGuidebook;

@@ -3,12 +3,13 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; base-uri 'none'; object-src 'none'; form-action 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src data: http: https:; frame-src https://www.openstreetmap.org; connect-src 'none'" />
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%235b2d9b'/%3E%3C/svg%3E" />
   <title>Sunset Garden Studio — guest guide</title>
   <meta name="description" content="Wi‑Fi, check-in, house notes, and local picks for your stay." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700&display=swap" rel="stylesheet" />
   <meta name="color-scheme" content="light dark" />
   <style>.guest-app {
   --guest-bg: #f3efe9;
@@ -93,6 +94,7 @@
   min-height: 330px;
   overflow: hidden;
   background: #15121b;
+  touch-action: pan-y;
 }
 
 .guest-hero-photo {
@@ -166,6 +168,21 @@
   bottom: 22px;
   z-index: 2;
   color: #fff;
+}
+
+.guest-sample-chip {
+  display: inline-flex;
+  align-items: center;
+  margin: 0 0 10px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
 .guest-hero-copy p {
@@ -256,6 +273,11 @@
   box-shadow: var(--guest-shadow);
 }
 
+.guest-actions a:hover,
+.guest-actions button:hover {
+  border-color: color-mix(in srgb, var(--guest-accent) 40%, var(--guest-line));
+}
+
 .guest-actions strong {
   font-size: 13.5px;
 }
@@ -275,6 +297,7 @@
   border: 1px solid var(--guest-line);
   border-radius: 22px;
   box-shadow: var(--guest-shadow);
+  scroll-margin-bottom: 92px;
 }
 
 .guest-card h2 {
@@ -339,8 +362,12 @@
   padding-top: 0;
 }
 
-.guest-wifi button {
+.guest-wifi button,
+.guest-copy {
   flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   border: 0;
   background: var(--guest-accent-soft);
   color: var(--guest-accent);
@@ -352,6 +379,19 @@
   font-weight: 700;
   cursor: pointer;
   touch-action: manipulation;
+}
+
+.guest-copy-field {
+  position: fixed;
+  left: -9999px;
+  top: 0;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.guest-card > p .guest-copy {
+  margin: 4px 0 0;
 }
 
 .guest-map {
@@ -417,12 +457,29 @@
   margin-bottom: 24px;
 }
 
+.guest-gallery-shot {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  border-radius: 18px;
+  overflow: hidden;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.guest-gallery-shot img,
 .guest-gallery img {
+  display: block;
   width: 100%;
   height: 124px;
   object-fit: cover;
   border-radius: 18px;
   background: var(--guest-chip);
+}
+
+.guest-gallery-shot.is-on img {
+  box-shadow: 0 0 0 2px var(--guest-accent);
 }
 
 .guest-nav {
@@ -459,6 +516,21 @@
   touch-action: manipulation;
 }
 
+.guest-nav a.is-on {
+  background: var(--guest-accent);
+  color: #fff;
+}
+
+.guest-app[data-guest-theme="dark"] .guest-nav a.is-on {
+  color: #17141d;
+}
+
+@media (prefers-color-scheme: dark) {
+  .guest-app[data-guest-theme="auto"] .guest-nav a.is-on {
+    color: #17141d;
+  }
+}
+
 .guest-hidden {
   display: none !important;
 }
@@ -490,6 +562,15 @@
   opacity: 1;
 }
 
+.guest-app :focus-visible {
+  outline: 2px solid var(--guest-accent);
+  outline-offset: 3px;
+}
+
+.device-screen .guest-hero {
+  min-height: 236px;
+}
+
 @media (prefers-reduced-transparency: reduce) {
   .guest-nav,
   .guest-theme-toggle {
@@ -512,6 +593,7 @@
     padding: 20px 16px 104px;
   }
 
+  .guest-gallery-shot img,
   .guest-gallery img {
     height: 108px;
   }
@@ -526,7 +608,7 @@
 
     <div class="guest-shell">
       <section class="guest-hero" data-hero>
-        <img class="guest-hero-photo" src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&amp;fit=crop&amp;w=960&amp;q=75" alt="Living room" width="800" height="330" decoding="async" />
+        <img class="guest-hero-photo" src="https://a0.muscache.com/im/pictures/airflow/Hosting-3079929/original/67bf0f10-3eac-4356-8857-fdbb61012dab.jpg?im_w=1200" alt="Living room" width="800" height="330" decoding="async" />
         <button class="guest-theme-toggle" type="button" data-theme-toggle aria-label="Toggle dark mode">
           <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
             <circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M2.5 12h2M19.5 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"/>
@@ -536,34 +618,46 @@
           </svg>
         </button>
         <div class="guest-hero-copy">
+          <span class="guest-sample-chip">Sample stay · fictional details</span>
           <p>Maya</p>
           <h1>Sunset Garden Studio</h1>
-          <div class="guest-dots"><button type="button" data-photo="0" class="is-on"></button><button type="button" data-photo="1" class=""></button><button type="button" data-photo="2" class=""></button><button type="button" data-photo="3" class=""></button></div>
+          <div class="guest-dots"><button type="button" data-photo="0" class="is-on" aria-label="Photo 1 of 4"></button><button type="button" data-photo="1" class="" aria-label="Photo 2 of 4"></button><button type="button" data-photo="2" class="" aria-label="Photo 3 of 4"></button><button type="button" data-photo="3" class="" aria-label="Photo 4 of 4"></button></div>
         </div>
       </section>
       <div class="guest-body">
         <p class="guest-welcome">Welcome to the Outer Sunset. The studio opens onto a small garden, two blocks from the N-Judah and a short walk to Ocean Beach.</p>
         <p class="guest-about ">A one-room stay with a real kitchen, blackout blinds, and a heater that actually works in the fog.</p>
         <div class="guest-gallery ">
-          <img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&amp;fit=crop&amp;w=800&amp;q=75" alt="Sofa nook" width="400" height="124" loading="lazy" decoding="async" /><img src="https://images.unsplash.com/photo-1556912173-46c336c7fd55?auto=format&amp;fit=crop&amp;w=800&amp;q=75" alt="Kitchen" width="400" height="124" loading="lazy" decoding="async" /><img src="https://images.unsplash.com/photo-1501594907352-04cda38ebc29?auto=format&amp;fit=crop&amp;w=960&amp;q=75" alt="Ocean Beach" width="400" height="124" loading="lazy" decoding="async" />
+          
+            <button class="guest-gallery-shot" type="button" data-photo="1" aria-label="Show photo 2 of 4">
+              <img src="https://a0.muscache.com/im/pictures/airflow/Hosting-3079929/original/350d217a-d79c-4ac6-aeab-32d3badb21dc.jpg?im_w=1200" alt="Kitchen" width="400" height="124" loading="lazy" decoding="async" />
+            </button>
+            <button class="guest-gallery-shot" type="button" data-photo="2" aria-label="Show photo 3 of 4">
+              <img src="https://a0.muscache.com/im/pictures/airflow/Hosting-3079929/original/e090dbdc-a311-424f-9b0a-f6bd191599b3.jpg?im_w=1200" alt="Bedroom" width="400" height="124" loading="lazy" decoding="async" />
+            </button>
+            <button class="guest-gallery-shot" type="button" data-photo="3" aria-label="Show photo 4 of 4">
+              <img src="https://a0.muscache.com/im/pictures/airflow/Hosting-3079929/original/7581a943-8516-4328-b2d8-fbc1cfda6a3a.jpg?im_w=1200" alt="Garden bedroom" width="400" height="124" loading="lazy" decoding="async" />
+            </button>
         </div>
         <div class="guest-actions">
           <a href="#wifi"><strong>Wi‑Fi</strong><span>SunsetGuest</span></a>
           <a href="#checkin"><strong>Check-in</strong><span>15:00</span></a>
-          <a href="https://www.google.com/maps?q=Outer%20Sunset%2C%20San%20Francisco%2C%20CA%2C%20San%20Francisco%2C%20California%2C%2094122%2C%20United%20States" target="_blank" rel="noreferrer"><strong>Map</strong><span>San Francisco</span></a>
+          <a href="https://www.google.com/maps?q=37.7601%2C-122.5050" target="_blank" rel="noopener noreferrer"><strong>Map</strong><span>San Francisco</span></a>
           <a href="tel:+14155550100"><strong>Host</strong><span>+1 (415) 555-0100</span></a>
         </div>
 
         <article class="guest-card " id="wifi">
           <h2>Wi‑Fi</h2>
-          <div class="guest-wifi"><div>Network</div><div><strong>SunsetGuest</strong> <button type="button" data-copy="SunsetGuest">Copy</button></div></div>
-          <div class="guest-wifi"><div>Password</div><div><strong>oceanview</strong> <button type="button" data-copy="oceanview">Copy</button></div></div>
+          <div class="guest-wifi"><div>Network</div><div><strong>SunsetGuest</strong> <button class="guest-copy" type="button" data-copy="SunsetGuest" data-copied="Copied">Copy</button></div></div>
+          <div class="guest-wifi"><div>Password</div><div><strong>oceanview</strong> <button class="guest-copy" type="button" data-copy="oceanview" data-copied="Copied">Copy</button></div></div>
+          <p><button class="guest-copy" type="button" data-copy="SunsetGuest
+oceanview" data-copied="Wi‑Fi copied">Copy both</button></p>
           <p>The router is on the shelf by the TV. 5 GHz is faster if your phone sees both.</p>
         </article>
 
         <article class="guest-card" id="checkin">
           <h2>Check-in</h2>
-          <p>From <strong>15:00</strong> · Door code <strong>1024#</strong></p>
+          <p>From <strong>15:00</strong> · Door code <strong>1024#</strong> <button class="guest-copy" type="button" data-copy="1024#" data-copied="Code copied">Copy code</button></p>
           <p>Use the keypad on the garden gate, then the lockbox under the bench by the studio door. Code is 1024#.</p>
         </article>
 
@@ -571,10 +665,10 @@
           <h2>Directions</h2>
           <p>Outer Sunset, San Francisco, CA, San Francisco, California, 94122, United States</p>
           <p>From SFO, BART to Civic Center, then the N-Judah toward Ocean Beach. Get off at Judah &amp; 46th. Rideshare drop-off is on Judah.</p>
-          <iframe class="guest-map" title="Map" src="https://www.openstreetmap.org/export/embed.html?bbox=-122.515%2C37.7501%2C-122.49499999999999%2C37.7701&amp;layer=mapnik&amp;marker=37.7601%2C-122.505" loading="lazy"></iframe>
+          <iframe class="guest-map" title="Map" src="https://www.openstreetmap.org/export/embed.html?bbox=-122.515%2C37.7501%2C-122.49499999999999%2C37.7701&amp;layer=mapnik&amp;marker=37.7601%2C-122.505" loading="lazy" referrerpolicy="no-referrer" sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox"></iframe>
         </article>
 
-        <article class="guest-card" id="parking">
+        <article class="guest-card " id="parking">
           <h2>Parking</h2>
           <p>Street parking is usually easy west of 46th Avenue. Watch Tuesday street sweeping, 8–10am.</p>
         </article>
@@ -588,16 +682,16 @@
         <article class="guest-card " id="recs">
           <h2>Recommendations</h2>
           
-            <a class="guest-rec" href="https://maps.google.com/?q=Andytown+Coffee+San+Francisco" target="_blank" rel="noreferrer">
-              <img src="https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&amp;fit=crop&amp;w=720&amp;q=75" alt="Andytown Coffee" width="92" height="92" loading="lazy" decoding="async" />
+            <a class="guest-rec" href="https://maps.google.com/?q=Andytown+Coffee+San+Francisco" target="_blank" rel="noopener noreferrer">
+              <img src="https://a0.muscache.com/im/pictures/airflow/Hosting-3079929/original/350d217a-d79c-4ac6-aeab-32d3badb21dc.jpg?im_w=1200" alt="Andytown Coffee" width="92" height="92" loading="lazy" decoding="async" />
               <div>
                 <small>Coffee</small>
                 <p><strong>Andytown Coffee</strong></p>
                 <p>Snowy Plovers and a window seat. A 12-minute walk toward the beach.</p>
               </div>
             </a>
-            <a class="guest-rec" href="https://maps.google.com/?q=Ocean+Beach+San+Francisco" target="_blank" rel="noreferrer">
-              <img src="https://images.unsplash.com/photo-1501594907352-04cda38ebc29?auto=format&amp;fit=crop&amp;w=960&amp;q=75" alt="Ocean Beach" width="92" height="92" loading="lazy" decoding="async" />
+            <a class="guest-rec" href="https://maps.google.com/?q=Ocean+Beach+San+Francisco" target="_blank" rel="noopener noreferrer">
+              <img src="https://a0.muscache.com/im/pictures/airflow/Hosting-3079929/original/7581a943-8516-4328-b2d8-fbc1cfda6a3a.jpg?im_w=1200" alt="Ocean Beach" width="92" height="92" loading="lazy" decoding="async" />
               <div>
                 <small>Walk</small>
                 <p><strong>Ocean Beach</strong></p>
@@ -615,7 +709,7 @@
         <article class="guest-card" id="book">
           <h2>Book again</h2>
           <p>If you want the same studio next time, book from this link so the calendar stays in sync.</p>
-          <p><a href="https://www.airbnb.com/" target="_blank" rel="noreferrer">Open the listing</a></p>
+          <p><a href="https://www.airbnb.com/rooms/3079929" target="_blank" rel="noopener noreferrer">Example listing photos</a></p>
           <p>Emergency: 911. Nearest ER is UCSF at Parnassus, about 15 minutes by car.</p>
         </article>
       </div>
@@ -628,12 +722,131 @@
         <a href="#recs">Eats</a>
         <a href="#checkout">Out</a>
       </nav>
-      <div class="guest-toast" data-toast>Copied</div>
+      <div class="guest-toast" data-toast role="status" aria-live="polite">Copied</div>
     </div>
   
 <script>
+    function fallbackCopy(text) {
+  const field = document.createElement("textarea");
+  field.value = text;
+  field.setAttribute("readonly", "");
+  field.className = "guest-copy-field";
+  document.body.appendChild(field);
+  field.select();
+  let ok = false;
+  try {
+    ok = document.execCommand("copy");
+  } catch {
+    ok = false;
+  }
+  field.remove();
+  return ok;
+}
+    function copyText(text) {
+  const value = String(text ?? "");
+  if (navigator.clipboard && window.isSecureContext) {
+    return navigator.clipboard.writeText(value).then(() => true).catch(() => fallbackCopy(value));
+  }
+  return Promise.resolve(fallbackCopy(value));
+}
+    function bindGuestInteractions(root, photos, options = {}) {
+  const list = (photos || []).filter(Boolean);
+  let index = Math.max(0, Math.min(Number(options.startIndex) || 0, Math.max(0, list.length - 1)));
+  const hero = root.querySelector("[data-hero]");
+
+  function showPhoto(next) {
+    if (!list.length || !hero) return;
+    index = ((next % list.length) + list.length) % list.length;
+    let img = hero.querySelector(".guest-hero-photo");
+    if (!img) {
+      img = document.createElement("img");
+      img.className = "guest-hero-photo";
+      img.alt = "";
+      img.width = 800;
+      img.height = 330;
+      img.decoding = "async";
+      hero.insertBefore(img, hero.firstChild);
+    }
+    img.src = list[index];
+    root.querySelectorAll("[data-photo]").forEach((el) => {
+      el.classList.toggle("is-on", Number(el.getAttribute("data-photo")) === index);
+    });
+    if (root.dataset) root.dataset.previewPhoto = String(index);
+  }
+
+  root.querySelectorAll("[data-photo]").forEach((btn) => {
+    btn.addEventListener("click", () => showPhoto(Number(btn.getAttribute("data-photo"))));
+  });
+
+  if (hero && list.length > 1) {
+    let startX = 0;
+    let tracking = false;
+    hero.addEventListener("pointerdown", (event) => {
+      if (event.target.closest("button")) return;
+      tracking = true;
+      startX = event.clientX;
+    });
+    hero.addEventListener("pointerup", (event) => {
+      if (!tracking) return;
+      tracking = false;
+      const dx = event.clientX - startX;
+      if (Math.abs(dx) < 48) return;
+      showPhoto(index + (dx < 0 ? 1 : -1));
+    });
+    hero.addEventListener("keydown", (event) => {
+      if (event.key === "ArrowRight") {
+        event.preventDefault();
+        showPhoto(index + 1);
+      } else if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        showPhoto(index - 1);
+      }
+    });
+    hero.setAttribute("tabindex", "0");
+    hero.setAttribute("role", "region");
+    hero.setAttribute("aria-label", "Stay photos");
+  }
+
+  if (index > 0) showPhoto(index);
+
+  const toast = root.querySelector("[data-toast]");
+  root.querySelectorAll("[data-copy]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      copyText(btn.getAttribute("data-copy") || "").then((ok) => {
+        if (!toast) return;
+        toast.textContent = ok ? (btn.getAttribute("data-copied") || "Copied") : "Copy failed";
+        toast.classList.add("is-on");
+        setTimeout(() => toast.classList.remove("is-on"), 1400);
+      });
+    });
+  });
+
+  const navLinks = [...root.querySelectorAll(".guest-nav a[href^='#']")];
+  const overflowY = root.classList.contains("guest-app") ? getComputedStyle(root).overflowY : "";
+  const observerRoot = overflowY === "auto" || overflowY === "scroll" ? root : null;
+  const sections = navLinks
+    .map((link) => root.querySelector(link.getAttribute("href")))
+    .filter(Boolean);
+  if (sections.length && "IntersectionObserver" in window) {
+    const observer = new IntersectionObserver((entries) => {
+      const visible = entries
+        .filter((entry) => entry.isIntersecting)
+        .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+      if (!visible) return;
+      navLinks.forEach((link) => {
+        link.classList.toggle("is-on", link.getAttribute("href") === `#${visible.target.id}`);
+      });
+    }, { root: observerRoot, rootMargin: "-10% 0px -58% 0px", threshold: [0, 0.2, 0.55] });
+    sections.forEach((section) => observer.observe(section));
+  }
+
+  if (typeof options.onThemeToggle === "function") {
+    const toggle = root.querySelector("[data-theme-toggle]");
+    if (toggle) toggle.addEventListener("click", options.onThemeToggle);
+  }
+}
     (function () {
-      var photos = ["https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=960&q=75","https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=800&q=75","https://images.unsplash.com/photo-1556912173-46c336c7fd55?auto=format&fit=crop&w=800&q=75","https://images.unsplash.com/photo-1501594907352-04cda38ebc29?auto=format&fit=crop&w=960&q=75"];
+      var photos = ["https://a0.muscache.com/im/pictures/airflow/Hosting-3079929/original/67bf0f10-3eac-4356-8857-fdbb61012dab.jpg?im_w=1200","https://a0.muscache.com/im/pictures/airflow/Hosting-3079929/original/350d217a-d79c-4ac6-aeab-32d3badb21dc.jpg?im_w=1200","https://a0.muscache.com/im/pictures/airflow/Hosting-3079929/original/e090dbdc-a311-424f-9b0a-f6bd191599b3.jpg?im_w=1200","https://a0.muscache.com/im/pictures/airflow/Hosting-3079929/original/7581a943-8516-4328-b2d8-fbc1cfda6a3a.jpg?im_w=1200"];
       var root = document.body;
       var THEME_KEY = "guest-guide-theme";
       var hostTheme = root.getAttribute("data-guest-theme") || "auto";
@@ -648,69 +861,14 @@
         if (mode === "dark" || mode === "light") return mode;
         return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
       }
-      function fallbackCopy(text) {
-        var field = document.createElement("textarea");
-        field.value = text;
-        field.setAttribute("readonly", "");
-        field.style.position = "fixed";
-        field.style.left = "-9999px";
-        document.body.appendChild(field);
-        field.select();
-        var ok = false;
-        try { ok = document.execCommand("copy"); } catch (e) {}
-        field.remove();
-        return ok;
-      }
-      function copyText(text) {
-        if (navigator.clipboard && window.isSecureContext) {
-          return navigator.clipboard.writeText(text).then(function () { return true; }).catch(function () { return fallbackCopy(text); });
-        }
-        return Promise.resolve(fallbackCopy(text));
-      }
-      var themeBtn = document.querySelector("[data-theme-toggle]");
-      if (themeBtn) {
-        themeBtn.addEventListener("click", function () {
+      bindGuestInteractions(root, photos, {
+        onThemeToggle: function () {
           var next = resolved() === "dark" ? "light" : "dark";
           root.dataset.guestTheme = next;
           if (hostTheme === "auto") {
             try { localStorage.setItem(THEME_KEY, next); } catch (e) {}
           }
-        });
-      }
-      var hero = document.querySelector("[data-hero]");
-      function showPhoto(i) {
-        if (!photos[i] || !hero) return;
-        var img = hero.querySelector(".guest-hero-photo");
-        if (!img) {
-          img = document.createElement("img");
-          img.className = "guest-hero-photo";
-          img.alt = "";
-          img.width = 800;
-          img.height = 330;
-          img.decoding = "async";
-          hero.insertBefore(img, hero.firstChild);
         }
-        img.src = photos[i];
-        document.querySelectorAll("[data-photo]").forEach(function (el) {
-          el.classList.toggle("is-on", Number(el.getAttribute("data-photo")) === i);
-        });
-      }
-      document.querySelectorAll("[data-photo]").forEach(function (btn) {
-        btn.addEventListener("click", function () {
-          showPhoto(Number(btn.getAttribute("data-photo")));
-        });
-      });
-      var toast = document.querySelector("[data-toast]");
-      document.querySelectorAll("[data-copy]").forEach(function (btn) {
-        btn.addEventListener("click", function () {
-          var text = btn.getAttribute("data-copy") || "";
-          copyText(text).then(function (ok) {
-            if (!toast) return;
-            toast.textContent = ok ? "Copied" : "Copy failed";
-            toast.classList.add("is-on");
-            setTimeout(function () { toast.classList.remove("is-on"); }, 1400);
-          });
-        });
       });
     })();
   </script>

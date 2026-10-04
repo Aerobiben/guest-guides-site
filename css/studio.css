@@ -158,6 +158,59 @@
   color: var(--muted);
 }
 
+.notice-banner {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin: -8px 0 20px;
+  padding: 14px 16px;
+  background: var(--warm-soft);
+  border: 1px solid color-mix(in srgb, var(--warm-ink) 16%, var(--line));
+  border-radius: var(--radius-lg);
+  color: var(--warm-ink);
+}
+
+.notice-banner strong {
+  display: block;
+  margin-bottom: 4px;
+}
+
+.notice-banner p {
+  margin: 0;
+  max-width: 62ch;
+  font-size: 13.5px;
+}
+
+.notice-banner .text-btn {
+  flex: none;
+  color: var(--warm-ink);
+}
+
+.studio-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  z-index: 40;
+  max-width: min(520px, calc(100% - 32px));
+  padding: 12px 16px;
+  border-radius: var(--radius-lg);
+  background: #1c1724;
+  color: #fff;
+  font-size: 13.5px;
+  line-height: 1.4;
+  box-shadow: var(--shadow-lift);
+  transform: translate(-50%, 16px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.studio-toast.is-on {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
 .tabs {
   display: flex;
   gap: 6px;
@@ -491,6 +544,11 @@ input[type="file"]::file-selector-button {
 .guides-list {
   display: grid;
   gap: 12px;
+  margin-top: 16px;
+}
+
+.follow {
+  margin-top: 14px;
 }
 
 .guide-chip {

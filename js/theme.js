@@ -1,5 +1,14 @@
 const THEME_KEY = "digital-guidebook-theme";
 
+try {
+  const saved = localStorage.getItem(THEME_KEY);
+  document.documentElement.dataset.theme = saved === "light" || saved === "dark"
+    ? saved
+    : (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+} catch {
+  /* ignore */
+}
+
 function systemTheme() {
   return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
 }
