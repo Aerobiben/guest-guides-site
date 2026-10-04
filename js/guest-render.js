@@ -45,8 +45,12 @@ function copyControl(value, label = "Copy", done = "Copied") {
 }
 
 function mapsUrl(guidebook) {
-  const { address } = guidebook;
-  if (address.linkBehavior === "latlng" && validCoords(guidebook)) {
+  const address = guidebook.address || {};
+  const usePin = address.linkBehavior === "latlng"
+    || address.linkBehavior === "automatic"
+    || address.linkBehavior === ""
+    || address.linkBehavior == null;
+  if (usePin && validCoords(guidebook)) {
     return `https://www.google.com/maps?q=${encodeURIComponent(`${address.lat},${address.lng}`)}`;
   }
   const query = fullAddress(guidebook);
@@ -138,6 +142,7 @@ function renderGuestInner(guidebook) {
           </svg>
         </button>
         <div class="guest-hero-copy">
+          ${guidebook.demo ? `<span class="guest-sample-chip">Sample stay · fictional details</span>` : ""}
           <p>${escapeHtml(guidebook.hostName || "Your host")}</p>
           <h1>${escapeHtml(guidebook.propertyName || guidebook.title || "Guest guide")}</h1>
           <div class="guest-dots">${photos.map((_, i) => `<button type="button" data-photo="${i}" class="${i === 0 ? "is-on" : ""}" aria-label="Photo ${i + 1} of ${photos.length}"></button>`).join("")}</div>
@@ -217,7 +222,7 @@ function renderGuestInner(guidebook) {
         <article class="guest-card" id="book">
           <h2>Book again</h2>
           <p>${escapeHtml(bookAgain.message)}</p>
-          ${listingHref ? `<p><a href="${listingHref}" target="_blank" rel="noopener noreferrer">Open the listing</a></p>` : ""}
+          ${listingHref ? `<p><a href="${listingHref}" target="_blank" rel="noopener noreferrer">${guidebook.demo ? "Example listing photos" : "Open the listing"}</a></p>` : ""}
           <p>Emergency: ${escapeHtml(emergency.localNumber || "local emergency services")}. ${escapeHtml(emergency.notes)}</p>
         </article>
       </div>

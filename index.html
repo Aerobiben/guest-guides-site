@@ -4,23 +4,23 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
-  <title>Digital Guidebook — the guest guide hosts hand over as one link</title>
+  <title>Digital Guidebook — the guest guide hosts download as one file</title>
   <meta name="description" content="Build a phone-friendly Airbnb guest guide: Wi‑Fi, check-in, house notes and local picks. Swap photos and details, then download a single HTML file for your guests. Free, no guest app." />
   <meta name="robots" content="index,follow" />
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; form-action 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: http: https:; frame-src https://www.openstreetmap.org; connect-src 'self'; worker-src 'none'" />
   <link rel="canonical" href="https://guest-guides.vercel.app/" />
   <meta property="og:title" content="Digital Guidebook — guest guides hosts actually use" />
-  <meta property="og:description" content="Wi‑Fi, check-in, house notes and local picks in one link. Download it as a single HTML file." />
+  <meta property="og:description" content="Wi‑Fi, check-in, house notes and local picks in one HTML file you download and send." />
   <meta property="og:type" content="website" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="preconnect" href="https://a0.muscache.com" />
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" />
-  <link rel="stylesheet" href="./css/tokens.css?v=6" />
-  <link rel="stylesheet" href="./css/landing.css?v=6" />
-  <link rel="stylesheet" href="./css/guest.css?v=6" />
-  <script src="./js/theme.js?v=6"></script>
+  <link rel="stylesheet" href="./css/tokens.css?v=7" />
+  <link rel="stylesheet" href="./css/landing.css?v=7" />
+  <link rel="stylesheet" href="./css/guest.css?v=7" />
+  <script src="./js/theme.js?v=7"></script>
 </head>
 <body>
   <div class="wrap">
@@ -33,7 +33,7 @@
         </span>
         <span class="brand-text">
           <strong>Digital Guidebook</strong>
-          <span>Guest guides, one link</span>
+          <span>Guest guides, one file</span>
         </span>
       </a>
       <div class="nav-links">
@@ -55,7 +55,7 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true">
             <rect x="4.5" y="10.5" width="15" height="9.5" rx="2.5"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/>
           </svg>
-          Host sign-in
+          Open the builder
         </a>
       </div>
     </nav>
@@ -65,8 +65,8 @@
         <span class="pill">Free for hosts</span>
         <h1>The house manual your guests <em>actually open</em>.</h1>
         <p class="lede">
-          Wi‑Fi, the door code, bin day, and the good coffee place — in one link that works on any phone.
-          Swap the photos and the details, then download a single HTML file and send it however you like.
+          Wi‑Fi, the door code, bin day, and the good coffee place — in one HTML file that works on any phone.
+          Swap the photos and the details, then download it and send it however you like.
         </p>
         <div class="hero-cta">
           <a class="btn btn-primary btn-lg" href="./samples/sunset-garden-studio.html">
@@ -79,7 +79,7 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true">
               <rect x="4.5" y="10.5" width="15" height="9.5" rx="2.5"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/>
             </svg>
-            Host sign-in
+            Open the builder
           </a>
         </div>
         <div class="trust">
@@ -89,7 +89,7 @@
           </span>
           <span>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>
-            No account, no login
+            Guests never log in
           </span>
           <span>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>
@@ -175,7 +175,7 @@
       <div class="section-head">
         <span class="eyebrow-text">How it works</span>
         <h2>Three steps, one file</h2>
-        <p>No sign-up. Your guidebooks stay in your own browser until you download them.</p>
+        <p>The builder is password-protected for hosts. Drafts stay in this browser until you download them. Guests never create an account.</p>
       </div>
       <div class="steps">
         <article class="step">
@@ -197,11 +197,12 @@
       <div class="section-head">
         <span class="eyebrow-text">Live samples</span>
         <h2>See one the way a guest would</h2>
-        <p>These are real exported files — the same output you get from the builder. <a href="https://guest-guides-preview.vercel.app">Browse them all in the preview gallery</a>.</p>
+        <p>Fictional sample stays — door codes and Wi‑Fi are not real. Same HTML file the builder downloads. <a href="https://guest-guides-preview.vercel.app">Browse them all in the preview gallery</a>.</p>
       </div>
       <div class="sample-grid">
         <a class="sample" href="./samples/sunset-garden-studio.html">
-          <img src="https://a0.muscache.com/im/pictures/airflow/Hosting-3079929/original/67bf0f10-3eac-4356-8857-fdbb61012dab.jpg?im_w=1200" alt="Sunset Garden Studio living room" width="800" height="178" loading="eager" decoding="async" />
+          <span class="sample-badge">Sample stay</span>
+          <img> src="https://a0.muscache.com/im/pictures/airflow/Hosting-3079929/original/67bf0f10-3eac-4356-8857-fdbb61012dab.jpg?im_w=1200" alt="Sunset Garden Studio living room" width="800" height="178" loading="eager" decoding="async" />
           <div class="sample-body">
             <strong>Sunset Garden Studio</strong>
             <span>San Francisco · Outer Sunset</span>
@@ -209,7 +210,8 @@
           </div>
         </a>
         <a class="sample" href="./samples/alfama-terrace.html">
-          <img src="https://a0.muscache.com/im/pictures/miso/Hosting-495237/original/c7d872aa-c20e-4271-a003-507273a3ef0c.jpeg?im_w=1200" alt="Alfama Terrace sitting room" width="800" height="178" loading="eager" decoding="async" />
+          <span class="sample-badge">Sample stay</span>
+          <img> src="https://a0.muscache.com/im/pictures/miso/Hosting-495237/original/c7d872aa-c20e-4271-a003-507273a3ef0c.jpeg?im_w=1200" alt="Alfama Terrace sitting room" width="800" height="178" loading="eager" decoding="async" />
           <div class="sample-body">
             <strong>Alfama Terrace</strong>
             <span>Lisbon, Portugal · tram 28</span>
@@ -217,7 +219,8 @@
           </div>
         </a>
         <a class="sample" href="./samples/yanaka-lantern-loft.html">
-          <img src="https://a0.muscache.com/im/pictures/106035557/bf134f9c_original.jpg?im_w=1200" alt="Yanaka tatami room" width="800" height="178" loading="eager" decoding="async" />
+          <span class="sample-badge">Sample stay</span>
+          <img> src="https://a0.muscache.com/im/pictures/106035557/bf134f9c_original.jpg?im_w=1200" alt="Yanaka tatami room" width="800" height="178" loading="eager" decoding="async" />
           <div class="sample-body">
             <strong>Yanaka Lantern Loft</strong>
             <span>Tokyo, Japan · near Nippori</span>
@@ -225,7 +228,8 @@
           </div>
         </a>
         <a class="sample" href="./samples/roma-norte-casa.html">
-          <img src="https://a0.muscache.com/im/pictures/airflow/Hosting-953052904610923157/original/06f064ff-3b10-4a2d-b6c6-02c8bde04a6c.jpg?im_w=1200" alt="Roma Norte loft living room" width="800" height="178" loading="eager" decoding="async" />
+          <span class="sample-badge">Sample stay</span>
+          <img> src="https://a0.muscache.com/im/pictures/airflow/Hosting-953052904610923157/original/06f064ff-3b10-4a2d-b6c6-02c8bde04a6c.jpg?im_w=1200" alt="Roma Norte loft living room" width="800" height="178" loading="eager" decoding="async" />
           <div class="sample-body">
             <strong>Roma Norte Casa</strong>
             <span>Mexico City · near Parque México</span>
@@ -233,7 +237,8 @@
           </div>
         </a>
         <a class="sample" href="./samples/les-lilas.html">
-          <img src="https://a0.muscache.com/im/pictures/79198232-7884-4356-9cc8-71d0c17f4c55.jpg?im_w=1200" alt="Les Lilas living room with Bastille view" width="800" height="178" loading="eager" decoding="async" />
+          <span class="sample-badge">Sample stay</span>
+          <img> src="https://a0.muscache.com/im/pictures/79198232-7884-4356-9cc8-71d0c17f4c55.jpg?im_w=1200" alt="Les Lilas living room with Bastille view" width="800" height="178" loading="eager" decoding="async" />
           <div class="sample-body">
             <strong>Les Lilas</strong>
             <span>Paris, France · métro line 11</span>
@@ -241,7 +246,8 @@
           </div>
         </a>
         <a class="sample" href="./samples/mundus-bologna.html">
-          <img src="https://a0.muscache.com/im/pictures/hosting/Hosting-738225000657298753/original/314b8300-6d12-4c3c-b207-f242ffa0600b.jpeg?im_w=1200" alt="Mundus Bologna terrace jacuzzi" width="800" height="178" loading="eager" decoding="async" />
+          <span class="sample-badge">Sample stay</span>
+          <img> src="https://a0.muscache.com/im/pictures/hosting/Hosting-738225000657298753/original/314b8300-6d12-4c3c-b207-f242ffa0600b.jpeg?im_w=1200" alt="Mundus Bologna terrace jacuzzi" width="800" height="178" loading="eager" decoding="async" />
           <div class="sample-body">
             <strong>Mundus Bologna</strong>
             <span>Bologna, Italy · under the portici</span>
@@ -249,7 +255,8 @@
           </div>
         </a>
         <a class="sample" href="./samples/bnbhost-glasgow.html">
-          <img src="https://a0.muscache.com/im/pictures/prohost-api/Hosting-1370329958509772935/original/914077fa-3c00-43ae-a353-e2fe2a0c7d49.jpeg?im_w=1200" alt="Glasgow bay-window living room" width="800" height="178" loading="eager" decoding="async" />
+          <span class="sample-badge">Sample stay</span>
+          <img> src="https://a0.muscache.com/im/pictures/prohost-api/Hosting-1370329958509772935/original/914077fa-3c00-43ae-a353-e2fe2a0c7d49.jpeg?im_w=1200" alt="Glasgow bay-window living room" width="800" height="178" loading="eager" decoding="async" />
           <div class="sample-body">
             <strong>BnBHost Glasgow</strong>
             <span>Glasgow, Scotland · West End flat</span>
@@ -263,25 +270,25 @@
       <div class="cta-band">
         <div>
           <h2>Your next guest arrives at midnight.</h2>
-          <p>Give them the door code, the Wi‑Fi, and the late-night noodle place in one link.</p>
+          <p>Give them the door code, the Wi‑Fi, and the late-night noodle place in one file.</p>
         </div>
         <a class="btn btn-primary btn-lg" href="./studio.html" title="Password protected — hosts only">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true">
             <rect x="4.5" y="10.5" width="15" height="9.5" rx="2.5"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/>
           </svg>
-          Host sign-in
+          Open the builder
         </a>
       </div>
     </section>
 
     <footer class="site-footer">
       <span>Digital Guidebook — phone guest guides for hosts.</span>
-      <span><a href="./samples/sunset-garden-studio.html">Sample guide</a> · <a href="https://guest-guides-preview.vercel.app">All previews</a> · <a href="./studio.html">Host sign-in</a></span>
+      <span><a href="./samples/sunset-garden-studio.html">Sample guide</a> · <a href="https://guest-guides-preview.vercel.app">All previews</a> · <a href="./studio.html">Open the builder</a></span>
     </footer>
   </div>
 
-  <script src="./js/templates.js?v=6"></script>
-  <script src="./js/guest-render.js?v=6"></script>
-  <script src="./js/landing.js?v=6"></script>
+  <script src="./js/templates.js?v=7"></script>
+  <script src="./js/guest-render.js?v=7"></script>
+  <script src="./js/landing.js?v=7"></script>
 </body>
 </html>

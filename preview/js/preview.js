@@ -72,7 +72,7 @@ function render() {
   renderPicker();
   renderFacts(guide);
   document.querySelector("#stage-title").textContent = guide.propertyName || guide.title;
-  document.querySelector("#stage-meta").textContent = `${place(guide)} · hosted by ${guide.hostName || "your host"}`;
+  document.querySelector("#stage-meta").textContent = `${place(guide)} · fictional sample stay`;
   const link = document.querySelector("#fullscreen-link");
   link.classList.toggle("hidden", !guide.slug);
   if (guide.slug) link.href = `./guides/${guide.slug}.html`;

@@ -21,8 +21,8 @@ function loadState() {
   } catch {
     /* ignore */
   }
-  const first = structuredClone(STARTER_TEMPLATES[0]);
-  return { guides: [first], activeId: first.id, tab: "intro", view: "editor" };
+  const first = blankGuidebook();
+  return { guides: [first], activeId: first.id, tab: "intro", view: "templates" };
 }
 
 function saveState() {
@@ -93,7 +93,7 @@ function renderHeading() {
 function renderNav() {
   qsa("[data-view]").forEach((btn) => {
     const view = btn.dataset.view;
-    const on = view === state.view || (view === "guides" && state.view === "editor");
+    const on = view === state.view;
     btn.classList.toggle("is-active", on);
   });
   qsa("[data-section]").forEach((btn) => {
@@ -125,7 +125,7 @@ function renderGuides() {
     <div class="guide-chip">
       <div>
         <button class="chip-open" data-open="${escapeHtml(guide.id)}">${escapeHtml(guide.propertyName || guide.title)}</button>
-        <p class="hint">${escapeHtml(guide.address.city || "No location yet")} · ${guide.photos.filter((photo) => photo.url).length} photos</p>
+        <p class="hint">${escapeHtml(guide.address.city || "No location yet")} · ${guide.photos.filter((photo) => photo.url).length} photos${guide.fromSample ? " · started from a sample" : ""}</p>
       </div>
       <button class="text-btn" data-delete="${escapeHtml(guide.id)}" ${state.guides.length === 1 ? "disabled" : ""}>Delete</button>
     </div>
@@ -136,6 +136,9 @@ function renderGuides() {
   list.querySelectorAll("[data-delete]").forEach((btn) => {
     btn.onclick = () => {
       if (state.guides.length === 1) return;
+      const target = state.guides.find((guide) => guide.id === btn.dataset.delete);
+      const name = target?.propertyName || target?.title || "this guidebook";
+      if (!window.confirm(`Delete “${name}”? This only removes the draft saved in this browser.`)) return;
       state.guides = state.guides.filter((guide) => guide.id !== btn.dataset.delete);
       if (!state.guides.some((guide) => guide.id === state.activeId)) state.activeId = state.guides[0].id;
       saveState();
@@ -150,9 +153,9 @@ function renderTemplates() {
     <div class="guide-chip">
       <div>
         <strong>${escapeHtml(tpl.title)}</strong>
-        <p class="hint">${escapeHtml([tpl.address.city, tpl.address.country].filter(Boolean).join(", "))}</p>
+        <p class="hint">${escapeHtml([tpl.address.city, tpl.address.country].filter(Boolean).join(", "))} · fictional sample</p>
       </div>
-      <button class="add-btn" data-use="${escapeHtml(tpl.id)}">Use template</button>
+      <button class="add-btn" data-use="${escapeHtml(tpl.id)}">Start from this</button>
     </div>
   `).join("");
   list.querySelectorAll("[data-use]").forEach((btn) => {
@@ -160,7 +163,14 @@ function renderTemplates() {
       const tpl = STARTER_TEMPLATES.find((item) => item.id === btn.dataset.use);
       const copy = structuredClone(tpl);
       copy.id = makeId();
-      state.guides.unshift(copy);
+      copy.demo = false;
+      copy.fromSample = true;
+      copy.listingUrl = "";
+      if (state.guides.length === 1 && isUnusedBlank(state.guides[0])) {
+        state.guides = [copy];
+      } else {
+        state.guides.unshift(copy);
+      }
       state.activeId = copy.id;
       state.view = "editor";
       saveState();
@@ -358,6 +368,13 @@ function fillForm() {
     g.title = qs("#title-field").value;
     saveState();
   };
+  const listingHint = qs("#listing-hint");
+  if (listingHint) {
+    listingHint.textContent = isSampleListing(g.listingUrl)
+      ? "This is still a sample listing link. Paste your own Airbnb or booking URL before guests use it."
+      : "Your Airbnb or booking page. Guests tap this to book again. Leave blank if you do not have one yet.";
+  }
+  renderSampleBanner();
   qs("#rules-input").oninput = () => {
     g.houseRules = qs("#rules-input").value.split("\n").map((line) => line.trim()).filter(Boolean);
     saveState();
@@ -433,11 +450,39 @@ function renderPreview() {
   hydrateGuest(qs("#guest-preview"), activeGuide());
 }
 
+function isUnusedBlank(guide) {
+  return Boolean(guide)
+    && !guide.fromSample
+    && !guide.propertyName
+    && !guide.hostName
+    && !guide.listingUrl
+    && !guide.intro?.welcome
+    && !guide.wifi?.network
+    && !guide.checkIn?.accessCode
+    && !(guide.photos || []).some((photo) => photo.url);
+}
+
+function renderSampleBanner() {
+  const banner = qs("#sample-banner");
+  if (!banner) return;
+  banner.classList.toggle("hidden", !activeGuide().fromSample);
+}
+
+function showStudioToast(message) {
+  const toast = qs("#studio-toast");
+  if (!toast) return;
+  toast.textContent = message;
+  toast.classList.add("is-on");
+  clearTimeout(showStudioToast.timer);
+  showStudioToast.timer = setTimeout(() => toast.classList.remove("is-on"), 4200);
+}
+
 function render() {
   renderNav();
   renderGuides();
   renderTemplates();
   if (state.view === "editor") fillForm();
+  else renderSampleBanner();
   renderPreview();
 }
 
@@ -450,6 +495,7 @@ async function exportHtml() {
   if (!guestCssCache) await loadGuestCss();
   const html = buildGuestDocument(activeGuide(), guestCssCache);
   downloadTextFile(`${slugify(activeGuide().propertyName || activeGuide().title)}.html`, html);
+  showStudioToast("Downloaded to this device. Nothing was published here — send the file or host it yourself.");
 }
 
 async function openFullPreview() {
@@ -518,6 +564,11 @@ function wire() {
   qs("#download-btn").onclick = exportHtml;
   qs("#preview-btn").onclick = openPreview;
   qs("#preview-full-btn").onclick = openFullPreview;
+  qs("#dismiss-sample-banner")?.addEventListener("click", () => {
+    activeGuide().fromSample = false;
+    saveState();
+    renderSampleBanner();
+  });
   let searchTimer;
   qs("#address-search").addEventListener("input", (event) => {
     clearTimeout(searchTimer);

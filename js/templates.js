@@ -113,7 +113,15 @@ function normalizeGuidebook(raw = {}, index = 0) {
   };
   guide.theme = source.theme === "dark" || source.theme === "light" ? source.theme : "auto";
   guide.id = fieldId(source.id, guide.id);
+  guide.demo = source.demo === true;
+  guide.fromSample = source.fromSample === true
+    || (source.fromSample !== false && isSampleListing(guide.listingUrl));
   return guide;
+}
+
+function isSampleListing(url) {
+  const raw = String(url || "").trim();
+  return Object.values(AIRBNB).some((item) => item.listing === raw);
 }
 
 function blankGuidebook() {
@@ -126,6 +134,8 @@ function blankGuidebook() {
     hostPhone: "",
     hostEmail: "",
     listingUrl: "",
+    demo: false,
+    fromSample: false,
     intro: {
       welcome: "",
       about: "",
@@ -641,7 +651,7 @@ const STARTER_TEMPLATES = [
   mundusGuidebook(),
   lesLilasGuidebook(),
   glasgowGuidebook(),
-];
+].map((guide) => ({ ...guide, demo: true, fromSample: false }));
 
 const SAMPLE_SLUGS = {
   "gb-sunset": "sunset-garden-studio",
@@ -657,6 +667,7 @@ globalThis.SAMPLE_SLUGS = SAMPLE_SLUGS;
 globalThis.STARTER_TEMPLATES = STARTER_TEMPLATES;
 globalThis.blankGuidebook = blankGuidebook;
 globalThis.normalizeGuidebook = normalizeGuidebook;
+globalThis.isSampleListing = isSampleListing;
 globalThis.makeId = makeId;
 globalThis.sunsetGuidebook = sunsetGuidebook;
 globalThis.lisbonGuidebook = lisbonGuidebook;

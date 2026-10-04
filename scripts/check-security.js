@@ -30,7 +30,29 @@ assert.match(html, /sandbox="allow-scripts allow-popups allow-popups-to-escape-s
 assert.match(html, /http-equiv="Content-Security-Policy"/);
 assert.equal(ctx.escapeHtml(`"'<>`).includes("<"), false);
 
+const autoGuide = {
+  ...ctx.STARTER_TEMPLATES[0],
+  address: { ...ctx.STARTER_TEMPLATES[0].address, linkBehavior: "automatic" },
+};
+const addressGuide = {
+  ...autoGuide,
+  address: { ...autoGuide.address, linkBehavior: "address" },
+};
+assert.match(ctx.mapsUrl(autoGuide), /37\.7601%2C-122\.5050/);
+assert.equal(ctx.mapsUrl(addressGuide).includes("%2C-122.5050"), false);
+
+const clone = ctx.normalizeGuidebook({
+  ...ctx.STARTER_TEMPLATES[0],
+  demo: false,
+  fromSample: true,
+  listingUrl: "",
+});
+assert.equal(clone.demo, false);
+assert.equal(clone.fromSample, true);
+assert.equal(clone.listingUrl, "");
+
 for (const guide of ctx.STARTER_TEMPLATES) {
+  assert.equal(guide.demo, true);
   assert.match(guide.listingUrl, /^https:\/\/www\.airbnb\.com\/rooms\/\d+$/);
   const photoUrls = [
     ...(guide.photos || []).map((photo) => photo.url),
